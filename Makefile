@@ -42,7 +42,7 @@ LDFLAGS =
 LDFLAGS_AUTO =
 LIBCC = -lgcc
 CPPFLAGS =
-CFLAGS =
+CFLAGS = --target=wasm32-wasi
 CFLAGS_AUTO = -Os -pipe
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc 
 
@@ -67,7 +67,7 @@ CRT_LIBS = $(addprefix lib/,$(notdir $(CRT_OBJS)))
 STATIC_LIBS = lib/libc.a
 SHARED_LIBS = lib/libc.so
 TOOL_LIBS = lib/musl-gcc.specs
-ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
+ALL_LIBS = $(STATIC_LIBS) $(TOOL_LIBS) #$(EMPTY_LIBS)
 ALL_TOOLS = obj/musl-gcc
 
 WRAPCC_GCC = gcc
@@ -171,11 +171,11 @@ $(EMPTY_LIBS):
 	rm -f $@
 	$(AR) rc $@
 
-lib/%.o: obj/crt/$(ARCH)/%.o
-	cp $< $@
+#lib/%.o: obj/crt/$(ARCH)/%.o
+#	cp $< $@
 
-lib/%.o: obj/crt/%.o
-	cp $< $@
+#lib/%.o: obj/crt/%.o
+#	cp $< $@
 
 lib/musl-gcc.specs: $(srcdir)/tools/musl-gcc.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
