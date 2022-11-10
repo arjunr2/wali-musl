@@ -17,8 +17,11 @@ includedir = $(prefix)/include
 libdir = $(prefix)/lib
 syslibdir = /lib
 
+# For WALI, exclude these
+EXCLUDE_SRC_DIRS = math ldso
+
 MALLOC_DIR = mallocng
-SRC_DIRS = $(addprefix $(srcdir)/,src/* src/malloc/$(MALLOC_DIR) crt ldso $(COMPAT_SRC_DIRS))
+SRC_DIRS = $(addprefix $(srcdir)/, $(filter-out $(addprefix src/, $(EXCLUDE_SRC_DIRS)), $(wildcard src/*)) src/malloc/$(MALLOC_DIR)) #crt ldso $(COMPAT_SRC_DIRS))
 BASE_GLOBS = $(addsuffix /*.c,$(SRC_DIRS))
 ARCH_GLOBS = $(addsuffix /$(ARCH)/*.[csS],$(SRC_DIRS))
 BASE_SRCS = $(sort $(wildcard $(BASE_GLOBS)))
@@ -94,6 +97,13 @@ $(ALL_LIBS) $(ALL_TOOLS) $(ALL_OBJS) $(ALL_OBJS:%.o=%.lo) $(GENH) $(GENH_INT): |
 
 $(OBJ_DIRS):
 	mkdir -p $@
+#	@echo "========= SOURCE DIR =========="
+#	@echo $(SRC_DIRS)
+#	@echo "========= OBJECT_DIRS ========="
+#	@echo $(OBJ_DIRS)
+#	@echo "========= ALL_OBJECTS ========="
+#	@echo $(ALL_OBJS)
+#	@echo "==============================="
 
 obj/include/bits/alltypes.h: $(srcdir)/arch/$(ARCH)/bits/alltypes.h.in $(srcdir)/include/alltypes.h.in $(srcdir)/tools/mkalltypes.sed
 	sed -f $(srcdir)/tools/mkalltypes.sed $(srcdir)/arch/$(ARCH)/bits/alltypes.h.in $(srcdir)/include/alltypes.h.in > $@

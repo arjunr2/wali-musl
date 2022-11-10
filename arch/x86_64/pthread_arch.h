@@ -6,7 +6,7 @@ static inline uintptr_t __get_tp()
 	return tp;
 }
 */
-static inline uintptr_t __get_tp()  __attribute((
+uintptr_t __get_tp()  __attribute((
   __import_name__("__get_tp")
 ));
 

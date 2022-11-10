@@ -61,31 +61,31 @@ static __inline long __syscall6(long n, long a1, long a2, long a3, long a4, long
 	return ret;
 }
 */
- long __syscall0(long n) __attribute((
+long __syscall0(long n) __attribute((
   __import_name__("syscall0")
 ));
 
- long __syscall1(long n, long a1)  __attribute((
+long __syscall1(long n, long a1)  __attribute((
   __import_name__("syscall1")
 ));
 
- long __syscall2(long n, long a1, long a2)  __attribute((
+long __syscall2(long n, long a1, long a2)  __attribute((
   __import_name__("syscall2")
 ));
 
- long __syscall3(long n, long a1, long a2, long a3)  __attribute((
+long __syscall3(long n, long a1, long a2, long a3)  __attribute((
   __import_name__("syscall3")
 ));
 
- long __syscall4(long n, long a1, long a2, long a3, long a4)  __attribute((
+long __syscall4(long n, long a1, long a2, long a3, long a4)  __attribute((
   __import_name__("syscall4")
 ));
 
- long __syscall5(long n, long a1, long a2, long a3, long a4, long a5)  __attribute((
+long __syscall5(long n, long a1, long a2, long a3, long a4, long a5)  __attribute((
   __import_name__("syscall5")
 ));
 
- long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)  __attribute((
+long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)  __attribute((
   __import_name__("syscall6")
 ));
 

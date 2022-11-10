@@ -14,11 +14,11 @@ static void do_unmap()
 	__syscall(SYS_exit);
 }
 
-void __unmapself(void *base, size_t size)
+/*void __unmapself(void *base, size_t size)
 {
 	char *stack = shared_stack + sizeof shared_stack;
 	stack -= (uintptr_t)stack % 16;
 	unmap_base = base;
 	unmap_size = size;
 	CRTJMP(do_unmap, stack);
-}
+}*/

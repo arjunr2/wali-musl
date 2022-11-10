@@ -25,18 +25,31 @@ typedef struct __jmp_buf_tag {
  || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
  || defined(_BSD_SOURCE)
 typedef jmp_buf sigjmp_buf;
-int sigsetjmp (sigjmp_buf, int) __setjmp_attr;
-_Noreturn void siglongjmp (sigjmp_buf, int);
+int sigsetjmp (sigjmp_buf, int) __setjmp_attr __attribute((
+  __import_name__("sigsetjmp")
+));
+_Noreturn void siglongjmp (sigjmp_buf, int) __attribute((
+  __import_name__("siglongjmp")
+));
 #endif
 
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
  || defined(_BSD_SOURCE)
-int _setjmp (jmp_buf) __setjmp_attr;
-_Noreturn void _longjmp (jmp_buf, int);
+int _setjmp (jmp_buf) __setjmp_attr __attribute((
+  __import_name__("_setjmp")
+));
+_Noreturn void _longjmp (jmp_buf, int) __attribute((
+  __import_name__("_longjmp")
+));
 #endif
 
-int setjmp (jmp_buf) __setjmp_attr;
-_Noreturn void longjmp (jmp_buf, int);
+int setjmp (jmp_buf) __setjmp_attr __attribute((
+  __import_name__("setjmp")
+));
+
+_Noreturn void longjmp (jmp_buf, int) __attribute((
+  __import_name__("longjmp")
+));
 
 #define setjmp setjmp
 

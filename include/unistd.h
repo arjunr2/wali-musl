@@ -162,7 +162,9 @@ unsigned ualarm(unsigned, unsigned);
 #define L_XTND 2
 int brk(void *);
 void *sbrk(intptr_t);
-pid_t vfork(void);
+pid_t vfork(void) __attribute((
+  __import_name__("vfork")
+));
 int vhangup(void);
 int chroot(const char *);
 int getpagesize(void);

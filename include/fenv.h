@@ -7,19 +7,52 @@ extern "C" {
 
 #include <bits/fenv.h>
 
-int feclearexcept(int);
-int fegetexceptflag(fexcept_t *, int);
-int feraiseexcept(int);
-int fesetexceptflag(const fexcept_t *, int);
-int fetestexcept(int);
+int feclearexcept(int) __attribute((
+  __import_name__("feclearexcept")
+));
 
-int fegetround(void);
-int fesetround(int);
+int fegetexceptflag(fexcept_t *, int) __attribute((
+  __import_name__("fegetexceptflag")
+));
 
-int fegetenv(fenv_t *);
-int feholdexcept(fenv_t *);
-int fesetenv(const fenv_t *);
-int feupdateenv(const fenv_t *);
+int feraiseexcept(int) __attribute((
+  __import_name__("feraiseexcept")
+));
+
+int fesetexceptflag(const fexcept_t *, int) __attribute((
+  __import_name__("fesetexceptflag")
+));
+
+int fetestexcept(int) __attribute((
+  __import_name__("fetestexcept")
+));
+
+
+int fegetround(void) __attribute((
+  __import_name__("fegetround")
+));
+
+int fesetround(int) __attribute((
+  __import_name__("fesetround")
+));
+
+
+int fegetenv(fenv_t *) __attribute((
+  __import_name__("fegetenv")
+));
+
+int feholdexcept(fenv_t *) __attribute((
+  __import_name__("feholdexcept")
+));
+
+int fesetenv(const fenv_t *) __attribute((
+  __import_name__("fesetenv")
+));
+
+int feupdateenv(const fenv_t *) __attribute((
+  __import_name__("feupdateenv")
+));
+
 
 #ifdef __cplusplus
 }
