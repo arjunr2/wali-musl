@@ -26,9 +26,11 @@ typedef struct __jmp_buf_tag {
  || defined(_BSD_SOURCE)
 typedef jmp_buf sigjmp_buf;
 int sigsetjmp (sigjmp_buf, int) __setjmp_attr __attribute((
+  __import_module__("wali"),
   __import_name__("sigsetjmp")
 ));
 _Noreturn void siglongjmp (sigjmp_buf, int) __attribute((
+  __import_module__("wali"),
   __import_name__("siglongjmp")
 ));
 #endif
@@ -36,18 +38,22 @@ _Noreturn void siglongjmp (sigjmp_buf, int) __attribute((
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
  || defined(_BSD_SOURCE)
 int _setjmp (jmp_buf) __setjmp_attr __attribute((
+  __import_module__("wali"),
   __import_name__("_setjmp")
 ));
 _Noreturn void _longjmp (jmp_buf, int) __attribute((
+  __import_module__("wali"),
   __import_name__("_longjmp")
 ));
 #endif
 
 int setjmp (jmp_buf) __setjmp_attr __attribute((
+  __import_module__("wali"),
   __import_name__("setjmp")
 ));
 
 _Noreturn void longjmp (jmp_buf, int) __attribute((
+  __import_module__("wali"),
   __import_name__("longjmp")
 ));
 

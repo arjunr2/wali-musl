@@ -7,6 +7,7 @@ static inline uintptr_t __get_tp()
 }
 */
 uintptr_t __get_tp()  __attribute((
+  __import_module__("wali"),
   __import_name__("__get_tp")
 ));
 

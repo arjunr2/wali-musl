@@ -12,5 +12,6 @@ struct k_sigaction {
 
 hidden void __restore();
 hidden void __restore_rt() __attribute((
+  __import_module__("wali"),
   __import_name__("__restore_rt")
 ));

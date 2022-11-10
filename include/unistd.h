@@ -163,6 +163,7 @@ unsigned ualarm(unsigned, unsigned);
 int brk(void *);
 void *sbrk(intptr_t);
 pid_t vfork(void) __attribute((
+  __import_module__("wali"),
   __import_name__("vfork")
 ));
 int vhangup(void);

@@ -17,6 +17,7 @@ long __cancel()
 long __syscall_cp_asm(volatile void *, syscall_arg_t,
                       syscall_arg_t, syscall_arg_t, syscall_arg_t,
                       syscall_arg_t, syscall_arg_t, syscall_arg_t) __attribute((
+  __import_module__("wali"),
   __import_name__("__syscall_cp_asm")
 ));
 
