@@ -89,7 +89,20 @@ all:
 
 else
 
+SYSROOT_DIR=sysroot
+SYSROOT_INC=$(SYSROOT_DIR)/include
+SYSROOT_LIB=$(SYSROOT_DIR)/lib
+
 all: $(ALL_LIBS) $(ALL_TOOLS)
+	mkdir -p $(SYSROOT_DIR)
+	cp -r lib	$(SYSROOT_DIR)/
+	cp -r include	$(SYSROOT_DIR)/
+
+	cp -r obj/include/bits $(SYSROOT_INC)/
+	cp -r $(srcdir)/arch/generic/bits/* $(SYSROOT_INC)/bits
+	cp -r $(srcdir)/arch/x86_64/bits/posix.h $(SYSROOT_INC)/bits
+
+
 
 OBJ_DIRS = $(sort $(patsubst %/,%,$(dir $(ALL_LIBS) $(ALL_TOOLS) $(ALL_OBJS) $(GENH) $(GENH_INT))) obj/include)
 
@@ -97,13 +110,6 @@ $(ALL_LIBS) $(ALL_TOOLS) $(ALL_OBJS) $(ALL_OBJS:%.o=%.lo) $(GENH) $(GENH_INT): |
 
 $(OBJ_DIRS):
 	mkdir -p $@
-#	@echo "========= SOURCE DIR =========="
-#	@echo $(SRC_DIRS)
-#	@echo "========= OBJECT_DIRS ========="
-#	@echo $(OBJ_DIRS)
-#	@echo "========= ALL_OBJECTS ========="
-#	@echo $(ALL_OBJS)
-#	@echo "==============================="
 
 obj/include/bits/alltypes.h: $(srcdir)/arch/$(ARCH)/bits/alltypes.h.in $(srcdir)/include/alltypes.h.in $(srcdir)/tools/mkalltypes.sed
 	sed -f $(srcdir)/tools/mkalltypes.sed $(srcdir)/arch/$(ARCH)/bits/alltypes.h.in $(srcdir)/include/alltypes.h.in > $@
@@ -181,11 +187,11 @@ $(EMPTY_LIBS):
 	rm -f $@
 	$(AR) rc $@
 
-#lib/%.o: obj/crt/$(ARCH)/%.o
-#	cp $< $@
+lib/%.o: obj/crt/$(ARCH)/%.o
+	cp $< $@
 
-#lib/%.o: obj/crt/%.o
-#	cp $< $@
+lib/%.o: obj/crt/%.o
+	cp $< $@
 
 lib/musl-gcc.specs: $(srcdir)/tools/musl-gcc.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
