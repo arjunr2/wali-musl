@@ -45,7 +45,7 @@ LDFLAGS =
 LDFLAGS_AUTO =
 LIBCC = -lgcc
 CPPFLAGS =
-CFLAGS = --target=wasm32-wasi
+CFLAGS = --target=wasm32
 CFLAGS_AUTO = -Os -pipe
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc 
 
@@ -245,7 +245,7 @@ musl-%.tar.gz: .git
 endif
 
 clean:
-	rm -rf obj lib
+	rm -rf obj lib sysroot
 
 distclean: clean
 	rm -f config.mak
