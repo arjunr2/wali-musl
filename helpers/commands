@@ -1,3 +1,5 @@
 To replace syscalls:
 find src/ -type f -exec sed -i 's/syscall\s*(\([^,]*\),\s*\(.*\))/syscall_\1(\2)/g' {} +
+find src/ -type f -exec sed -i
+'s/syscall\s*(\(\s*SYS[^,]*\),\s*\(.*\))/syscall_\1(\2)/g' {} +
 

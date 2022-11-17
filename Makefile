@@ -101,6 +101,7 @@ all: $(ALL_LIBS) $(ALL_TOOLS)
 	cp -r obj/include/bits $(SYSROOT_INC)/
 	cp -r $(srcdir)/arch/generic/bits/* $(SYSROOT_INC)/bits
 	cp -r $(srcdir)/arch/x86_64/bits/posix.h $(SYSROOT_INC)/bits
+	cp -r $(srcdir)/arch/x86_64/bits/stat.h $(SYSROOT_INC)/bits
 
 
 
