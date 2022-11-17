@@ -100,9 +100,9 @@ all: $(ALL_LIBS) $(ALL_TOOLS)
 
 	cp -r obj/include/bits $(SYSROOT_INC)/
 	cp -r $(srcdir)/arch/generic/bits/* $(SYSROOT_INC)/bits
-	cp -r $(srcdir)/arch/x86_64/bits/posix.h $(SYSROOT_INC)/bits
-	cp -r $(srcdir)/arch/x86_64/bits/stat.h $(SYSROOT_INC)/bits
-
+#	cp -r $(srcdir)/arch/x86_64/bits/posix.h $(SYSROOT_INC)/bits
+#	cp -r $(srcdir)/arch/x86_64/bits/stat.h $(SYSROOT_INC)/bits
+	cp -r $(srcdir)/arch/x86_64/bits/* $(SYSROOT_INC)/bits/
 
 
 OBJ_DIRS = $(sort $(patsubst %/,%,$(dir $(ALL_LIBS) $(ALL_TOOLS) $(ALL_OBJS) $(GENH) $(GENH_INT))) obj/include)
