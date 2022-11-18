@@ -29,7 +29,7 @@ int fchmodat(int fd, const char *path, mode_t mode, int flag)
 	ret = stat(proc, &st);
 	if (!ret) {
 		if (S_ISLNK(st.st_mode)) ret = __syscall_ret(-EOPNOTSUPP);
-		else ret = syscall(SYS_fchmodat, AT_FDCWD, proc, mode);
+		else ret = syscall(SYS_fchmodat, AT_FDCWD, proc, mode, 0);
 	}
 
 	__syscall_SYS_close(fd2);
