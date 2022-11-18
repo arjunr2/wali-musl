@@ -23,9 +23,6 @@ def main():
             map_val = mapping.get(x, [PL_VAL, ()])
             args = map_val[1]
 
-            print(x)
-            print(map_val)
-            print(args)
             append_fn([x], args)
 
             if len(map_val) == 3:
@@ -43,7 +40,7 @@ LONG="long"
 VAR="..."
 
 mapping = {
-    "read"      :   [0, (INT,    _CHAR,  SIZE_T )],
+    "read"      :   [0, (INT,    _VOID,  SIZE_T )],
     "write"     :   [1, (INT,    _VOID,  SIZE_T )],
     "open"      :   [2, (_CHAR,  INT,    INT    )],
     "close"     :   [3, (INT,                   )],
@@ -52,7 +49,7 @@ mapping = {
     "lstat"     :   [6, (_CHAR,  _VOID          )],
     "poll"      :   [7, (_VOID,  INT,    LONG   )],
     "lseek"     :   [8, (INT,    LONG,   INT    )],
-    "mmap"      :   [9, (LONG,   LONG,   LONG,   LONG,   LONG,   LONG)],
+    "mmap"      :   [9, (_VOID,   LONG,   LONG,   LONG,   LONG,   LONG)],
 
     "mprotect"  :   [10,    (LONG,   SIZE_T, LONG)],
     "rt_sigprocmask"    :   [14,    (INT,    _VOID,  _VOID,  SIZE_T)],
