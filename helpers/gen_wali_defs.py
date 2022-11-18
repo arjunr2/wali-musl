@@ -37,15 +37,16 @@ def main():
 
 INT="int"
 _CHAR="char*"
-SIZE_T="size_t"
+SIZE_T="long"
 _VOID="void*"
 LONG="long"
+VAR="..."
 
 mapping = {
     "read"      :   [0, (INT,    _CHAR,  SIZE_T )],
-    "write"     :   [1, (INT,    _CHAR,  SIZE_T )],
+    "write"     :   [1, (INT,    _VOID,  SIZE_T )],
     "open"      :   [2, (_CHAR,  INT,    INT    )],
-    "close"     :   [3, (INT                    )],
+    "close"     :   [3, (INT,                   )],
     "stat"      :   [4, (_CHAR,  _VOID          )],
     "fstat"     :   [5, (INT,    _VOID          )],
     "lstat"     :   [6, (_CHAR,  _VOID          )],
@@ -56,12 +57,12 @@ mapping = {
     "mprotect"  :   [10,    (LONG,   SIZE_T, LONG)],
     "rt_sigprocmask"    :   [14,    (INT,    _VOID,  _VOID,  SIZE_T)],
 
-    "fcntl"     :   [72,    (INT,    INT,    LONG)],
+    "fcntl"     :   [72,    (INT, INT, VAR)],
 
     # Mode_t check
-    "fchmodat"  :   [268,   (INT,    _CHAR,  INT)],
+    "fchmodat"  :   [268,   (INT,    _CHAR,  INT,   INT)],
     "newfstatat":   [262,   (INT,    _CHAR,  _VOID,  INT),  ("fstatat",)],
-    "futex"     :   [202,   (_VOID,  INT,    INT,    _VOID,  _VOID,  INT)],
+    "futex"     :   [202,   ("volatile "+_VOID, INT,    VAR)],
 
     "fadvise64" :   [221,   (INT,    LONG,   SIZE_T, INT),  ("fadvise",)]
 
