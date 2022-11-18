@@ -17,7 +17,7 @@ static void do_setrlimit(void *p)
 {
 	struct ctx *c = p;
 	if (c->err>0) return;
-	c->err = -__syscall(SYS_setrlimit, c->res, c->lim);
+	c->err = -__syscall_SYS_setrlimit(c->res, c->lim);
 }
 #endif
 
@@ -30,7 +30,7 @@ int setrlimit(int resource, const struct rlimit *rlim)
 		FIX(tmp.rlim_max);
 		rlim = &tmp;
 	}
-	int ret = __syscall(SYS_prlimit64, 0, resource, rlim, 0);
+	int ret = __syscall_SYS_prlimit64(0, resource, rlim, 0);
 #ifdef SYS_setrlimit
 	if (ret != -ENOSYS) return __syscall_ret(ret);
 

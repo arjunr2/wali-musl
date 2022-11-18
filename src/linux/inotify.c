@@ -8,9 +8,9 @@ int inotify_init()
 }
 int inotify_init1(int flags)
 {
-	int r = __syscall(SYS_inotify_init1, flags);
+	int r = __syscall_SYS_inotify_init1(flags);
 #ifdef SYS_inotify_init
-	if (r==-ENOSYS && !flags) r = __syscall(SYS_inotify_init);
+	if (r==-ENOSYS && !flags) r = __syscall_SYS_inotify_init();
 #endif
 	return __syscall_ret(r);
 }

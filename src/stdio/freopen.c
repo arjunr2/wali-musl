@@ -21,7 +21,7 @@ FILE *freopen(const char *restrict filename, const char *restrict mode, FILE *re
 
 	if (!filename) {
 		if (fl&O_CLOEXEC)
-			__syscall(SYS_fcntl, f->fd, F_SETFD, FD_CLOEXEC);
+			__syscall_SYS_fcntl(f->fd, F_SETFD, FD_CLOEXEC);
 		fl &= ~(O_CREAT|O_EXCL|O_CLOEXEC);
 		if (syscall(SYS_fcntl, f->fd, F_SETFL, fl) < 0)
 			goto fail;

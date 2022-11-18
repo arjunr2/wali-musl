@@ -7,7 +7,7 @@ int sched_rr_get_interval(pid_t pid, struct timespec *ts)
 	/* On a 32-bit arch, use the old syscall if it exists. */
 	if (SYS_sched_rr_get_interval != SYS_sched_rr_get_interval_time64) {
 		long ts32[2];
-		int r = __syscall(SYS_sched_rr_get_interval, pid, ts32);
+		int r = __syscall_SYS_sched_rr_get_interval(pid, ts32);
 		if (!r) {
 			ts->tv_sec = ts32[0];
 			ts->tv_nsec = ts32[1];

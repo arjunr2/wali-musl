@@ -158,7 +158,7 @@ _Noreturn void __pthread_exit(void *result)
 		/* Robust list will no longer be valid, and was already
 		 * processed above, so unregister it with the kernel. */
 		if (self->robust_list.off)
-			__syscall(SYS_set_robust_list, 0, 3*sizeof(long));
+			__syscall_SYS_set_robust_list(0, 3*sizeof(long));
 
 		/* The following call unmaps the thread's stack mapping
 		 * and then exits without touching the stack. */
@@ -169,7 +169,7 @@ _Noreturn void __pthread_exit(void *result)
 	a_store(&self->detach_state, DT_EXITED);
 	__wake(&self->detach_state, 1, 1);
 
-	for (;;) __syscall(SYS_exit, 0);
+	for (;;) __syscall_SYS_exit(0);
 }
 
 void __do_cleanup_push(struct __ptcb *cb)
@@ -199,11 +199,11 @@ static int start(void *p)
 		if (a_cas(&args->control, 1, 2)==1)
 			__wait(&args->control, 0, 2, 1);
 		if (args->control) {
-			__syscall(SYS_set_tid_address, &args->control);
-			for (;;) __syscall(SYS_exit, 0);
+			__syscall_SYS_set_tid_address(&args->control);
+			for (;;) __syscall_SYS_exit(0);
 		}
 	}
-	__syscall(SYS_rt_sigprocmask, SIG_SETMASK, &args->sig_mask, 0, _NSIG/8);
+	__syscall_SYS_rt_sigprocmask(SIG_SETMASK, &args->sig_mask, 0, _NSIG/8);
 	__pthread_exit(args->start_func(args->start_arg));
 	return 0;
 }
@@ -255,7 +255,7 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 		init_file_lock(__stdin_used);
 		init_file_lock(__stdout_used);
 		init_file_lock(__stderr_used);
-		__syscall(SYS_rt_sigprocmask, SIG_UNBLOCK, SIGPT_SET, 0, _NSIG/8);
+		__syscall_SYS_rt_sigprocmask(SIG_UNBLOCK, SIGPT_SET, 0, _NSIG/8);
 		self->tsd = (void **)__pthread_tsd_main;
 		__membarrier_init();
 		libc.threaded = 1;

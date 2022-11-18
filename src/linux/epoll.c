@@ -11,9 +11,9 @@ int epoll_create(int size)
 
 int epoll_create1(int flags)
 {
-	int r = __syscall(SYS_epoll_create1, flags);
+	int r = __syscall_SYS_epoll_create1(flags);
 #ifdef SYS_epoll_create
-	if (r==-ENOSYS && !flags) r = __syscall(SYS_epoll_create, 1);
+	if (r==-ENOSYS && !flags) r = __syscall_SYS_epoll_create(1);
 #endif
 	return __syscall_ret(r);
 }

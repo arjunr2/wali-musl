@@ -16,13 +16,13 @@ pid_t _Fork(void)
 	__block_all_sigs(&set);
 	LOCK(__abort_lock);
 #ifdef SYS_fork
-	ret = __syscall(SYS_fork);
+	ret = __syscall_SYS_fork();
 #else
-	ret = __syscall(SYS_clone, SIGCHLD, 0);
+	ret = __syscall_SYS_clone(SIGCHLD, 0);
 #endif
 	if (!ret) {
 		pthread_t self = __pthread_self();
-		self->tid = __syscall(SYS_gettid);
+		self->tid = __syscall_SYS_gettid();
 		self->robust_list.off = 0;
 		self->robust_list.pending = 0;
 		self->next = self->prev = self;

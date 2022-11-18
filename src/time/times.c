@@ -3,5 +3,5 @@
 
 clock_t times(struct tms *tms)
 {
-	return __syscall(SYS_times, tms);
+	return __syscall_SYS_times(tms);
 }

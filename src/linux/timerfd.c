@@ -17,14 +17,14 @@ int timerfd_settime(int fd, int flags, const struct itimerspec *new, struct itim
 	int r = -ENOSYS;
 	if (SYS_timerfd_settime == SYS_timerfd_settime64
 	    || !IS32BIT(is) || !IS32BIT(vs) || (sizeof(time_t)>4 && old))
-		r = __syscall(SYS_timerfd_settime64, fd, flags,
+		r = __syscall_SYS_timerfd_settime64(fd, flags,
 			((long long[]){is, ins, vs, vns}), old);
 	if (SYS_timerfd_settime == SYS_timerfd_settime64 || r!=-ENOSYS)
 		return __syscall_ret(r);
 	if (!IS32BIT(is) || !IS32BIT(vs))
 		return __syscall_ret(-ENOTSUP);
 	long old32[4];
-	r = __syscall(SYS_timerfd_settime, fd, flags,
+	r = __syscall_SYS_timerfd_settime(fd, flags,
 		((long[]){is, ins, vs, vns}), old32);
 	if (!r && old) {
 		old->it_interval.tv_sec = old32[0];
@@ -42,11 +42,11 @@ int timerfd_gettime(int fd, struct itimerspec *cur)
 #ifdef SYS_timerfd_gettime64
 	int r = -ENOSYS;
 	if (sizeof(time_t) > 4)
-		r = __syscall(SYS_timerfd_gettime64, fd, cur);
+		r = __syscall_SYS_timerfd_gettime64(fd, cur);
 	if (SYS_timerfd_gettime == SYS_timerfd_gettime64 || r!=-ENOSYS)
 		return __syscall_ret(r);
 	long cur32[4];
-	r = __syscall(SYS_timerfd_gettime, fd, cur32);
+	r = __syscall_SYS_timerfd_gettime(fd, cur32);
 	if (!r) {
 		cur->it_interval.tv_sec = cur32[0];
 		cur->it_interval.tv_nsec = cur32[1];

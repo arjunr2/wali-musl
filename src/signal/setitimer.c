@@ -12,7 +12,7 @@ int setitimer(int which, const struct itimerval *restrict new, struct itimerval 
 		if (!IS32BIT(is) || !IS32BIT(vs))
 			return __syscall_ret(-ENOTSUP);
 		long old32[4];
-		int r = __syscall(SYS_setitimer, which,
+		int r = __syscall_SYS_setitimer(which,
 			((long[]){is, ius, vs, vus}), old32);
 		if (!r && old) {
 			old->it_interval.tv_sec = old32[0];

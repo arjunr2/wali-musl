@@ -10,9 +10,9 @@ int pthread_getschedparam(pthread_t t, int *restrict policy, struct sched_param 
 	if (!t->tid) {
 		r = ESRCH;
 	} else {
-		r = -__syscall(SYS_sched_getparam, t->tid, param);
+		r = -__syscall_SYS_sched_getparam(t->tid, param);
 		if (!r) {
-			*policy = __syscall(SYS_sched_getscheduler, t->tid);
+			*policy = __syscall_SYS_sched_getscheduler(t->tid);
 		}
 	}
 	UNLOCK(t->killlock);

@@ -7,7 +7,7 @@ int clock_getres(clockid_t clk, struct timespec *ts)
 	/* On a 32-bit arch, use the old syscall if it exists. */
 	if (SYS_clock_getres != SYS_clock_getres_time64) {
 		long ts32[2];
-		int r = __syscall(SYS_clock_getres, clk, ts32);
+		int r = __syscall_SYS_clock_getres(clk, ts32);
 		if (!r && ts) {
 			ts->tv_sec = ts32[0];
 			ts->tv_nsec = ts32[1];

@@ -46,7 +46,7 @@ static void notify_signal(struct sigevent *sev)
 		.si_pid = getpid(),
 		.si_uid = getuid()
 	};
-	__syscall(SYS_rt_sigqueueinfo, si.si_pid, si.si_signo, &si);
+	__syscall_SYS_rt_sigqueueinfo(si.si_pid, si.si_signo, &si);
 }
 
 static void *wait_thread(void *p)

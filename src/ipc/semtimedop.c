@@ -20,7 +20,7 @@ int semtimedop(int id, struct sembuf *buf, size_t n, const struct timespec *ts)
 	long ns = ts ? ts->tv_nsec : 0;
 	int r = -ENOSYS;
 	if (NO_TIME32 || !IS32BIT(s))
-		r = __syscall(SYS_semtimedop_time64, id, buf, n,
+		r = __syscall_SYS_semtimedop_time64(id, buf, n,
 			ts ? ((long long[]){s, ns}) : 0);
 	if (NO_TIME32 || r!=-ENOSYS) return __syscall_ret(r);
 	ts = ts ? (void *)(long[]){CLAMP(s), ns} : 0;

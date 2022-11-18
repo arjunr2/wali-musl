@@ -11,11 +11,11 @@ int timer_gettime(timer_t t, struct itimerspec *val)
 #ifdef SYS_timer_gettime64
 	int r = -ENOSYS;
 	if (sizeof(time_t) > 4)
-		r = __syscall(SYS_timer_gettime64, t, val);
+		r = __syscall_SYS_timer_gettime64(t, val);
 	if (SYS_timer_gettime == SYS_timer_gettime64 || r!=-ENOSYS)
 		return __syscall_ret(r);
 	long val32[4];
-	r = __syscall(SYS_timer_gettime, t, val32);
+	r = __syscall_SYS_timer_gettime(t, val32);
 	if (!r) {
 		val->it_interval.tv_sec = val32[0];
 		val->it_interval.tv_nsec = val32[1];

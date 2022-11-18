@@ -26,9 +26,9 @@ int msgctl(int q, int cmd, struct msqid_ds *buf)
 	}
 #endif
 #ifndef SYS_ipc
-	int r = __syscall(SYS_msgctl, q, IPC_CMD(cmd), buf);
+	int r = __syscall_SYS_msgctl(q, IPC_CMD(cmd), buf);
 #else
-	int r = __syscall(SYS_ipc, IPCOP_msgctl, q, IPC_CMD(cmd), 0, buf, 0);
+	int r = __syscall_SYS_ipc(IPCOP_msgctl, q, IPC_CMD(cmd), 0, buf, 0);
 #endif
 #ifdef SYSCALL_IPC_BROKEN_MODE
 	if (r >= 0) switch (cmd | IPC_TIME64) {

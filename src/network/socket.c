@@ -13,9 +13,9 @@ int socket(int domain, int type, int protocol)
 			protocol, 0, 0, 0);
 		if (s < 0) return __syscall_ret(s);
 		if (type & SOCK_CLOEXEC)
-			__syscall(SYS_fcntl, s, F_SETFD, FD_CLOEXEC);
+			__syscall_SYS_fcntl(s, F_SETFD, FD_CLOEXEC);
 		if (type & SOCK_NONBLOCK)
-			__syscall(SYS_fcntl, s, F_SETFL, O_NONBLOCK);
+			__syscall_SYS_fcntl(s, F_SETFL, O_NONBLOCK);
 	}
 	return __syscall_ret(s);
 }

@@ -19,7 +19,7 @@ static void do_setxid(void *p)
 		 * thing to do. State is inconsistent and dangerous. Use
 		 * SIGKILL because it is uncatchable. */
 		__block_all_sigs(0);
-		__syscall(SYS_kill, __syscall(SYS_getpid), SIGKILL);
+		__syscall_SYS_kill(__syscall_SYS_getpid(), SIGKILL);
 	}
 	c->ret = ret;
 }

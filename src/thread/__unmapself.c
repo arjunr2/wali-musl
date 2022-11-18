@@ -10,8 +10,8 @@ static char shared_stack[256];
 
 static void do_unmap()
 {
-	__syscall(SYS_munmap, unmap_base, unmap_size);
-	__syscall(SYS_exit);
+	__syscall_SYS_munmap(unmap_base, unmap_size);
+	__syscall_SYS_exit();
 }
 
 /*void __unmapself(void *base, size_t size)

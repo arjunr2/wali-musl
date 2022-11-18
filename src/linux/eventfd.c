@@ -5,9 +5,9 @@
 
 int eventfd(unsigned int count, int flags)
 {
-	int r = __syscall(SYS_eventfd2, count, flags);
+	int r = __syscall_SYS_eventfd2(count, flags);
 #ifdef SYS_eventfd
-	if (r==-ENOSYS && !flags) r = __syscall(SYS_eventfd, count);
+	if (r==-ENOSYS && !flags) r = __syscall_SYS_eventfd(count);
 #endif
 	return __syscall_ret(r);
 }

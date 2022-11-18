@@ -51,7 +51,7 @@ int mq_notify(mqd_t mqd, const struct sigevent *sev)
 	pthread_barrier_init(&args.barrier, 0, 2);
 
 	if (pthread_create(&td, &attr, start, &args)) {
-		__syscall(SYS_close, s);
+		__syscall_SYS_close(s);
 		errno = EAGAIN;
 		return -1;
 	}
@@ -65,7 +65,7 @@ int mq_notify(mqd_t mqd, const struct sigevent *sev)
 
 	if (syscall(SYS_mq_notify, mqd, &sev2) < 0) {
 		pthread_cancel(td);
-		__syscall(SYS_close, s);
+		__syscall_SYS_close(s);
 		return -1;
 	}
 

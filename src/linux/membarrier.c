@@ -21,7 +21,7 @@ static void bcast_barrier(int s)
 
 int __membarrier(int cmd, int flags)
 {
-	int r = __syscall(SYS_membarrier, cmd, flags);
+	int r = __syscall_SYS_membarrier(cmd, flags);
 	/* Emulate the private expedited command, which is needed by the
 	 * dynamic linker for installation of dynamic TLS, for older
 	 * kernels that lack the syscall. Unlike the syscall, this only
@@ -41,7 +41,7 @@ int __membarrier(int cmd, int flags)
 		memset(&sa.sa_mask, -1, sizeof sa.sa_mask);
 		if (!__libc_sigaction(SIGSYNCCALL, &sa, 0)) {
 			for (td=self->next; td!=self; td=td->next)
-				__syscall(SYS_tkill, td->tid, SIGSYNCCALL);
+				__syscall_SYS_tkill(td->tid, SIGSYNCCALL);
 			for (td=self->next; td!=self; td=td->next)
 				sem_wait(&barrier_sem);
 			r = 0;
@@ -66,7 +66,7 @@ void __membarrier_init(void)
 	 * to the application to do so if desired. Unfortunately this means
 	 * library code initialized after the process becomes multi-threaded
 	 * cannot use these features without accepting registration latency. */
-	__syscall(SYS_membarrier, MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED, 0);
+	__syscall_SYS_membarrier(MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED, 0);
 }
 
 weak_alias(__membarrier, membarrier);

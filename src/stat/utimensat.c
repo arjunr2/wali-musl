@@ -23,16 +23,16 @@ int utimensat(int fd, const char *path, const struct timespec times[2], int flag
 		if (!NS_SPECIAL(ns1)) s1 = times[1].tv_sec;
 	}
 	if (SYS_utimensat == SYS_utimensat_time64 || !IS32BIT(s0) || !IS32BIT(s1))
-		r = __syscall(SYS_utimensat_time64, fd, path, times ?
+		r = __syscall_SYS_utimensat_time64(fd, path, times ?
 			((long long[]){s0, ns0, s1, ns1}) : 0, flags);
 	if (SYS_utimensat == SYS_utimensat_time64 || r!=-ENOSYS)
 		return __syscall_ret(r);
 	if (!IS32BIT(s0) || !IS32BIT(s1))
 		return __syscall_ret(-ENOTSUP);
-	r = __syscall(SYS_utimensat, fd, path,
+	r = __syscall_SYS_utimensat(fd, path,
 		times ? ((long[]){s0, ns0, s1, ns1}) : 0, flags);
 #else
-	r = __syscall(SYS_utimensat, fd, path, times, flags);
+	r = __syscall_SYS_utimensat(fd, path, times, flags);
 #endif
 
 #ifdef SYS_futimesat
@@ -52,9 +52,9 @@ int utimensat(int fd, const char *path, const struct timespec times[2], int flag
 		}
 	}
 
-	r = __syscall(SYS_futimesat, fd, path, tv);
+	r = __syscall_SYS_futimesat(fd, path, tv);
 	if (r != -ENOSYS || fd != AT_FDCWD) return __syscall_ret(r);
-	r = __syscall(SYS_utimes, path, tv);
+	r = __syscall_SYS_utimes(path, tv);
 #endif
 	return __syscall_ret(r);
 }

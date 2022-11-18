@@ -59,14 +59,14 @@ static void *__simple_malloc(size_t n)
 		size_t req = n - (end-cur) + PAGE_SIZE-1 & -PAGE_SIZE;
 
 		if (!cur) {
-			brk = __syscall(SYS_brk, 0);
+			brk = __syscall_SYS_brk(0);
 			brk += -brk & PAGE_SIZE-1;
 			cur = end = brk;
 		}
 
 		if (brk == end && req < SIZE_MAX-brk
 		    && !traverses_stack_p(brk, brk+req)
-		    && __syscall(SYS_brk, brk+req)==brk+req) {
+		    && __syscall_SYS_brk(brk+req)==brk+req) {
 			brk = end += req;
 		} else {
 			int new_area = 0;

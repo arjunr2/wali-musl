@@ -17,10 +17,10 @@ _Noreturn void abort(void)
 	 * the default action of abnormal termination. */
 	__block_all_sigs(0);
 	LOCK(__abort_lock);
-	__syscall(SYS_rt_sigaction, SIGABRT,
+	__syscall_SYS_rt_sigaction(SIGABRT,
 		&(struct k_sigaction){.handler = SIG_DFL}, 0, _NSIG/8);
-	__syscall(SYS_tkill, __pthread_self()->tid, SIGABRT);
-	__syscall(SYS_rt_sigprocmask, SIG_UNBLOCK,
+	__syscall_SYS_tkill(__pthread_self()->tid, SIGABRT);
+	__syscall_SYS_rt_sigprocmask(SIG_UNBLOCK,
 		&(long[_NSIG/(8*sizeof(long))]){1UL<<(SIGABRT-1)}, 0, _NSIG/8);
 
 	/* Beyond this point should be unreachable. */

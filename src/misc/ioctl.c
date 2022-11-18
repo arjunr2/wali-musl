@@ -132,7 +132,7 @@ int ioctl(int fd, int req, ...)
 	va_start(ap, req);
 	arg = va_arg(ap, void *);
 	va_end(ap);
-	int r = __syscall(SYS_ioctl, fd, req, arg);
+	int r = __syscall_SYS_ioctl(fd, req, arg);
 	if (SIOCGSTAMP != SIOCGSTAMP_OLD && req && r==-ENOTTY) {
 		for (int i=0; i<sizeof compat_map/sizeof *compat_map; i++) {
 			if (compat_map[i].new_req != req) continue;
@@ -141,7 +141,7 @@ int ioctl(int fd, int req, ...)
 				char buf[256];
 			} u;
 			convert_ioctl_struct(&compat_map[i], u.buf, arg, W);
-			r = __syscall(SYS_ioctl, fd, compat_map[i].old_req, u.buf);
+			r = __syscall_SYS_ioctl(fd, compat_map[i].old_req, u.buf);
 			if (r<0) break;
 			convert_ioctl_struct(&compat_map[i], u.buf, arg, R);
 			break;

@@ -27,7 +27,7 @@ int __pthread_mutex_trylock_owner(pthread_mutex_t *m)
 	if (type & 128) {
 		if (!self->robust_list.off) {
 			self->robust_list.off = (char*)&m->_m_lock-(char *)&m->_m_next;
-			__syscall(SYS_set_robust_list, &self->robust_list, 3*sizeof(long));
+			__syscall_SYS_set_robust_list(&self->robust_list, 3*sizeof(long));
 		}
 		if (m->_m_waiters) tid |= 0x80000000;
 		self->robust_list.pending = &m->_m_next;
@@ -43,7 +43,7 @@ int __pthread_mutex_trylock_owner(pthread_mutex_t *m)
 success:
 	if ((type&8) && m->_m_waiters) {
 		int priv = (type & 128) ^ 128;
-		__syscall(SYS_futex, &m->_m_lock, FUTEX_UNLOCK_PI|priv);
+		__syscall_SYS_futex(&m->_m_lock, FUTEX_UNLOCK_PI|priv);
 		self->robust_list.pending = 0;
 		return (type&4) ? ENOTRECOVERABLE : EBUSY;
 	}

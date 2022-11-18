@@ -8,7 +8,7 @@ int getrusage(int who, struct rusage *ru)
 	int r;
 #ifdef SYS_getrusage_time64
 	long long kru64[18];
-	r = __syscall(SYS_getrusage_time64, who, kru64);
+	r = __syscall_SYS_getrusage_time64(who, kru64);
 	if (!r) {
 		ru->ru_utime = (struct timeval)
 			{ .tv_sec = kru64[0], .tv_usec = kru64[1] };
@@ -22,7 +22,7 @@ int getrusage(int who, struct rusage *ru)
 		return __syscall_ret(r);
 #endif
 	char *dest = (char *)&ru->ru_maxrss - 4*sizeof(long);
-	r = __syscall(SYS_getrusage, who, dest);
+	r = __syscall_SYS_getrusage(who, dest);
 	if (!r && sizeof(time_t) > sizeof(long)) {
 		long kru[4];
 		memcpy(kru, dest, 4*sizeof(long));

@@ -55,7 +55,7 @@ static void *start(void *arg)
 		}
 		if (self->timer_id < 0) break;
 	}
-	__syscall(SYS_timer_delete, self->timer_id & INT_MAX);
+	__syscall_SYS_timer_delete(self->timer_id & INT_MAX);
 	return 0;
 }
 
@@ -103,7 +103,7 @@ int timer_create(clockid_t clk, struct sigevent *restrict evp, timer_t *restrict
 		args.sev = evp;
 
 		__block_app_sigs(&set);
-		__syscall(SYS_rt_sigprocmask, SIG_BLOCK, SIGTIMER_SET, 0, _NSIG/8);
+		__syscall_SYS_rt_sigprocmask(SIG_BLOCK, SIGTIMER_SET, 0, _NSIG/8);
 		r = pthread_create(&td, &attr, start, &args);
 		__restore_sigs(&set);
 		if (r) {

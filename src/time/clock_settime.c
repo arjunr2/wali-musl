@@ -11,7 +11,7 @@ int clock_settime(clockid_t clk, const struct timespec *ts)
 	long ns = ts->tv_nsec;
 	int r = -ENOSYS;
 	if (SYS_clock_settime == SYS_clock_settime64 || !IS32BIT(s))
-		r = __syscall(SYS_clock_settime64, clk,
+		r = __syscall_SYS_clock_settime64(clk,
 			((long long[]){s, ns}));
 	if (SYS_clock_settime == SYS_clock_settime64 || r!=-ENOSYS)
 		return __syscall_ret(r);

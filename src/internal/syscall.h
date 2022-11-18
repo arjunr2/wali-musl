@@ -41,8 +41,13 @@ hidden long __syscall_ret(unsigned long),
 #define __SYSCALL_CONCAT(a,b) __SYSCALL_CONCAT_X(a,b)
 #define __SYSCALL_DISP(b,...) __SYSCALL_CONCAT(b,__SYSCALL_NARGS(__VA_ARGS__))(__VA_ARGS__)
 
-#define __syscall(...) __SYSCALL_DISP(__syscall,__VA_ARGS__)
-#define syscall(...) __syscall_ret(__syscall(__VA_ARGS__))
+/* Standin replacement to make sure this is unused in the future */
+long __syscall(long n, ...) __attribute__((
+  __import_module__("undefined"),
+  __import_name__("undef_syscall")
+));
+//#define __syscall(...) __SYSCALL_DISP(__syscall,__VA_ARGS__)
+#define syscall(b,...) __syscall_ret(__syscall_##b(__VA_ARGS__))
 
 #define socketcall(nm,a,b,c,d,e,f) __syscall_ret(__socketcall(nm,a,b,c,d,e,f))
 #define socketcall_cp(nm,a,b,c,d,e,f) __syscall_ret(__socketcall_cp(nm,a,b,c,d,e,f))
@@ -66,7 +71,7 @@ static inline long __alt_socketcall(int sys, int sock, int cp, syscall_arg_t a, 
 	if (r != -ENOSYS) return r;
 #ifdef SYS_socketcall
 	if (cp) r = __syscall_cp(SYS_socketcall, sock, ((long[6]){a, b, c, d, e, f}));
-	else r = __syscall(SYS_socketcall, sock, ((long[6]){a, b, c, d, e, f}));
+	else r = __syscall_SYS_socketcall(sock, ((long[6]){a, b, c, d, e, f}));
 #endif
 	return r;
 }

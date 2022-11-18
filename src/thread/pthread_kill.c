@@ -10,7 +10,7 @@ int pthread_kill(pthread_t t, int sig)
 	 * must be async-cancel-safe. */
 	__block_all_sigs(&set);
 	LOCK(t->killlock);
-	r = t->tid ? -__syscall(SYS_tkill, t->tid, sig)
+	r = t->tid ? -__syscall_SYS_tkill(t->tid, sig)
 		: (sig+0U >= _NSIG ? EINVAL : 0);
 	UNLOCK(t->killlock);
 	__restore_sigs(&set);

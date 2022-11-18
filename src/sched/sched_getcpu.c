@@ -36,7 +36,7 @@ int sched_getcpu(void)
 	}
 #endif
 
-	r = __syscall(SYS_getcpu, &cpu, 0, 0);
+	r = __syscall_SYS_getcpu(&cpu, 0, 0);
 	if (!r) return cpu;
 	return __syscall_ret(r);
 }

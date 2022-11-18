@@ -22,9 +22,9 @@ struct args {
 static int __sys_dup2(int old, int new)
 {
 #ifdef SYS_dup2
-	return __syscall(SYS_dup2, old, new);
+	return __syscall_SYS_dup2(old, new);
 #else
-	return __syscall(SYS_dup3, old, new, 0);
+	return __syscall_SYS_dup3(old, new, 0);
 #endif
 }
 
@@ -66,19 +66,19 @@ static int child(void *args_vp)
 	}
 
 	if (attr->__flags & POSIX_SPAWN_SETSID)
-		if ((ret=__syscall(SYS_setsid)) < 0)
+		if ((ret=__syscall_SYS_setsid()) < 0)
 			goto fail;
 
 	if (attr->__flags & POSIX_SPAWN_SETPGROUP)
-		if ((ret=__syscall(SYS_setpgid, 0, attr->__pgrp)))
+		if ((ret=__syscall_SYS_setpgid(0, attr->__pgrp)))
 			goto fail;
 
 	/* Use syscalls directly because the library functions attempt
 	 * to do a multi-threaded synchronized id-change, which would
 	 * trash the parent's state. */
 	if (attr->__flags & POSIX_SPAWN_RESETIDS)
-		if ((ret=__syscall(SYS_setgid, __syscall(SYS_getgid))) ||
-		    (ret=__syscall(SYS_setuid, __syscall(SYS_getuid))) )
+		if ((ret=__syscall_SYS_setgid(__syscall_SYS_getgid())) ||
+		    (ret=__syscall_SYS_setuid(__syscall_SYS_getuid())) )
 			goto fail;
 
 	if (fa && fa->__actions) {
@@ -91,14 +91,14 @@ static int child(void *args_vp)
 			 * parent. To avoid that, we dup the pipe onto
 			 * an unoccupied fd. */
 			if (op->fd == p) {
-				ret = __syscall(SYS_dup, p);
+				ret = __syscall_SYS_dup(p);
 				if (ret < 0) goto fail;
-				__syscall(SYS_close, p);
+				__syscall_SYS_close(p);
 				p = ret;
 			}
 			switch(op->cmd) {
 			case FDOP_CLOSE:
-				__syscall(SYS_close, op->fd);
+				__syscall_SYS_close(op->fd);
 				break;
 			case FDOP_DUP2:
 				fd = op->srcfd;
@@ -110,8 +110,8 @@ static int child(void *args_vp)
 					if ((ret=__sys_dup2(fd, op->fd))<0)
 						goto fail;
 				} else {
-					ret = __syscall(SYS_fcntl, fd, F_GETFD);
-					ret = __syscall(SYS_fcntl, fd, F_SETFD,
+					ret = __syscall_SYS_fcntl(fd, F_GETFD);
+					ret = __syscall_SYS_fcntl(fd, F_SETFD,
 					                ret & ~FD_CLOEXEC);
 					if (ret<0)
 						goto fail;
@@ -123,15 +123,15 @@ static int child(void *args_vp)
 				if (fd != op->fd) {
 					if ((ret=__sys_dup2(fd, op->fd))<0)
 						goto fail;
-					__syscall(SYS_close, fd);
+					__syscall_SYS_close(fd);
 				}
 				break;
 			case FDOP_CHDIR:
-				ret = __syscall(SYS_chdir, op->path);
+				ret = __syscall_SYS_chdir(op->path);
 				if (ret<0) goto fail;
 				break;
 			case FDOP_FCHDIR:
-				ret = __syscall(SYS_fchdir, op->fd);
+				ret = __syscall_SYS_fchdir(op->fd);
 				if (ret<0) goto fail;
 				break;
 			}
@@ -142,7 +142,7 @@ static int child(void *args_vp)
 	 * to a different fd. We don't use F_DUPFD_CLOEXEC above because
 	 * it would fail on older kernels and atomicity is not needed --
 	 * in this process there are no threads or signal handlers. */
-	__syscall(SYS_fcntl, p, F_SETFD, FD_CLOEXEC);
+	__syscall_SYS_fcntl(p, F_SETFD, FD_CLOEXEC);
 
 	pthread_sigmask(SIG_SETMASK, (attr->__flags & POSIX_SPAWN_SETSIGMASK)
 		? &attr->__mask : &args->oldmask, 0);
@@ -156,7 +156,7 @@ static int child(void *args_vp)
 fail:
 	/* Since sizeof errno < PIPE_BUF, the write is atomic. */
 	ret = -ret;
-	if (ret) while (__syscall(SYS_write, p, &ret, sizeof ret) < 0);
+	if (ret) while (__syscall_SYS_write(p, &ret, sizeof ret) < 0);
 	_exit(127);
 }
 

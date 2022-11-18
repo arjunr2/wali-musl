@@ -19,7 +19,7 @@ static void cleanup(void *p)
 {
 	struct pollfd *pfd = p;
 	for (int i=0; pfd[i].fd >= -1; i++)
-		if (pfd[i].fd >= 0) __syscall(SYS_close, pfd[i].fd);
+		if (pfd[i].fd >= 0) __syscall_SYS_close(pfd[i].fd);
 }
 
 static unsigned long mtime()
@@ -301,7 +301,7 @@ int __res_msend_rc(int nqueries, const unsigned char *const *queries,
 			 * Immediately close TCP socket so as not to consume
 			 * resources we no longer need. */
 			alens[i] = alen;
-			__syscall(SYS_close, pfd[i].fd);
+			__syscall_SYS_close(pfd[i].fd);
 			pfd[i].fd = -1;
 		}
 	}

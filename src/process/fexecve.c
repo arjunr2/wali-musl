@@ -6,7 +6,7 @@
 
 int fexecve(int fd, char *const argv[], char *const envp[])
 {
-	int r = __syscall(SYS_execveat, fd, "", argv, envp, AT_EMPTY_PATH);
+	int r = __syscall_SYS_execveat(fd, "", argv, envp, AT_EMPTY_PATH);
 	if (r != -ENOSYS) return __syscall_ret(r);
 	char buf[15 + 3*sizeof(int)];
 	__procfdname(buf, fd);

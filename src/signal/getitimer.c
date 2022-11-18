@@ -5,7 +5,7 @@ int getitimer(int which, struct itimerval *old)
 {
 	if (sizeof(time_t) > sizeof(long)) {
 		long old32[4];
-		int r = __syscall(SYS_getitimer, which, old32);
+		int r = __syscall_SYS_getitimer(which, old32);
 		if (!r) {
 			old->it_interval.tv_sec = old32[0];
 			old->it_interval.tv_usec = old32[1];
