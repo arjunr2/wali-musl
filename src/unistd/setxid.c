@@ -12,7 +12,7 @@ static void do_setxid(void *p)
 {
 	struct ctx *c = p;
 	if (c->ret<0) return;
-	int ret = __syscall(c->nr, c->id, c->eid, c->sid);
+	int ret = __syscall(c->nr, c->id, c->eid, c->sid, SYS_NULL, SYS_NULL);
 	if (ret && !c->ret) {
 		/* If one thread fails to set ids after another has already
 		 * succeeded, forcibly killing the process is the only safe
