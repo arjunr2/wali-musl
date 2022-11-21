@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 import csv
 
 BASIC_TYPES = ["int", "char", "long", "void", "..."]
@@ -7,7 +8,7 @@ COMPLEX_TYPES = ["off_t"]
 
 def gen_syscall_list():
     input_file = "syscallnrs_x86_64.h"
-    out_file = "syscall_defs.txt"
+    out_file = "syscall_list.txt"
     defs = []
 
     with open(input_file, "r") as f:
@@ -21,29 +22,32 @@ def gen_syscall_list():
     return defs
 
 
+
 def main():
+    out_file = "wali_syscall_defs.txt"
     defs = gen_syscall_list()
-    #with open(csv.DictReader
+    
+    format_file = "syscall_format.csv"
+    df = pd.read_csv(format_file, skiprows=1, keep_default_na=False)
+    df_dict = df.to_dict(orient='records')
 
-    #wali_defs = []
-    #PL_VAL = 12345
-    #append_fn = lambda names, args: [wali_defs.append("WALI_SYSCALL_DEF ({}, {});".format(name, ','.join(args))) for name in names]
-    #
-    #with open("wali_syscall_defs.txt", "w") as f:
-    #    for x in defs:
-    #        map_val = mapping.get(x, [PL_VAL, ()])
-    #        args = map_val[1]
+    syscall_info = df_dict #[i for i in df_dict if i['# Args'] != ""]
+    
+    append_fn = lambda name, args: wali_defs.append("WALI_SYSCALL_DEF ({}, {});".format(name, ','.join(args)))
+    gen_args = lambda x: [] if not x['# Args'] else [x["a"+str(i+1)] for i in range(int(x['# Args']))]
 
-    #        append_fn([x], args)
-
-    #        if len(map_val) == 3:
-    #            append_fn(map_val[2], args)
-
-
-    #    f.writelines('\n'.join(wali_defs))
+    wali_defs = []
+    for item in syscall_info:
+        args = gen_args(item)
+        append_fn(item['Syscall'], args)
+        for i in filter(None, item['Aliases'].split(',')):
+            append_fn(i, args)
 
 
+    with open(out_file, "w") as f:
+        f.writelines('\n'.join(wali_defs))
 
+    print(wali_defs)
 
 
 if __name__ == '__main__':
