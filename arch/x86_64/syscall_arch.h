@@ -62,37 +62,37 @@ static __inline long __syscall6(long n, long a1, long a2, long a3, long a4, long
 }
 */
 long __syscall0(long n) __attribute((
-  __import_module__("wali"),
+  __import_module__("undef"),
   __import_name__("syscall0")
 ));
 
 long __syscall1(long n, long a1)  __attribute((
-  __import_module__("wali"),
+  __import_module__("undef"),
   __import_name__("syscall1")
 ));
 
 long __syscall2(long n, long a1, long a2)  __attribute((
-  __import_module__("wali"),
+  __import_module__("undef"),
   __import_name__("syscall2")
 ));
 
 long __syscall3(long n, long a1, long a2, long a3)  __attribute((
-  __import_module__("wali"),
+  __import_module__("undef"),
   __import_name__("syscall3")
 ));
 
 long __syscall4(long n, long a1, long a2, long a3, long a4)  __attribute((
-  __import_module__("wali"),
+  __import_module__("undef"),
   __import_name__("syscall4")
 ));
 
 long __syscall5(long n, long a1, long a2, long a3, long a4, long a5)  __attribute((
-  __import_module__("wali"),
+  __import_module__("undef"),
   __import_name__("syscall5")
 ));
 
 long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)  __attribute((
-  __import_module__("wali"),
+  __import_module__("undef"),
   __import_name__("syscall6")
 ));
 
@@ -104,6 +104,11 @@ long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)  _
     __import_name__("__syscall_SYS_" #type)\
   ));
 
+long __syscall(long n,...) {
+  switch (n) {
+    case SYS_write: return __syscall_SYS_write()
+  }
+}
 /* WALI Syscall Imports */
 WALI_SYSCALL_DEF (read, int,void*,long);
 WALI_SYSCALL_DEF (write, int,void*,long);
