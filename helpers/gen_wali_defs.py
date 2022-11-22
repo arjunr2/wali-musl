@@ -33,11 +33,10 @@ def gen_syscall_list():
 
 def gen_args(x):
     if not x['# Args']:
-        return []
+        return [], False
 
     args = [x["a"+str(i+1)] for i in range(int(x['# Args']))]
     arg_sub = []
-    print(args)
     for arg in args:
         if arg[-1] == '*': 
             arg_sub.append(arg[:-1]+'*' if arg[:-1] in BASIC_TYPES else "void*")
@@ -46,34 +45,44 @@ def gen_args(x):
         else:
             arg_sub.append(arg)
     
-    return arg_sub
+    return arg_sub, True
 
 
 def main():
     out_file = "wali_syscall_defs.txt"
+    out_case_file = "wali_case_defs.txt"
+
     defs = gen_syscall_list()
     
     format_file = "syscall_format.csv"
     df = pd.read_csv(format_file, skiprows=1, keep_default_na=False)
     df_dict = df.to_dict(orient='records')
 
-    syscall_info = df_dict #[i for i in df_dict if i['# Args'] != ""]
+    syscall_info = df_dict
     
-    append_fn = lambda name, args: wali_defs.append("WALI_SYSCALL_DEF ({}, {});".format(name, ','.join(args)))
-    #gen_args = lambda x: [] if not x['# Args'] else [x["a"+str(i+1)] for i in range(int(x['# Args']))]
+    append_def_fn = lambda name, args: wali_defs.append("WALI_SYSCALL_DEF ({}, {});".format(name, ','.join(args)))
+    append_case_fn = lambda name, fn_name, args: \
+        case_list.append("\t\tCASE_SYSCALL ({}, {}, {});".format(
+                            name, fn_name, ','.join(['({})a{}'.format(j, i+1) if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)])))
 
     wali_defs = []
+    case_list = []
     for item in syscall_info:
-        args = gen_args(item)
+        args, valid = gen_args(item)
         print("{}: {}".format(item['Syscall'], args))
-        append_fn(item['Syscall'], args)
-        for i in filter(None, item['Aliases'].split(',')):
-            append_fn(i, args)
+        
+        fn_name = item['Aliases'] if item['Aliases'] else item['Syscall']
+
+        append_def_fn(fn_name, args)
+        if valid:
+            append_case_fn(item['Syscall'], fn_name, args)
 
 
     with open(out_file, "w") as f:
         f.writelines('\n'.join(wali_defs))
 
+    with open(out_case_file, "w") as f:
+        f.writelines('\n'.join(case_list))
 
 
 if __name__ == '__main__':
