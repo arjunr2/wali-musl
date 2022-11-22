@@ -42,6 +42,7 @@ hidden long __syscall_ret(unsigned long),
 #define __SYSCALL_DISP(b,...) __SYSCALL_CONCAT(b,__SYSCALL_NARGS(__VA_ARGS__))(__VA_ARGS__)
 
 /* Standin replacement to make sure this is unused in the future */
+#define SYS_NULL 0
 long __syscall(long n, ...) __attribute__((
   __import_module__("undefined"),
   __import_name__("undef_syscall")
@@ -67,7 +68,7 @@ static inline long __alt_socketcall(int sys, int sock, int cp, syscall_arg_t a, 
 {
 	long r;
 	if (cp) r = __syscall_cp(sys, a, b, c, d, e, f);
-	else r = __syscall(sys, a, b, c, d, e, f);
+	else r = __syscall_var(sys, a, b, c, d, e, f);
 	if (r != -ENOSYS) return r;
 #ifdef SYS_socketcall
 	if (cp) r = __syscall_cp(SYS_socketcall, sock, ((long[6]){a, b, c, d, e, f}));
