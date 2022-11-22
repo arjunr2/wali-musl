@@ -1,3 +1,6 @@
+#ifndef _SYSCALL_ARCH_H
+#define _SYSCALL_ARCH_H
+
 #define __SYSCALL_LL_E(x) (x)
 #define __SYSCALL_LL_O(x) (x)
 /*
@@ -62,37 +65,37 @@ static __inline long __syscall6(long n, long a1, long a2, long a3, long a4, long
 }
 */
 long __syscall0(long n) __attribute((
-  __import_module__("undef"),
+  __import_module__("undefined"),
   __import_name__("syscall0")
 ));
 
 long __syscall1(long n, long a1)  __attribute((
-  __import_module__("undef"),
+  __import_module__("undefined"),
   __import_name__("syscall1")
 ));
 
 long __syscall2(long n, long a1, long a2)  __attribute((
-  __import_module__("undef"),
+  __import_module__("undefined"),
   __import_name__("syscall2")
 ));
 
 long __syscall3(long n, long a1, long a2, long a3)  __attribute((
-  __import_module__("undef"),
+  __import_module__("undefined"),
   __import_name__("syscall3")
 ));
 
 long __syscall4(long n, long a1, long a2, long a3, long a4)  __attribute((
-  __import_module__("undef"),
+  __import_module__("undefined"),
   __import_name__("syscall4")
 ));
 
 long __syscall5(long n, long a1, long a2, long a3, long a4, long a5)  __attribute((
-  __import_module__("undef"),
+  __import_module__("undefined"),
   __import_name__("syscall5")
 ));
 
 long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)  __attribute((
-  __import_module__("undef"),
+  __import_module__("undefined"),
   __import_name__("syscall6")
 ));
 
@@ -103,10 +106,6 @@ long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)  _
     __import_module__("wali"),\
     __import_name__("__syscall_SYS_" #type)\
   ));
-
-//long __syscall(long n,...) {
-//  switch(
-//}
 
 /* WALI Syscall Imports */
 WALI_SYSCALL_DEF (read, int,void*,long);
@@ -330,7 +329,6 @@ WALI_SYSCALL_DEF (getdents64, int,void*,int);
 WALI_SYSCALL_DEF (set_tid_address, );
 WALI_SYSCALL_DEF (restart_syscall, );
 WALI_SYSCALL_DEF (semtimedop, );
-WALI_SYSCALL_DEF (fadvise64, int,long,long,int);
 WALI_SYSCALL_DEF (fadvise, int,long,long,int);
 WALI_SYSCALL_DEF (timer_create, );
 WALI_SYSCALL_DEF (timer_settime, );
@@ -372,7 +370,6 @@ WALI_SYSCALL_DEF (mkdirat, );
 WALI_SYSCALL_DEF (mknodat, );
 WALI_SYSCALL_DEF (fchownat, );
 WALI_SYSCALL_DEF (futimesat, );
-WALI_SYSCALL_DEF (newfstatat, );
 WALI_SYSCALL_DEF (fstatat, );
 WALI_SYSCALL_DEF (unlinkat, int,char*,int);
 WALI_SYSCALL_DEF (renameat, );
@@ -447,6 +444,111 @@ WALI_SYSCALL_DEF (statx, );
 WALI_SYSCALL_DEF (io_pgetevents, );
 WALI_SYSCALL_DEF (rseq, );
 
+#define __scca(X) ((long) (X))
+
+#define __syscall_arch0() 
+#define __syscall_arch1(a) __scca(a)
+#define __syscall_arch2(a,b) __scca(a),__scca(b)
+#define __syscall_arch3(a,b,c) __scca(a),__scca(b),__scca(c)
+#define __syscall_arch4(a,b,c,d) __scca(a),__scca(b),__scca(c),__scca(d)
+#define __syscall_arch5(a,b,c,d,e) __scca(a),__scca(b),__scca(c),__scca(d),__scca(e)
+#define __syscall_arch6(a,b,c,d,e,f) __scca(a),__scca(b),__scca(c),__scca(d),__scca(e),__scca(f)
+#define __syscall_arch7(a,b,c,d,e,f,g) __scca(a),__scca(b),__scca(c),__scca(d),__scca(e),__scca(f),__scca(g)
+
+#define __SYSCALL_ARCH_NARGS_X(a,b,c,d,e,f,g,n,...) n
+#define __SYSCALL_ARCH_NARGS(...) __SYSCALL_ARCH_NARGS_X(__VA_ARGS__,7,6,5,4,3,2,1,0,)
+#define __SYSCALL_ARCH_CONCAT_X(a,b) a##b
+#define __SYSCALL_ARCH_CONCAT(a,b) __SYSCALL_ARCH_CONCAT_X(a,b)
+
+#define CASE_SYSCALL(name, fn_name, ...) \
+  case SYS_##name: return __syscall_SYS_##fn_name(__VA_ARGS__); break; 
+
+
+/* Internal syscall implementation for non-const syscall NR invokation */
+static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, long a6) {
+  switch(n) {
+		CASE_SYSCALL (read, read, (int)a1,(void*)a2,(long)a3);
+		CASE_SYSCALL (write, write, (int)a1,(void*)a2,(long)a3);
+		CASE_SYSCALL (open, open, (char*)a1,(int)a2,(int)a3);
+		CASE_SYSCALL (close, close, (int)a1);
+		CASE_SYSCALL (stat, stat, (char*)a1,(void*)a2);
+		CASE_SYSCALL (fstat, fstat, (char*)a1,(void*)a2);
+		CASE_SYSCALL (lstat, lstat, (char*)a1,(void*)a2);
+		CASE_SYSCALL (poll, poll, (void*)a1,(int)a2,(int)a3);
+		CASE_SYSCALL (lseek, lseek, (int)a1,(long)a2,(int)a3);
+		CASE_SYSCALL (mmap, mmap, (void*)a1,(long)a2,(int)a3,(int)a4,(int)a5,(long)a6);
+		CASE_SYSCALL (mprotect, mprotect, (void*)a1,(long)a2,(int)a3);
+		CASE_SYSCALL (munmap, munmap, (void*)a1,(long)a2);
+		CASE_SYSCALL (brk, brk, (void*)a1);
+		CASE_SYSCALL (rt_sigaction, rt_sigaction, (int)a1,(void*)a2,(void*)a3,(long)a4);
+		CASE_SYSCALL (rt_sigprocmask, rt_sigprocmask, (int)a1,(void*)a2,(void*)a3,(long)a4);
+		CASE_SYSCALL (rt_sigreturn, rt_sigreturn, (long)a1);
+		CASE_SYSCALL (ioctl, ioctl, (int)a1,(int)a2,a3);
+		CASE_SYSCALL (pread64, pread64, (int)a1,(void*)a2,(long)a3,(long)a4);
+		CASE_SYSCALL (pwrite64, pwrite64, (int)a1,(void*)a2,(long)a3,(long)a4);
+		CASE_SYSCALL (readv, readv, (int)a1,(void*)a2,(int)a3);
+		CASE_SYSCALL (writev, writev, (int)a1,(void*)a2,(int)a3);
+		CASE_SYSCALL (access, access, (char*)a1,(int)a2);
+		CASE_SYSCALL (pipe, pipe, (int*)a1);
+		CASE_SYSCALL (select, select, (int)a1,(void*)a2,(void*)a3,(void*)a4,(void*)a5);
+		CASE_SYSCALL (sched_yield, sched_yield, );
+		CASE_SYSCALL (mremap, mremap, (void*)a1,(long)a2,(long)a3,(int)a4,a5);
+		CASE_SYSCALL (msync, msync, (void*)a1,(long)a2,(int)a3);
+		CASE_SYSCALL (madvise, madvise, (void*)a1,(long)a2,(int)a3);
+		CASE_SYSCALL (dup, dup, (int)a1);
+		CASE_SYSCALL (dup2, dup2, (int)a1,(int)a2);
+		CASE_SYSCALL (nanosleep, nanosleep, (void*)a1,(void*)a2);
+		CASE_SYSCALL (alarm, alarm, (int)a1);
+		CASE_SYSCALL (getpid, getpid, );
+		CASE_SYSCALL (socket, socket, (int)a1,(int)a2,(int)a3);
+		CASE_SYSCALL (connect, connect, (int)a1,(void*)a2,(long)a3);
+		CASE_SYSCALL (accept, accept, (int)a1,(void*)a2,(long)a3);
+		CASE_SYSCALL (sendto, sendto, (int)a1,(void*)a2,(long)a3,(int)a4);
+		CASE_SYSCALL (recvfrom, recvfrom, (int)a1,(void*)a2,(long)a3,(int)a4,(void*)a5,(void*)a6);
+		CASE_SYSCALL (sendmsg, sendmsg, (int)a1,(void*)a2,(int)a3);
+		CASE_SYSCALL (recvmsg, recvmsg, (int)a1,(void*)a2,(int)a3);
+		CASE_SYSCALL (shutdown, shutdown, (int)a1,(int)a2);
+		CASE_SYSCALL (bind, bind, (int)a1,(void*)a2,(long)a3);
+		CASE_SYSCALL (listen, listen, (int)a1,(int)a2);
+		CASE_SYSCALL (getsockname, getsockname, (int)a1,(void*)a2,(void*)a3);
+		CASE_SYSCALL (getpeername, getpeername, (int)a1,(void*)a2,(void*)a3);
+		CASE_SYSCALL (setsockopt, setsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(long)a5);
+		CASE_SYSCALL (getsockopt, getsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(void*)a5);
+		CASE_SYSCALL (wait4, wait4, (int)a1,(int*)a2,(int)a3,(void*)a4);
+		CASE_SYSCALL (kill, kill, (int)a1,(int)a2);
+		CASE_SYSCALL (uname, uname, (void*)a1);
+		CASE_SYSCALL (fcntl, fcntl, (int)a1,(int)a2,a3);
+		CASE_SYSCALL (flock, flock, (int)a1,(int)a2);
+		CASE_SYSCALL (fsync, fsync, (int)a1);
+		CASE_SYSCALL (getcwd, getcwd, (char*)a1,(long)a2);
+		CASE_SYSCALL (chdir, chdir, (char*)a1);
+		CASE_SYSCALL (mkdir, mkdir, (char*)a1,(int)a2);
+		CASE_SYSCALL (rmdir, rmdir, (char*)a1);
+		CASE_SYSCALL (link, link, (char*)a1,(char*)a2);
+		CASE_SYSCALL (unlink, unlink, (char*)a1);
+		CASE_SYSCALL (symlink, symlink, (char*)a1,(char*)a2);
+		CASE_SYSCALL (readlink, readlink, (char*)a1,(char*)a2,(long)a3);
+		CASE_SYSCALL (chmod, chmod, (char*)a1,(int)a2);
+		CASE_SYSCALL (fchmod, fchmod, (int)a1,(int)a2);
+		CASE_SYSCALL (chown, chown, (char*)a1,(int)a2,(int)a3);
+		CASE_SYSCALL (fchown, fchown, (int)a1,(int)a2,(int)a3);
+		CASE_SYSCALL (umask, umask, (int)a1);
+		CASE_SYSCALL (utime, utime, (char*)a1,(void*)a2);
+		CASE_SYSCALL (statfs, statfs, (char*)a1,(void*)a2);
+		CASE_SYSCALL (fstatfs, fstatfs, (int)a1,(void*)a2);
+		CASE_SYSCALL (getdents64, getdents64, (int)a1,(void*)a2,(int)a3);
+		CASE_SYSCALL (fadvise64, fadvise, (int)a1,(long)a2,(long)a3,(int)a4);
+		CASE_SYSCALL (openat, openat, (int)a1,(char*)a2,(int)a3,a4);
+		CASE_SYSCALL (unlinkat, unlinkat, (int)a1,(char*)a2,(int)a3);
+		CASE_SYSCALL (faccessat, faccessat, (int)a1,(char*)a2,(int)a3,a4);
+		CASE_SYSCALL (utimensat, utimensat, (int)a1,(char*)a2,(void*)a3,(int)a4);
+		CASE_SYSCALL (eventfd, eventfd, (int)a1);
+		CASE_SYSCALL (eventfd2, eventfd2, (int)a1,(int)a2);
+		CASE_SYSCALL (pipe2, pipe2, (int*)a1,(int)a2);
+    default: return -1;
+  }
+}
+
 
 #define VDSO_USEFUL
 #define VDSO_CGT_SYM "__vdso_clock_gettime"
@@ -455,3 +557,5 @@ WALI_SYSCALL_DEF (rseq, );
 #define VDSO_GETCPU_VER "LINUX_2.6"
 
 #define IPC_64 0
+
+#endif
