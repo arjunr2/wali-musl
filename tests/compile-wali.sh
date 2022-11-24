@@ -1,6 +1,7 @@
 #!/bin/bash
 
 sysroot_dir=../sysroot
+
 crtfile=startup/crt1.o 
 file=$(basename $1 .c)
 
