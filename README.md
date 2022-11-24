@@ -40,3 +40,6 @@ with implementations of the imported "wali" methods. [WAMR](https://github.com/b
 is easy to get started with details on implementing native functions [here](https://github.com/bytecodealliance/wasm-micro-runtime/blob/main/doc/export_native_api.md)
 
 
+## Miscellaneous Resources
+
+* [Table of Syscalls](https://docs.google.com/spreadsheets/d/1__2NqMqGLHdjFFYonkF49IkGgfv62TJCpZuXqhXwnlc/edit?usp=sharing)
