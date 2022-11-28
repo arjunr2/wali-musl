@@ -16,7 +16,7 @@ COMPLEX_TYPES = {
 
 
 def gen_syscall_list():
-    input_file = "syscallnrs_x86_64.h"
+    input_file = "syscallnrs/x86-64.h"
     out_file = "syscall_list.txt"
     defs = []
 
