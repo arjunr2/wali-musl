@@ -51,6 +51,7 @@ def gen_args(x):
 def main():
     out_file = "wali_syscall_defs.txt"
     out_case_file = "wali_case_defs.txt"
+    out_declr_file = "wali_syscall_declr.txt"
 
     defs = gen_syscall_list()
     
@@ -65,8 +66,15 @@ def main():
         case_list.append("\t\tCASE_SYSCALL ({}, {}, {});".format(
                             name, fn_name, ','.join(['({})a{}'.format(j, i+1) if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)])))
 
+
+    append_declr_fn = lambda fn_name, args: \
+        declr_list.append("int __syscall_{}_wrapper (wasm_exec_env_t exec_env".format(fn_name) + \
+            ''.join([', int a{}'.format(i+1) for i, j in enumerate(args)]) + ');')
+
     wali_defs = []
     case_list = []
+    declr_list = []
+
     for item in syscall_info:
         args, valid = gen_args(item)
         print("{}: {}".format(item['Syscall'], args))
@@ -74,6 +82,8 @@ def main():
         fn_name = item['Aliases'] if item['Aliases'] else item['Syscall']
 
         append_def_fn(fn_name, args)
+        append_declr_fn(fn_name, args)
+
         if valid:
             append_case_fn(item['Syscall'], fn_name, args)
 
@@ -84,6 +94,8 @@ def main():
     with open(out_case_file, "w") as f:
         f.writelines('\n'.join(case_list))
 
+    with open(out_declr_file, "w") as f:
+        f.writelines('\n'.join(declr_list))
 
 if __name__ == '__main__':
     main()
