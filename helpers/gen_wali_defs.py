@@ -64,11 +64,12 @@ def main():
     append_def_fn = lambda name, args: wali_defs.append("WALI_SYSCALL_DEF ({}, {});".format(name, ','.join(args)))
     append_case_fn = lambda name, fn_name, args: \
         case_list.append("\t\tCASE_SYSCALL ({}, {}, {});".format(
-                            name, fn_name, ','.join(['({})a{}'.format(j, i+1) if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)])))
+                            name, fn_name, ','.join(['({})a{}'.format(j, i+1) \
+                            if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)])))
 
 
     append_declr_fn = lambda fn_name, args: \
-        declr_list.append("int __syscall_{}_wrapper (wasm_exec_env_t exec_env".format(fn_name) + \
+        declr_list.append("int wali_syscall_{} (wasm_exec_env_t exec_env".format(fn_name) + \
             ''.join([', int a{}'.format(i+1) for i, j in enumerate(args)]) + ');')
 
     wali_defs = []
