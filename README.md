@@ -8,7 +8,7 @@ support for other architectures.
 
 ## Prerequisites
 
-* [Clang](https://github.com/llvm/llvm-project/releases) is required for WASM compilation.
+* [Clang](https://github.com/llvm/llvm-project/releases?page=3) is required for WASM compilation (tested with 13.0.0).
 Download the clang+llvm package and add the `bin` directory to your PATH.
 You may alternatively choose to build from source (which can take several hours) as directed 
 [here](https://clang.llvm.org/get_started.html)
@@ -19,7 +19,9 @@ You may alternatively choose to build from source (which can take several hours)
 ## Building wali libc
 
 The build/installation process mostly mirrors that of musl and is detailed in the 
-[INSTALL](https://github.com/arjunr2/wali-musl/blob/master/INSTALL) file
+[INSTALL](https://github.com/arjunr2/wali-musl/blob/master/INSTALL) file.
+
+NOTE: Currently, the build is tested with clang-13. Support for newer versions will be added. 
 
 
 ## Compilation of C code
