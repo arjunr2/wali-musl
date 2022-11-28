@@ -62,7 +62,7 @@ long __syscall(long n, ...) __attribute__((
 #define __syscall_cp6(n,a,b,c,d,e,f) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f))
 
 #define __syscall_cp(...) __SYSCALL_DISP(__syscall_cp,__VA_ARGS__)
-#define syscall_cp(...) __syscall_ret(__syscall_cp(__VA_ARGS__))
+#define syscall_cp(b,...) __syscall_ret(__syscall_##b(__VA_ARGS__))
 
 static inline long __alt_socketcall(int sys, int sock, int cp, syscall_arg_t a, syscall_arg_t b, syscall_arg_t c, syscall_arg_t d, syscall_arg_t e, syscall_arg_t f)
 {

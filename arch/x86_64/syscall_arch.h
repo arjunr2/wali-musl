@@ -464,7 +464,7 @@ WALI_SYSCALL_DEF (rseq, );
   case SYS_##name: return __syscall_SYS_##fn_name(__VA_ARGS__); break; 
 
 
-/* Internal syscall implementation for non-const syscall NR invokation */
+/* Internal syscall implementation for non-const syscall NR invocation */
 static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, long a6) {
   switch(n) {
 		CASE_SYSCALL (read, read, (int)a1,(void*)a2,(long)a3);
