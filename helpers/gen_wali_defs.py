@@ -4,7 +4,7 @@ import csv
 
 BASIC_TYPES = ["int", "char", "long", "void", "..."]
 COMPLEX_TYPES = {
-    "off_t": "long", 
+    "off_t": "long long",
     "size_t": "long", 
     "mode_t": "int",
     "nfds_t": "int",
@@ -12,6 +12,11 @@ COMPLEX_TYPES = {
     "uid_t": "int",
     "pid_t": "int",
     "gid_t": "int"
+}
+
+# long long in WASM is really a long in 64-bit machine
+WASM_TO_NATIVE_SIZES = {
+    "long long": "long"
 }
 
 
@@ -61,16 +66,19 @@ def main():
 
     syscall_info = df_dict
     
-    append_def_fn = lambda name, args: wali_defs.append("WALI_SYSCALL_DEF ({}, {});".format(name, ','.join(args)))
+    append_def_fn = lambda name, args: wali_defs.append(f"WALI_SYSCALL_DEF ({name}, {','.join(args)});")
     append_case_fn = lambda name, fn_name, args: \
-        case_list.append("\t\tCASE_SYSCALL ({}, {}, {});".format(
-                            name, fn_name, ','.join(['({})a{}'.format(j, i+1) \
-                            if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)])))
+        case_list.append("\t\tCASE_SYSCALL ({name}, {fn_name}, {arglist});".format(
+                            name = name, 
+                            fn_name = fn_name, 
+                            arglist = ','.join(['({})a{}'.format(j, i+1) \
+                                if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)])))
 
 
     append_declr_fn = lambda fn_name, args: \
-        declr_list.append("int wali_syscall_{} (wasm_exec_env_t exec_env".format(fn_name) + \
-            ''.join([', int a{}'.format(i+1) for i, j in enumerate(args)]) + ');')
+        declr_list.append("long wali_syscall_{fn_name} (wasm_exec_env_t exec_env{arglist});".format(
+            fn_name = fn_name,
+            arglist = ''.join([', long a{}'.format(i+1) for i, j in enumerate(args)])))
 
     wali_defs = []
     case_list = []

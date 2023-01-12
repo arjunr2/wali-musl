@@ -1,9 +1,11 @@
 #define _Addr long
-#define _Int64 long
+#define _Int64 long long
+//#define _Int64 long
 #define _Reg long
 
 #define __BYTE_ORDER 1234
-#define __LONG_MAX 0x7fffffffffffffffL
+#define __LONG_MAX 0x7fffffffL
+//#define __LONG_MAX 0x7fffffffffffffffL
 
 #ifndef __cplusplus
 TYPEDEF int wchar_t;
