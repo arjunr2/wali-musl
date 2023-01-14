@@ -34,13 +34,25 @@ int print_int(long val) {
   return len;
 }
 
+int print_char(char v) {
+  write(1, &v, 1);
+  return 0;
+}
+
 #define PRINT_INT(hd, int_val) {  \
   print(hd ":    ");  \
   print_int(int_val); \
   print("\n");  \
 }
+
 #define PRINT_STR(hd, str_val) {  \
   print(hd ":    ");  \
   print(str_val); \
   print("\n");  \
 } 
+
+#define PRINT_CHAR(hd, char_val) {  \
+  print(hd ":    ");  \
+  print_char(char_val); \
+}
+
