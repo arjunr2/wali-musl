@@ -113,11 +113,11 @@ WALI_SYSCALL_DEF (write, int,void*,long);
 WALI_SYSCALL_DEF (open, char*,int,int);
 WALI_SYSCALL_DEF (close, int);
 WALI_SYSCALL_DEF (stat, char*,void*);
-WALI_SYSCALL_DEF (fstat, char*,void*);
+WALI_SYSCALL_DEF (fstat, int,void*);
 WALI_SYSCALL_DEF (lstat, char*,void*);
 WALI_SYSCALL_DEF (poll, void*,int,int);
 WALI_SYSCALL_DEF (lseek, int,long long,int);
-WALI_SYSCALL_DEF (mmap, void*,long,int,int,int,long long);
+WALI_SYSCALL_DEF (mmap2, void*,long,int,int,int,long long);
 WALI_SYSCALL_DEF (mprotect, void*,long,int);
 WALI_SYSCALL_DEF (munmap, void*,long);
 WALI_SYSCALL_DEF (brk, void*);
@@ -440,7 +440,7 @@ WALI_SYSCALL_DEF (pwritev2, );
 WALI_SYSCALL_DEF (pkey_mprotect, );
 WALI_SYSCALL_DEF (pkey_alloc, );
 WALI_SYSCALL_DEF (pkey_free, );
-WALI_SYSCALL_DEF (statx, );
+WALI_SYSCALL_DEF (statx, int,char*,int,int,void*);
 WALI_SYSCALL_DEF (io_pgetevents, );
 WALI_SYSCALL_DEF (rseq, );
 
@@ -472,11 +472,11 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (open, open, (char*)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (close, close, (int)a1);
 		CASE_SYSCALL (stat, stat, (char*)a1,(void*)a2);
-		CASE_SYSCALL (fstat, fstat, (char*)a1,(void*)a2);
+		CASE_SYSCALL (fstat, fstat, (int)a1,(void*)a2);
 		CASE_SYSCALL (lstat, lstat, (char*)a1,(void*)a2);
 		CASE_SYSCALL (poll, poll, (void*)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (lseek, lseek, (int)a1,(long long)a2,(int)a3);
-		CASE_SYSCALL (mmap, mmap, (void*)a1,(long)a2,(int)a3,(int)a4,(int)a5,(long long)a6);
+		CASE_SYSCALL (mmap, mmap2, (void*)a1,(long)a2,(int)a3,(int)a4,(int)a5,(long long)a6);
 		CASE_SYSCALL (mprotect, mprotect, (void*)a1,(long)a2,(int)a3);
 		CASE_SYSCALL (munmap, munmap, (void*)a1,(long)a2);
 		CASE_SYSCALL (brk, brk, (void*)a1);
@@ -514,6 +514,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (getpeername, getpeername, (int)a1,(void*)a2,(void*)a3);
 		CASE_SYSCALL (setsockopt, setsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(long)a5);
 		CASE_SYSCALL (getsockopt, getsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(void*)a5);
+		CASE_SYSCALL (fork, fork, );
 		CASE_SYSCALL (wait4, wait4, (int)a1,(int*)a2,(int)a3,(void*)a4);
 		CASE_SYSCALL (kill, kill, (int)a1,(int)a2);
 		CASE_SYSCALL (uname, uname, (void*)a1);
@@ -545,7 +546,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (eventfd, eventfd, (int)a1);
 		CASE_SYSCALL (eventfd2, eventfd2, (int)a1,(int)a2);
 		CASE_SYSCALL (pipe2, pipe2, (int*)a1,(int)a2);
-    CASE_SYSCALL (fork, fork, );
+		CASE_SYSCALL (statx, statx, (int)a1,(char*)a2,(int)a3,(int)a4,(void*)a5);
     default: return -1;
   }
 }
