@@ -53,10 +53,32 @@ def gen_args(x):
     return arg_sub, True
 
 
+def gen_base_impl(nr, fn_name, args):
+    lines = [f"// {nr}",
+            "long wali_syscall_{fn_name} (wasm_exec_env_t exec_env{arglist}) {{".format(
+                fn_name = fn_name, 
+                arglist = ''.join([', long a{}'.format(i+1) 
+                            for i, j in enumerate(args)])),
+
+            f"\tSC({fn_name})",
+
+            "\treturn __syscall{num_args}(SYS_{fn_name}{arglist});".format(
+                num_args = len(args),
+                fn_name = fn_name,
+                arglist = ''.join([f", a{i+1}" if argty[-1] != '*' else f", MADDR(a{i})"
+                    for i, argty in enumerate(args)])),
+            
+            "}\n"
+            ]
+                
+    return '\n'.join(lines)
+
+
 def main():
     out_file = "wali_syscall_defs.txt"
     out_case_file = "wali_case_defs.txt"
     out_declr_file = "wali_syscall_declr.txt"
+    out_impl_file = "wali_syscall_impl.txt"
 
     defs = gen_syscall_list()
     
@@ -74,15 +96,16 @@ def main():
                             arglist = ','.join(['({})a{}'.format(j, i+1) \
                                 if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)])))
 
-
     append_declr_fn = lambda fn_name, args: \
         declr_list.append("long wali_syscall_{fn_name} (wasm_exec_env_t exec_env{arglist});".format(
             fn_name = fn_name,
             arglist = ''.join([', long a{}'.format(i+1) for i, j in enumerate(args)])))
 
+
     wali_defs = []
     case_list = []
     declr_list = []
+    impl_list = []
 
     for item in syscall_info:
         args, valid = gen_args(item)
@@ -95,7 +118,8 @@ def main():
 
         if valid:
             append_case_fn(item['Syscall'], fn_name, args)
-
+            impl_list.append(gen_base_impl(item['NR'], fn_name, args))
+            
 
     with open(out_file, "w") as f:
         f.writelines('\n'.join(wali_defs))
@@ -105,6 +129,9 @@ def main():
 
     with open(out_declr_file, "w") as f:
         f.writelines('\n'.join(declr_list))
+
+    with open(out_impl_file, "w") as f:
+        f.writelines('\n'.join(impl_list))
 
 if __name__ == '__main__':
     main()
