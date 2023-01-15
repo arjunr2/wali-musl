@@ -57,15 +57,14 @@ def gen_base_impl(nr, fn_name, args):
     lines = [f"// {nr}",
             "long wali_syscall_{fn_name} (wasm_exec_env_t exec_env{arglist}) {{".format(
                 fn_name = fn_name, 
-                arglist = ''.join([', long a{}'.format(i+1) 
-                            for i, j in enumerate(args)])),
+                arglist = ''.join([f", long a{i+1}" for i, j in enumerate(args)])),
 
-            f"\tSC({fn_name})",
-
+            f"\tSC({fn_name});",
+            f"\tERRSC({fn_name});",
             "\treturn __syscall{num_args}(SYS_{fn_name}{arglist});".format(
                 num_args = len(args),
                 fn_name = fn_name,
-                arglist = ''.join([f", a{i+1}" if argty[-1] != '*' else f", MADDR(a{i})"
+                arglist = ''.join([f", a{i+1}" if argty[-1] != '*' else f", MADDR(a{i+1})"
                     for i, argty in enumerate(args)])),
             
             "}\n"
