@@ -5,7 +5,7 @@ int main()
     struct stat sb;
     char path[] = "compile-wali.sh";
 
-    if (stat(path, &sb) == -1) {
+    if (lstat(path, &sb) == -1) {
         print("ERROR\n");
         exit(1);
     }
