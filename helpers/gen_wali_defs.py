@@ -96,9 +96,9 @@ impl_list = []
 
 out_dict = {
     "wali_syscall_defs":    (wali_def_list, gen_syscall_def, 1),
-    "wali_case_list":       (case_list, gen_case, 0),
-    "wali_declr_list":      (declr_list, gen_declr, 1),
-    "wali_impl_list":       (impl_list, gen_base_impl, 0)
+    "wali_syscall_cases":       (case_list, gen_case, 0),
+    "wali_syscall_declr":      (declr_list, gen_declr, 1),
+    "wali_syscall_impl":       (impl_list, gen_base_impl, 0)
 }
 
 
