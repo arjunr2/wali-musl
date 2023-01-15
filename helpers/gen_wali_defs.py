@@ -53,7 +53,23 @@ def gen_args(x):
     return arg_sub, True
 
 
-def gen_base_impl(nr, fn_name, args):
+
+def gen_syscall_def(nr, name, fn_name, args):
+    return f"WALI_SYSCALL_DEF ({fn_name}, {','.join(args)});"
+
+def gen_case(nr, name, fn_name, args):
+    return "\t\tCASE_SYSCALL ({name}, {fn_name}, {arglist});".format(
+            name = name, 
+            fn_name = fn_name, 
+            arglist = ','.join( ['({})a{}'.format(j, i+1) \
+                if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)]))
+
+def gen_declr(nr, name, fn_name, args):
+    return "long wali_syscall_{fn_name} (wasm_exec_env_t exec_env{arglist});".format(
+            fn_name = fn_name,
+            arglist = ''.join([', long a{}'.format(i+1) for i, j in enumerate(args)]))
+
+def gen_base_impl(nr, name, fn_name, args):
     lines = [f"// {nr}",
             "long wali_syscall_{fn_name} (wasm_exec_env_t exec_env{arglist}) {{".format(
                 fn_name = fn_name, 
@@ -69,16 +85,24 @@ def gen_base_impl(nr, fn_name, args):
             
             "}\n"
             ]
-                
     return '\n'.join(lines)
 
 
-def main():
-    out_file = "wali_syscall_defs.txt"
-    out_case_file = "wali_case_defs.txt"
-    out_declr_file = "wali_syscall_declr.txt"
-    out_impl_file = "wali_syscall_impl.txt"
 
+wali_def_list = []
+case_list = []
+declr_list = []
+impl_list = []
+
+out_dict = {
+    "wali_syscall_defs":    (wali_def_list, gen_syscall_def, 1),
+    "wali_case_list":       (case_list, gen_case, 0),
+    "wali_declr_list":      (declr_list, gen_declr, 1),
+    "wali_impl_list":       (impl_list, gen_base_impl, 0)
+}
+
+
+def main():
     defs = gen_syscall_list()
     
     format_file = "syscall_format.csv"
@@ -87,50 +111,22 @@ def main():
 
     syscall_info = df_dict
     
-    append_def_fn = lambda name, args: wali_defs.append(f"WALI_SYSCALL_DEF ({name}, {','.join(args)});")
-    append_case_fn = lambda name, fn_name, args: \
-        case_list.append("\t\tCASE_SYSCALL ({name}, {fn_name}, {arglist});".format(
-                            name = name, 
-                            fn_name = fn_name, 
-                            arglist = ','.join(['({})a{}'.format(j, i+1) \
-                                if j != '...' else 'a{}'.format(i+1) for i, j in enumerate(args)])))
-
-    append_declr_fn = lambda fn_name, args: \
-        declr_list.append("long wali_syscall_{fn_name} (wasm_exec_env_t exec_env{arglist});".format(
-            fn_name = fn_name,
-            arglist = ''.join([', long a{}'.format(i+1) for i, j in enumerate(args)])))
-
-
-    wali_defs = []
-    case_list = []
-    declr_list = []
-    impl_list = []
-
     for item in syscall_info:
         args, valid = gen_args(item)
         print("{}: {}".format(item['Syscall'], args))
         
         fn_name = item['Aliases'] if item['Aliases'] else item['Syscall']
 
-        append_def_fn(fn_name, args)
-        append_declr_fn(fn_name, args)
+        for ty, tup in out_dict.items():
+            buf, app_fn, ignore_valid = tup
+            if valid or ignore_valid:
+                buf.append(app_fn(item['NR'], item['Syscall'], fn_name, args))
 
-        if valid:
-            append_case_fn(item['Syscall'], fn_name, args)
-            impl_list.append(gen_base_impl(item['NR'], fn_name, args))
-            
 
-    with open(out_file, "w") as f:
-        f.writelines('\n'.join(wali_defs))
-
-    with open(out_case_file, "w") as f:
-        f.writelines('\n'.join(case_list))
-
-    with open(out_declr_file, "w") as f:
-        f.writelines('\n'.join(declr_list))
-
-    with open(out_impl_file, "w") as f:
-        f.writelines('\n'.join(impl_list))
+    for ty, tup in out_dict.items():
+        buf = tup[0]
+        with open(ty + ".out", "w") as f:
+            f.writelines('\n'.join(buf))
 
 if __name__ == '__main__':
     main()
