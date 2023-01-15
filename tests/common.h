@@ -17,12 +17,13 @@ int print(char* buf) {
 }
 
 int print_int(long val) {
-  char res[12];
+  char res[13];
   int len = 0;
-  while (val > 0) {
+  if (val < 0) { val = (~val) + 1; };
+  do {
     res[len++] = (val % 10) + '0';
     val /= 10;
-  }
+  } while (val > 0);
   res[len] = 0;
 
   for (int j = 0; j < len/2; j++) {
