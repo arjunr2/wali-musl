@@ -64,22 +64,6 @@ long __syscall(long n, ...) __attribute__((
 #define __syscall_cp(...) __SYSCALL_DISP(__syscall_cp,__VA_ARGS__)
 #define syscall_cp(b,...) __syscall_ret(__syscall_##b(__VA_ARGS__))
 
-static inline long __alt_socketcall(int sys, int sock, int cp, syscall_arg_t a, syscall_arg_t b, syscall_arg_t c, syscall_arg_t d, syscall_arg_t e, syscall_arg_t f)
-{
-	long r;
-	if (cp) r = __syscall_cp(sys, a, b, c, d, e, f);
-	else r = __syscall_var(sys, a, b, c, d, e, f);
-	if (r != -ENOSYS) return r;
-#ifdef SYS_socketcall
-	if (cp) r = __syscall_cp(SYS_socketcall, sock, ((long[6]){a, b, c, d, e, f}));
-	else r = __syscall_SYS_socketcall(sock, ((long[6]){a, b, c, d, e, f}));
-#endif
-	return r;
-}
-#define __socketcall(nm, a, b, c, d, e, f) __alt_socketcall(SYS_##nm, __SC_##nm, 0, \
-	__scc(a), __scc(b), __scc(c), __scc(d), __scc(e), __scc(f))
-#define __socketcall_cp(nm, a, b, c, d, e, f) __alt_socketcall(SYS_##nm, __SC_##nm, 1, \
-	__scc(a), __scc(b), __scc(c), __scc(d), __scc(e), __scc(f))
 
 /* fixup legacy 16-bit junk */
 
@@ -397,8 +381,29 @@ static inline long __alt_socketcall(int sys, int sock, int cp, syscall_arg_t a, 
 #define __sys_open_cp(...) __SYSCALL_DISP(__sys_open_cp,,__VA_ARGS__)
 #define sys_open_cp(...) __syscall_ret(__sys_open_cp(__VA_ARGS__))
 
+
+/* Arch specific variable NR syscall */
+#include "syscall_var.h"
+
 hidden void __procfdname(char __buf[static 15+3*sizeof(int)], unsigned);
 
 hidden void *__vdsosym(const char *, const char *);
+
+static inline long __alt_socketcall(int sys, int sock, int cp, syscall_arg_t a, syscall_arg_t b, syscall_arg_t c, syscall_arg_t d, syscall_arg_t e, syscall_arg_t f)
+{
+	long r;
+	if (cp) r = __syscall_cp(sys, a, b, c, d, e, f);
+	else r = __syscall_var(sys, a, b, c, d, e, f);
+	if (r != -ENOSYS) return r;
+#ifdef SYS_socketcall
+	if (cp) r = __syscall_cp(SYS_socketcall, sock, ((long[6]){a, b, c, d, e, f}));
+	else r = __syscall_SYS_socketcall(sock, ((long[6]){a, b, c, d, e, f}));
+#endif
+	return r;
+}
+#define __socketcall(nm, a, b, c, d, e, f) __alt_socketcall(SYS_##nm, __SC_##nm, 0, \
+	__scc(a), __scc(b), __scc(c), __scc(d), __scc(e), __scc(f))
+#define __socketcall_cp(nm, a, b, c, d, e, f) __alt_socketcall(SYS_##nm, __SC_##nm, 1, \
+	__scc(a), __scc(b), __scc(c), __scc(d), __scc(e), __scc(f))
 
 #endif
