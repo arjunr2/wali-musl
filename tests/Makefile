@@ -1,17 +1,25 @@
-.PHONY: clean all
+.PHONY: dir clean all
+
+CC=gcc
+
+WASM_DIR=wasm
+ELF_DIR=elf
 
 SRC_C:=$(wildcard *.c)
-SRC_O:=$(SRC_C:.c=_link.o)
+SRC_O:=$(SRC_C:.c=.o)
+SRC_WASM:=$(SRC_C.c=.wasm)
 
-default: all
+all: dir $(SRC_O)
 
-all: $(SRC_O)
+dir:
+	mkdir -p $(WASM_DIR)
+	mkdir -p $(ELF_DIR)
 
-%_link.o: %.c
-	echo $(SRC_O)
-	./compile-wali.sh $<
+%.o: %.c
+	./compile-wali.sh -o $(WASM_DIR) $<
+	$(CC) -o $(ELF_DIR)/$* $<
+
 
 clean:
-	rm *.wasm
-	rm *.wat
-	rm *.ll
+	rm -r $(WASM_DIR)
+	rm -r $(ELF_DIR)
