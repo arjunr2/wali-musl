@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <sys/syscall.h>
 #include <sys/sysmacros.h>
+#include <signal.h>
+#include <sys/utsname.h>
 
 int print(char* buf) {
   int len = strlen(buf);

@@ -16,8 +16,8 @@ dir:
 	mkdir -p $(ELF_DIR)
 
 %.o: %.c
-	./compile-wali.sh -o $(WASM_DIR) $<
 	$(CC) -o $(ELF_DIR)/$* $<
+	./compile-wali.sh -o $(WASM_DIR) $<
 
 
 clean:

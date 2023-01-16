@@ -29,6 +29,7 @@ int main()
     }
 
     if (cpid == 0) {    /* Child reads from pipe */
+        PRINT_INT("Child PID", getpid());
         close(pipefd[1]);          /* Close unused write end */
 
         while (read(pipefd[0], &buf, strlen(write_str)) > 0)
@@ -38,6 +39,7 @@ int main()
         close(pipefd[0]);
 
     } else {            /* Parent writes argv[1] to pipe */
+        PRINT_INT("Parent PID", getpid());
         close(pipefd[0]);          /* Close unused read end */
         for (int i = 0; i < NUM_ITS; i++) {
           write(pipefd[1], write_str, strlen(write_str));
