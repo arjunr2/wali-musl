@@ -88,17 +88,33 @@ def gen_base_impl(nr, name, fn_name, args):
     return '\n'.join(lines)
 
 
+def gen_native_args(args):
+    return "\"({params}){res}\"".format(
+        params = ''.join(["I" if x == "long long" else "i" for x in args]),
+        res = "i"
+        )
+    
+
+def gen_native_def(nr, name, fn_name, args):
+    return "\t\t\tNSYMBOL ( {: >25}, {: >25}, {: >12} ),".format(
+                "__syscall_SYS_" + fn_name,
+                "wali_syscall_" + fn_name,
+                gen_native_args(args)
+            )
+
 
 wali_def_list = []
 case_list = []
 declr_list = []
 impl_list = []
+native_list = []
 
 out_dict = {
     "wali_syscall_defs":    (wali_def_list, gen_syscall_def, 1),
     "wali_syscall_cases":       (case_list, gen_case, 0),
     "wali_syscall_declr":      (declr_list, gen_declr, 1),
-    "wali_syscall_impl":       (impl_list, gen_base_impl, 0)
+    "wali_syscall_impl":       (impl_list, gen_base_impl, 0),
+    "wali_syscall_native":      (native_list, gen_native_def, 0)
 }
 
 
