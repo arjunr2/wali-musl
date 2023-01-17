@@ -151,7 +151,7 @@ WALI_SYSCALL_DEF (getpid, );
 WALI_SYSCALL_DEF (sendfile, );
 WALI_SYSCALL_DEF (socket, int,int,int);
 WALI_SYSCALL_DEF (connect, int,void*,long);
-WALI_SYSCALL_DEF (accept, int,void*,long);
+WALI_SYSCALL_DEF (accept, int,void*,void*);
 WALI_SYSCALL_DEF (sendto, int,void*,long,int);
 WALI_SYSCALL_DEF (recvfrom, int,void*,long,int,void*,void*);
 WALI_SYSCALL_DEF (sendmsg, int,void*,int);

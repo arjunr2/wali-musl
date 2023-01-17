@@ -42,7 +42,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (getpid, getpid, );
 		CASE_SYSCALL (socket, socket, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (connect, connect, (int)a1,(void*)a2,(long)a3);
-		CASE_SYSCALL (accept, accept, (int)a1,(void*)a2,(long)a3);
+		CASE_SYSCALL (accept, accept, (int)a1,(void*)a2,(void*)a3);
 		CASE_SYSCALL (sendto, sendto, (int)a1,(void*)a2,(long)a3,(int)a4);
 		CASE_SYSCALL (recvfrom, recvfrom, (int)a1,(void*)a2,(long)a3,(int)a4,(void*)a5,(void*)a6);
 		CASE_SYSCALL (sendmsg, sendmsg, (int)a1,(void*)a2,(int)a3);
