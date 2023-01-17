@@ -81,9 +81,9 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (fadvise, fadvise, (int)a1,(long long)a2,(long long)a3,(int)a4);
 		CASE_SYSCALL (clock_gettime, clock_gettime, (int)a1,(void*)a2);
 		CASE_SYSCALL (clock_nanosleep, clock_nanosleep, (int)a1,(int)a2,(void*)a3,(void*)a4);
-		CASE_SYSCALL (openat, openat, (int)a1,(char*)a2,(int)a3,a4);
+		CASE_SYSCALL (openat, openat, (int)a1,(char*)a2,(int)a3,(int)a4);
 		CASE_SYSCALL (unlinkat, unlinkat, (int)a1,(char*)a2,(int)a3);
-		CASE_SYSCALL (faccessat, faccessat, (int)a1,(char*)a2,(int)a3,a4);
+		CASE_SYSCALL (faccessat, faccessat, (int)a1,(char*)a2,(int)a3,(int)a4);
 		CASE_SYSCALL (utimensat, utimensat, (int)a1,(char*)a2,(void*)a3,(int)a4);
 		CASE_SYSCALL (eventfd, eventfd, (int)a1);
 		CASE_SYSCALL (eventfd2, eventfd2, (int)a1,(int)a2);

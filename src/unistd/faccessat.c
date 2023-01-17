@@ -34,7 +34,7 @@ int faccessat(int fd, const char *filename, int amode, int flag)
 		return __syscall_ret(-EINVAL);
 
 	if (!flag || (getuid()==geteuid() && getgid()==getegid()))
-		return syscall(SYS_faccessat, fd, filename, amode);
+		return syscall(SYS_faccessat, fd, filename, amode, 0);
 
 	char stack[1024];
 	sigset_t set;
