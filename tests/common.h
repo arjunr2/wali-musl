@@ -11,6 +11,7 @@
 #include <sys/sysmacros.h>
 #include <signal.h>
 #include <sys/utsname.h>
+#include <dirent.h>
 
 int print(char* buf) {
   int len = strlen(buf);
@@ -19,7 +20,7 @@ int print(char* buf) {
 }
 
 int print_int(long val) {
-  char res[13];
+  char res[20];
   int len = 0;
   if (val < 0) { val = (~val) + 1; };
   do {
