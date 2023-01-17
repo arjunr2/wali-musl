@@ -13,6 +13,9 @@
 #include <sys/utsname.h>
 #include <dirent.h>
 #include <utime.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 int print(const char* buf) {
   int len = strlen(buf);
