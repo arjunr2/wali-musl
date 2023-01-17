@@ -9,6 +9,7 @@ COMPLEX_TYPES = {
     "mode_t": "int",
     "nfds_t": "int",
     "socklen_t": "long",
+    "clockid_t": "int",
     "uid_t": "int",
     "pid_t": "int",
     "gid_t": "int"
@@ -70,7 +71,7 @@ def gen_declr(nr, name, fn_name, args):
             arglist = ''.join([', long a{}'.format(i+1) for i, j in enumerate(args)]))
 
 def gen_base_impl(nr, name, fn_name, args):
-    lines = [f"// {nr}",
+    lines = [f"// {nr} TODO",
             "long wali_syscall_{fn_name} (wasm_exec_env_t exec_env{arglist}) {{".format(
                 fn_name = fn_name, 
                 arglist = ''.join([f", long a{i+1}" for i, j in enumerate(args)])),
