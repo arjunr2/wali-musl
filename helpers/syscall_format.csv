@@ -217,7 +217,7 @@ NR,Syscall,# Args,a1,a2,a3,a4,a5,a6,Aliases,Unused Aliases
 214,epoll_ctl_old,,,,,,,,,
 215,epoll_wait_old,,,,,,,,,
 216,remap_file_pages,,,,,,,,,
-217,getdents64,3,int,struct linux_dirent*,int,,,,,
+217,getdents64,3,int,struct dirent*,int,,,,,
 218,set_tid_address,,,,,,,,,
 219,restart_syscall,,,,,,,,,
 220,semtimedop,,,,,,,,,

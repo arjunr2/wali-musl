@@ -13,13 +13,13 @@
 #include <sys/utsname.h>
 #include <dirent.h>
 
-int print(char* buf) {
+int print(const char* buf) {
   int len = strlen(buf);
   write(1, buf, len);
   return len;
 }
 
-int print_int(long val) {
+int print_int(int64_t val) {
   char res[20];
   int len = 0;
   if (val < 0) { val = (~val) + 1; };

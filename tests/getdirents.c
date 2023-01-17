@@ -34,6 +34,8 @@ int main()
         handle_error("open");
 
     for ( ; ; ) {
+        PRINT_INT("getdents", SYS_getdents);
+        PRINT_INT("getdents64", SYS_getdents64);
         nread = syscall(SYS_getdents64, fd, buf, BUF_SIZE);
         if (nread == -1)
             handle_error("getdents");
@@ -45,8 +47,7 @@ int main()
         for (bpos = 0; bpos < nread;) {
             d = (struct dirent *) (buf + bpos);
             PRINT_INT("Inode", d->d_ino);
-            d_type = *(buf + bpos + d->d_reclen - 1);
-            PRINT_STR("Filetype", (char*) get_type(d_type));
+            PRINT_STR("Filetype", (char*) get_type(d->d_type));
             PRINT_INT("D_reclen", d->d_reclen);
             PRINT_INT("D_off", d->d_off);
             PRINT_STR("D_name", d->d_name);
