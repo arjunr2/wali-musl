@@ -124,7 +124,7 @@ WALI_SYSCALL_DEF (brk, void*);
 WALI_SYSCALL_DEF (rt_sigaction, int,void*,void*,long);
 WALI_SYSCALL_DEF (rt_sigprocmask, int,void*,void*,long);
 WALI_SYSCALL_DEF (rt_sigreturn, long);
-WALI_SYSCALL_DEF (ioctl, int,int,...);
+WALI_SYSCALL_DEF (ioctl, int,int,void*);
 WALI_SYSCALL_DEF (pread64, int,void*,long,long long);
 WALI_SYSCALL_DEF (pwrite64, int,void*,long,long long);
 WALI_SYSCALL_DEF (readv, int,void*,int);
