@@ -144,8 +144,8 @@ void free(void *p)
 	struct mapinfo mi = nontrivial_free(g, idx);
 	unlock();
 	if (mi.len) {
-		int e = errno;
+		//int e = errno;
 		munmap(mi.base, mi.len);
-		errno = e;
+		//errno = e;
 	}
 }
