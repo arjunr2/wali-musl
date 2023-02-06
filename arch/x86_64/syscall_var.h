@@ -23,7 +23,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (rt_sigaction, rt_sigaction, (int)a1,(void*)a2,(void*)a3,(unsigned int)a4);
 		CASE_SYSCALL (rt_sigprocmask, rt_sigprocmask, (int)a1,(void*)a2,(void*)a3,(unsigned int)a4);
 		CASE_SYSCALL (rt_sigreturn, rt_sigreturn, (long)a1);
-		CASE_SYSCALL (ioctl, ioctl, (int)a1,(int)a2,a3);
+		CASE_SYSCALL (ioctl, ioctl, (int)a1,(int)a2,(char*)a3);
 		CASE_SYSCALL (pread64, pread64, (int)a1,(void*)a2,(unsigned int)a3,(long long)a4);
 		CASE_SYSCALL (pwrite64, pwrite64, (int)a1,(void*)a2,(unsigned int)a3,(long long)a4);
 		CASE_SYSCALL (readv, readv, (int)a1,(void*)a2,(int)a3);
@@ -74,6 +74,8 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (chown, chown, (char*)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (fchown, fchown, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (umask, umask, (int)a1);
+		CASE_SYSCALL (rt_sigsuspend, rt_sigsuspend, (void*)a1,(unsigned int)a2);
+		CASE_SYSCALL (sigaltstack, sigaltstack, (void*)a1,(void*)a2);
 		CASE_SYSCALL (utime, utime, (char*)a1,(void*)a2);
 		CASE_SYSCALL (statfs, statfs, (char*)a1,(void*)a2);
 		CASE_SYSCALL (fstatfs, fstatfs, (int)a1,(void*)a2);
