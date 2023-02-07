@@ -167,7 +167,7 @@ WALI_SYSCALL_DEF (getsockopt, int,int,int,void*,void*);
 WALI_SYSCALL_DEF (clone, );
 WALI_SYSCALL_DEF (fork, );
 WALI_SYSCALL_DEF (vfork, );
-WALI_SYSCALL_DEF (execve, );
+WALI_SYSCALL_DEF (execve, char*,char*,char*);
 WALI_SYSCALL_DEF (exit, );
 WALI_SYSCALL_DEF (wait4, int,int*,int,void*);
 WALI_SYSCALL_DEF (kill, int,int);
