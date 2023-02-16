@@ -55,7 +55,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (setsockopt, setsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(unsigned int)a5);
 		CASE_SYSCALL (getsockopt, getsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(void*)a5);
 		CASE_SYSCALL (fork, fork, );
-    CASE_SYSCALL (execve, execve, (char*)a1,(char*)a2,(char*)a3);
+		CASE_SYSCALL (execve, execve, (char*)a1,(char*)a2,(char*)a3);
 		CASE_SYSCALL (wait4, wait4, (int)a1,(int*)a2,(int)a3,(void*)a4);
 		CASE_SYSCALL (kill, kill, (int)a1,(int)a2);
 		CASE_SYSCALL (uname, uname, (void*)a1);
@@ -75,6 +75,13 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (chown, chown, (char*)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (fchown, fchown, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (umask, umask, (int)a1);
+		CASE_SYSCALL (getuid, getuid, );
+		CASE_SYSCALL (getgid, getgid, );
+		CASE_SYSCALL (geteuid, geteuid, );
+		CASE_SYSCALL (getegid, getegid, );
+		CASE_SYSCALL (getppid, getppid, );
+		CASE_SYSCALL (getpgid, getpgid, (int)a1);
+		CASE_SYSCALL (getsid, getsid, (int)a1);
 		CASE_SYSCALL (rt_sigsuspend, rt_sigsuspend, (void*)a1,(unsigned int)a2);
 		CASE_SYSCALL (sigaltstack, sigaltstack, (void*)a1,(void*)a2);
 		CASE_SYSCALL (utime, utime, (char*)a1,(void*)a2);
