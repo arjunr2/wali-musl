@@ -56,6 +56,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (getsockopt, getsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(void*)a5);
 		CASE_SYSCALL (fork, fork, );
 		CASE_SYSCALL (execve, execve, (char*)a1,(char*)a2,(char*)a3);
+		CASE_SYSCALL (exit, exit, (int)a1);
 		CASE_SYSCALL (wait4, wait4, (int)a1,(int*)a2,(int)a3,(void*)a4);
 		CASE_SYSCALL (kill, kill, (int)a1,(int)a2);
 		CASE_SYSCALL (uname, uname, (void*)a1);
@@ -79,6 +80,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (getgid, getgid, );
 		CASE_SYSCALL (geteuid, geteuid, );
 		CASE_SYSCALL (getegid, getegid, );
+		CASE_SYSCALL (setpgid, setpgid, (int)a1, (int)a2);
 		CASE_SYSCALL (getppid, getppid, );
 		CASE_SYSCALL (getpgid, getpgid, (int)a1);
 		CASE_SYSCALL (getsid, getsid, (int)a1);
@@ -91,6 +93,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (fadvise, fadvise, (int)a1,(long long)a2,(long long)a3,(int)a4);
 		CASE_SYSCALL (clock_gettime, clock_gettime, (int)a1,(void*)a2);
 		CASE_SYSCALL (clock_nanosleep, clock_nanosleep, (int)a1,(int)a2,(void*)a3,(void*)a4);
+		CASE_SYSCALL (exit_group, exit_group, (int)a1);
 		CASE_SYSCALL (openat, openat, (int)a1,(char*)a2,(int)a3,(int)a4);
 		CASE_SYSCALL (unlinkat, unlinkat, (int)a1,(char*)a2,(int)a3);
 		CASE_SYSCALL (faccessat, faccessat, (int)a1,(char*)a2,(int)a3,(int)a4);
