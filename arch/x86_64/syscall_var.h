@@ -63,6 +63,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (fcntl, fcntl, (int)a1,(int)a2,a3);
 		CASE_SYSCALL (flock, flock, (int)a1,(int)a2);
 		CASE_SYSCALL (fsync, fsync, (int)a1);
+		CASE_SYSCALL (ftruncate, ftruncate, (int)a1,(long long)a2);
 		CASE_SYSCALL (getcwd, getcwd, (char*)a1,(unsigned int)a2);
 		CASE_SYSCALL (chdir, chdir, (char*)a1);
 		CASE_SYSCALL (mkdir, mkdir, (char*)a1,(int)a2);
@@ -80,8 +81,9 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (getgid, getgid, );
 		CASE_SYSCALL (geteuid, geteuid, );
 		CASE_SYSCALL (getegid, getegid, );
-		CASE_SYSCALL (setpgid, setpgid, (int)a1, (int)a2);
+		CASE_SYSCALL (setpgid, setpgid, (int)a1,(int)a2);
 		CASE_SYSCALL (getppid, getppid, );
+		CASE_SYSCALL (setsid, setsid, );
 		CASE_SYSCALL (getpgid, getpgid, (int)a1);
 		CASE_SYSCALL (getsid, getsid, (int)a1);
 		CASE_SYSCALL (rt_sigsuspend, rt_sigsuspend, (void*)a1,(unsigned int)a2);
