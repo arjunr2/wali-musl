@@ -64,6 +64,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (flock, flock, (int)a1,(int)a2);
 		CASE_SYSCALL (fsync, fsync, (int)a1);
 		CASE_SYSCALL (ftruncate, ftruncate, (int)a1,(long long)a2);
+		//CASE_SYSCALL (getdents, getdents, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (getcwd, getcwd, (char*)a1,(unsigned int)a2);
 		CASE_SYSCALL (chdir, chdir, (char*)a1);
 		CASE_SYSCALL (mkdir, mkdir, (char*)a1,(int)a2);

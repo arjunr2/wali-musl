@@ -186,7 +186,7 @@ WALI_SYSCALL_DEF (fsync, int);
 WALI_SYSCALL_DEF (fdatasync, );
 WALI_SYSCALL_DEF (truncate, );
 WALI_SYSCALL_DEF (ftruncate, int,long long);
-WALI_SYSCALL_DEF (getdents, );
+WALI_SYSCALL_DEF (getdents, int,void*,int);
 WALI_SYSCALL_DEF (getcwd, char*,unsigned int);
 WALI_SYSCALL_DEF (chdir, char*);
 WALI_SYSCALL_DEF (fchdir, );
