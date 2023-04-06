@@ -6,7 +6,7 @@ int __errno_process = 0;
 int *__errno_location(void)
 {
 	//return &__pthread_self()->errno_val;
-  printf("-- WARNING -- Setting Errno\n");
+  //printf("-- WARNING -- Setting Errno\n");
   return &__errno_process;
 }
 
