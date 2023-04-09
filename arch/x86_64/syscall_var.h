@@ -39,6 +39,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (dup2, dup2, (int)a1,(int)a2);
 		CASE_SYSCALL (nanosleep, nanosleep, (void*)a1,(void*)a2);
 		CASE_SYSCALL (alarm, alarm, (int)a1);
+		CASE_SYSCALL (setitimer, setitimer, (int)a1,(void*)a2,(void*)a3);
 		CASE_SYSCALL (getpid, getpid, );
 		CASE_SYSCALL (socket, socket, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (connect, connect, (int)a1,(void*)a2,(unsigned int)a3);

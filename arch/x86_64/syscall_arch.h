@@ -146,7 +146,7 @@ WALI_SYSCALL_DEF (pause, );
 WALI_SYSCALL_DEF (nanosleep, void*,void*);
 WALI_SYSCALL_DEF (getitimer, );
 WALI_SYSCALL_DEF (alarm, int);
-WALI_SYSCALL_DEF (setitimer, );
+WALI_SYSCALL_DEF (setitimer, int,void*,void*);
 WALI_SYSCALL_DEF (getpid, );
 WALI_SYSCALL_DEF (sendfile, );
 WALI_SYSCALL_DEF (socket, int,int,int);
