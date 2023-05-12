@@ -21,7 +21,7 @@ syslibdir = /lib
 EXCLUDE_SRC_DIRS = math ldso
 
 MALLOC_DIR = mallocng
-SRC_DIRS = $(addprefix $(srcdir)/, $(filter-out $(addprefix src/, $(EXCLUDE_SRC_DIRS)), $(wildcard src/*)) src/malloc/$(MALLOC_DIR)) #crt ldso $(COMPAT_SRC_DIRS))
+SRC_DIRS = $(addprefix $(srcdir)/, $(filter-out $(addprefix src/, $(EXCLUDE_SRC_DIRS)), $(wildcard src/*)) src/malloc/$(MALLOC_DIR) crt) #ldso $(COMPAT_SRC_DIRS))
 BASE_GLOBS = $(addsuffix /*.c,$(SRC_DIRS))
 ARCH_GLOBS = $(addsuffix /$(ARCH)/*.[csS],$(SRC_DIRS))
 BASE_SRCS = $(sort $(wildcard $(BASE_GLOBS)))
@@ -70,7 +70,7 @@ CRT_LIBS = $(addprefix lib/,$(notdir $(CRT_OBJS)))
 STATIC_LIBS = lib/libc.a
 SHARED_LIBS = lib/libc.so
 TOOL_LIBS = lib/musl-gcc.specs
-ALL_LIBS = $(STATIC_LIBS) $(TOOL_LIBS) #$(EMPTY_LIBS)
+ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(TOOL_LIBS) #$(EMPTY_LIBS)
 ALL_TOOLS = obj/musl-gcc
 
 WRAPCC_GCC = gcc
@@ -100,8 +100,6 @@ all: $(ALL_LIBS) $(ALL_TOOLS)
 
 	cp -r obj/include/bits $(SYSROOT_INC)/
 	cp -r $(srcdir)/arch/generic/bits/* $(SYSROOT_INC)/bits
-#	cp -r $(srcdir)/arch/x86_64/bits/posix.h $(SYSROOT_INC)/bits
-#	cp -r $(srcdir)/arch/x86_64/bits/stat.h $(SYSROOT_INC)/bits
 	cp -r $(srcdir)/arch/x86_64/bits/* $(SYSROOT_INC)/bits/
 
 
