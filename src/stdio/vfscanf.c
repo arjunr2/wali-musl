@@ -68,7 +68,7 @@ int vfscanf(FILE *restrict f, const char *restrict fmt, va_list ap)
 	int invert;
 	int matches=0;
 	unsigned long long x;
-	long double y;
+	long_double_pr_t y;
 	off_t pos = 0;
 	unsigned char scanset[257];
 	size_t i, k;
@@ -312,7 +312,11 @@ int vfscanf(FILE *restrict f, const char *restrict fmt, va_list ap)
 				*(double *)dest = y;
 				break;
 			case SIZE_L:
-				*(long double *)dest = y;
+#if !defined(__wali_printscan_enable_long_double)
+        long_double_not_supported();
+#else
+				*(long_double_pr_t *)dest = y;
+#endif
 				break;
 			}
 			break;

@@ -9,6 +9,8 @@
 #include <wchar.h>
 #include <inttypes.h>
 
+#include <private/printscan.h>
+
 /* Convenient bit representation for modifier flags, which all fall
  * within 31 codepoints of the space character. */
 
@@ -95,7 +97,7 @@ static const unsigned char states[]['z'-'A'+1] = {
 union arg
 {
 	uintmax_t i;
-	long double f;
+	long_double_pr_t f;
 	void *p;
 };
 
@@ -119,7 +121,10 @@ static void pop_arg(union arg *arg, int type, va_list *ap)
 	break; case PDIFF:	arg->i = va_arg(*ap, ptrdiff_t);
 	break; case UIPTR:	arg->i = (uintptr_t)va_arg(*ap, void *);
 	break; case DBL:	arg->f = va_arg(*ap, double);
-	break; case LDBL:	arg->f = va_arg(*ap, long double);
+	break; case LDBL:	arg->f = va_arg(*ap, long_double_pr_t);
+#if !defined(__wali_printscan_enable_long_double)
+    long_double_not_supported();
+#endif
 	}
 }
 
@@ -302,6 +307,33 @@ static int wprintf_core(FILE *f, const wchar_t *fmt, va_list *ap, union arg *nl_
 		}
 
 		if (xp && p<0) goto overflow;
+#if !defined(__wali_printscan_enable_long_double)
+    // Omit the 'L' modifier for floating-point cases.
+		switch (t|32) {
+		case 'a': case 'e': case 'f': case 'g':
+			snprintf(charfmt, sizeof charfmt, "%%%s%s%s%s%s*.*%c",
+				"#"+!(fl & ALT_FORM),
+				"+"+!(fl & MARK_POS),
+				"-"+!(fl & LEFT_ADJ),
+				" "+!(fl & PAD_POS),
+				"0"+!(fl & ZERO_PAD),
+				t);
+
+			l = fprintf(f, charfmt, w, p, arg.f);
+			break;
+		case 'd': case 'i': case 'o': case 'u': case 'x': case 'p':
+			snprintf(charfmt, sizeof charfmt, "%%%s%s%s%s%s*.*%c%c",
+				"#"+!(fl & ALT_FORM),
+				"+"+!(fl & MARK_POS),
+				"-"+!(fl & LEFT_ADJ),
+				" "+!(fl & PAD_POS),
+				"0"+!(fl & ZERO_PAD),
+				sizeprefix[(t|32)-'a'], t);
+
+			l = fprintf(f, charfmt, w, p, arg.i);
+			break;
+		}
+#else
 		snprintf(charfmt, sizeof charfmt, "%%%s%s%s%s%s*.*%c%c",
 			"#"+!(fl & ALT_FORM),
 			"+"+!(fl & MARK_POS),
@@ -318,6 +350,7 @@ static int wprintf_core(FILE *f, const wchar_t *fmt, va_list *ap, union arg *nl_
 			l = fprintf(f, charfmt, w, p, arg.i);
 			break;
 		}
+#endif
 	}
 
 	if (f) return cnt;

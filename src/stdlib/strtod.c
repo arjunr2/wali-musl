@@ -3,12 +3,12 @@
 #include "floatscan.h"
 #include "stdio_impl.h"
 
-static long double strtox(const char *s, char **p, int prec)
+static long_double_pr_t strtox(const char *s, char **p, int prec)
 {
 	FILE f;
 	sh_fromstring(&f, s);
 	shlim(&f, 0);
-	long double y = __floatscan(&f, prec, 1);
+	long_double_pr_t y = __floatscan(&f, prec, 1);
 	off_t cnt = shcnt(&f);
 	if (p) *p = cnt ? (char *)s + cnt : (char *)s;
 	return y;
@@ -26,5 +26,9 @@ double strtod(const char *restrict s, char **restrict p)
 
 long double strtold(const char *restrict s, char **restrict p)
 {
+#if !defined(__wali_printscan_enable_long_double)
+  long_double_not_supported();
+#else
 	return strtox(s, p, 2);
+#endif
 }

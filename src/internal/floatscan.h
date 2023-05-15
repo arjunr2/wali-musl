@@ -2,7 +2,8 @@
 #define FLOATSCAN_H
 
 #include <stdio.h>
+#include <private/printscan.h>
 
-hidden long double __floatscan(FILE *, int, int);
+hidden long_double_pr_t __floatscan(FILE *, int, int);
 
 #endif
