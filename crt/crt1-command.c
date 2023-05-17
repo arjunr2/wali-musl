@@ -1,7 +1,18 @@
 
-extern void __wasm_call_ctors(void);
-extern void __wasm_call_dtors(void);
-extern void __wasi_proc_exit(int);
+void __wali_call_ctors(void) __attribute((
+  __import_module__("wali"),
+  __import_name__("__call_ctors")
+));
+void __wali_call_dtors(void) __attribute((
+  __import_module__("wali"),
+  __import_name__("__call_dtors")
+));
+
+void __wali_proc_exit(int) __attribute((
+  __import_module__("wali"),
+  __import_name__("__proc_exit")
+));
+
 extern int __main_void(void);
 
 __attribute__((export_name("_start")))
@@ -13,7 +24,7 @@ void _start(void) {
   started = 1;
 
   // The linker synthesizes this to call constructors.
-  __wasm_call_ctors();
+  __wali_call_ctors();
 
   // Call `__main_void` which will either be the application's zero-argument
   // `__main_void` function or a libc routine which obtains the command-line
@@ -21,11 +32,9 @@ void _start(void) {
   int r = __main_void();
 
   // Call atexit functions, destructors, stdio cleanup, etc.
-  __wasm_call_dtors();
+  __wali_call_dtors();
 
-  // If main exited successfully, just return, otherwise call
-  // `__wasi_proc_exit`.
   if (r != 0) {
-      __wasi_proc_exit(r);
+      __wali_proc_exit(r);
   }
 }

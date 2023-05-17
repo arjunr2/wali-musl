@@ -23,17 +23,18 @@ int __main_argc_argv(int argc, char *argv[]);
 __attribute__((__weak__, nodebug))
 int __main_void(void) {
   int argc = __cl_get_argc();
-  char **argv = (char**) malloc(argc * sizeof(char*));
+  char **argv = (char**) malloc((argc+1) * sizeof(char*));
   if (argv == NULL) {
     return 1;
   }
   for (int i = 0; i < argc; i++) {
     int argv_len = __cl_get_argv_len(i);
-    argv[i] = (char *) malloc(argv_len);
+    argv[i] = (char *) malloc(argv_len+1);
     if (argv[i] == NULL) {
       return 1;
     }
     __cl_copy_argv(argv[i], i);
   }
+  argv[argc] = NULL;
   return __main_argc_argv(argc, argv);
 }

@@ -190,7 +190,7 @@ WALI_SYSCALL_DEF (getdents, int,void*,int);
 WALI_SYSCALL_DEF (getcwd, char*,unsigned int);
 WALI_SYSCALL_DEF (chdir, char*);
 WALI_SYSCALL_DEF (fchdir, );
-WALI_SYSCALL_DEF (rename, );
+WALI_SYSCALL_DEF (rename, char*,char*);
 WALI_SYSCALL_DEF (mkdir, char*,int);
 WALI_SYSCALL_DEF (rmdir, char*);
 WALI_SYSCALL_DEF (creat, );
