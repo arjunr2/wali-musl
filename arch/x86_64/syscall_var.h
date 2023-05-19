@@ -68,7 +68,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		//CASE_SYSCALL (getdents, getdents, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (getcwd, getcwd, (char*)a1,(unsigned int)a2);
 		CASE_SYSCALL (chdir, chdir, (char*)a1);
-    CASE_SYSCALL (rename, rename, (char*)a1,(char*)a2);
+		CASE_SYSCALL (rename, rename, (char*)a1,(char*)a2);
 		CASE_SYSCALL (mkdir, mkdir, (char*)a1,(int)a2);
 		CASE_SYSCALL (rmdir, rmdir, (char*)a1);
 		CASE_SYSCALL (link, link, (char*)a1,(char*)a2);
@@ -80,6 +80,8 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (chown, chown, (char*)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (fchown, fchown, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (umask, umask, (int)a1);
+		CASE_SYSCALL (getrlimit, getrlimit, (int)a1,(void*)a2);
+		CASE_SYSCALL (sysinfo, sysinfo, (void*)a1);
 		CASE_SYSCALL (getuid, getuid, );
 		CASE_SYSCALL (getgid, getgid, );
 		CASE_SYSCALL (geteuid, geteuid, );
@@ -94,6 +96,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (utime, utime, (char*)a1,(void*)a2);
 		CASE_SYSCALL (statfs, statfs, (char*)a1,(void*)a2);
 		CASE_SYSCALL (fstatfs, fstatfs, (int)a1,(void*)a2);
+		CASE_SYSCALL (setrlimit, setrlimit, (int)a1,(void*)a2);
 		CASE_SYSCALL (getdents64, getdents64, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (fadvise, fadvise, (int)a1,(long long)a2,(long long)a3,(int)a4);
 		CASE_SYSCALL (clock_gettime, clock_gettime, (int)a1,(void*)a2);
@@ -106,7 +109,10 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (eventfd, eventfd, (int)a1);
 		CASE_SYSCALL (eventfd2, eventfd2, (int)a1,(int)a2);
 		CASE_SYSCALL (pipe2, pipe2, (int*)a1,(int)a2);
+		CASE_SYSCALL (prlimit64, prlimit64, (int)a1,(int)a2,(void*)a3,(void*)a4);
+		CASE_SYSCALL (getrandom, getrandom, (void*)a1,(unsigned int)a2,(int)a3);
 		CASE_SYSCALL (statx, statx, (int)a1,(char*)a2,(int)a3,(int)a4,(void*)a5);
+		CASE_SYSCALL (faccessat2, faccessat2, (int)a1,(char*)a2,(int)a3,(int)a4);
     default: return -1;
   }
 }
