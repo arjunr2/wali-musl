@@ -29,10 +29,7 @@ int sigsetjmp (sigjmp_buf, int) __setjmp_attr __attribute((
   __import_module__("wali"),
   __import_name__("sigsetjmp")
 ));
-_Noreturn void siglongjmp (sigjmp_buf, int) __attribute((
-  __import_module__("wali"),
-  __import_name__("siglongjmp")
-));
+_Noreturn void siglongjmp (sigjmp_buf, int);
 #endif
 
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
