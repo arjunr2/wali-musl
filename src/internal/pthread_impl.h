@@ -161,6 +161,10 @@ hidden int __clone(int (*)(void *), void *, int, void *, ...) __attribute((
   __import_module__("wali"),
   __import_name__("__clone")
 ));
+hidden int __wasm_thread_spawn(void (*wasm_start_fn)(int, void*), void*) __attribute((
+  __import_module__("wali"),
+  __import_name__("__wasm_thread_spawn")
+));
 
 hidden int __set_thread_area(void *) __attribute((
   __import_module__("wali"),

@@ -6,9 +6,5 @@ static inline uintptr_t __get_tp()
 	return tp;
 }
 */
-uintptr_t __get_tp()  __attribute((
-  __import_module__("wali"),
-  __import_name__("__get_tp")
-));
 
 #define MC_PC gregs[REG_RIP]

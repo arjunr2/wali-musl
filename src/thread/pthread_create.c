@@ -137,7 +137,8 @@ _Noreturn void __pthread_exit(void *result)
 	__vm_unlock();
 
 	__do_orphaned_stdio_locks();
-	__dl_thread_cleanup();
+	/* LDSO -- Not WALI supported */
+  //__dl_thread_cleanup();
 
 	/* Last, unlink thread from the list. This change will not be visible
 	 * until the lock is released, which only happens after SYS_exit
@@ -148,6 +149,10 @@ _Noreturn void __pthread_exit(void *result)
 	self->next->prev = self->prev;
 	self->prev->next = self->next;
 	self->prev = self->next = self;
+
+  /* Linux creates thread with CLONE_CHILD_CLEARTID
+  * Mirror unlocking performed by kernel by adding it here */
+  __tl_unlock();
 
 	if (state==DT_DETACHED && self->map_base) {
 		/* Detached threads must block even implementation-internal
@@ -185,35 +190,55 @@ void __do_cleanup_pop(struct __ptcb *cb)
 }
 
 struct start_args {
+  /* Stack and TLS Base should be at the start of struct
+  * This is expected since the startup function uses
+  * offsets into this */
+  void *stack;
+  void *tls_base;
+  /* */
 	void *(*start_func)(void *);
 	void *start_arg;
 	volatile int control;
 	unsigned long sig_mask[_NSIG/8/sizeof(long)];
 };
 
-static int start(void *p)
-{
-	struct start_args *args = p;
-	int state = args->control;
-	if (state) {
-		if (a_cas(&args->control, 1, 2)==1)
-			__wait(&args->control, 0, 2, 1);
-		if (args->control) {
-			__syscall_SYS_set_tid_address(&args->control);
-			for (;;) __syscall_SYS_exit(0);
-		}
-	}
-	__syscall_SYS_rt_sigprocmask(SIG_SETMASK, &args->sig_mask, 0, _NSIG/8);
-	__pthread_exit(args->start_func(args->start_arg));
-	return 0;
-}
+//static int start(void *p)
+//{
+//	struct start_args *args = p;
+//	int state = args->control;
+//	if (state) {
+//		if (a_cas(&args->control, 1, 2)==1)
+//			__wait(&args->control, 0, 2, 1);
+//		if (args->control) {
+//			__syscall_SYS_set_tid_address(&args->control);
+//			for (;;) __syscall_SYS_exit(0);
+//		}
+//	}
+//	__syscall_SYS_rt_sigprocmask(SIG_SETMASK, &args->sig_mask, 0, _NSIG/8);
+//	__pthread_exit(args->start_func(args->start_arg));
+//	return 0;
+//}
+//
+//static int start_c11(void *p)
+//{
+//	struct start_args *args = p;
+//	int (*start)(void*) = (int(*)(void*)) args->start_func;
+//	__pthread_exit((void *)(uintptr_t)start(args->start_arg));
+//	return 0;
+//}
 
-static int start_c11(void *p)
-{
-	struct start_args *args = p;
-	int (*start)(void*) = (int(*)(void*)) args->start_func;
-	__pthread_exit((void *)(uintptr_t)start(args->start_arg));
-	return 0;
+
+hidden void __wasm_thread_start_libc(int tid, void *p) {
+  struct start_args *args = p;
+  pthread_t self = __pthread_self();
+  /* pthread_create parent also races to set TID,
+  * so use atomic_stores at both locations for whichever
+  * writes first */
+  a_store(&(self->tid), tid);
+  /* Inherit parent signal mask */
+  __syscall_SYS_rt_sigprocmask(SIG_SETMASK, &args->sig_mask, 0, _NSIG/8);
+  /* User start function */
+  __pthread_exit(args->start_func(args->start_arg));
 }
 
 #define ROUND(x) (((x)+PAGE_SIZE-1)&-PAGE_SIZE)
@@ -240,13 +265,15 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 	size_t size, guard;
 	struct pthread *self, *new;
 	unsigned char *map = 0, *stack = 0, *tsd = 0, *stack_limit;
-	unsigned flags = CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND
-		| CLONE_THREAD | CLONE_SYSVSEM | CLONE_SETTLS
-		| CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID | CLONE_DETACHED;
 	pthread_attr_t attr = { 0 };
 	sigset_t set;
 
-	if (!libc.can_do_threads) return ENOSYS;
+  size_t tls_align = __builtin_wasm_tls_align();
+  size_t tls_size = __builtin_wasm_tls_size() + tls_align;
+  void* tls_base = __builtin_wasm_tls_base();
+  void* new_tls_base;
+  size_t tls_offset;
+
 	self = __pthread_self();
 	if (!libc.threaded) {
 		for (FILE *f=*__ofl_lock(); f; f=f->next)
@@ -269,7 +296,7 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 	}
 
 	if (attr._a_stackaddr) {
-		size_t need = libc.tls_size + __pthread_tsd_size;
+		size_t need = tls_size + __pthread_tsd_size;
 		size = attr._a_stacksize;
 		stack = (void *)(attr._a_stackaddr & -16);
 		stack_limit = (void *)(attr._a_stackaddr - size);
@@ -278,7 +305,7 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 		 * application's stack space. */
 		if (need < size/8 && need < 2048) {
 			tsd = stack - __pthread_tsd_size;
-			stack = tsd - libc.tls_size;
+			stack = tsd - tls_size;
 			memset(stack, 0, need);
 		} else {
 			size = ROUND(need);
@@ -287,7 +314,7 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 	} else {
 		guard = ROUND(attr._a_guardsize);
 		size = guard + ROUND(attr._a_stacksize
-			+ libc.tls_size +  __pthread_tsd_size);
+			+ tls_size +  __pthread_tsd_size);
 	}
 
 	if (!tsd) {
@@ -305,16 +332,18 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 		}
 		tsd = map + size - __pthread_tsd_size;
 		if (!stack) {
-			stack = tsd - libc.tls_size;
+			stack = tsd - tls_size;
 			stack_limit = map + guard;
 		}
 	}
 
-	new = __copy_tls(tsd - libc.tls_size);
+  new_tls_base = __copy_tls(tsd - tls_size);
+  tls_offset = new_tls_base - tls_base;
+  /* Pthread structure for new thread */
+  new = (void*)((uintptr_t)self + tls_offset);
+
 	new->map_base = map;
 	new->map_size = size;
-	new->stack = stack;
-	new->stack_size = stack - stack_limit;
 	new->guard_size = guard;
 	new->self = new;
 	new->tsd = (void *)tsd;
@@ -331,11 +360,26 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 	/* Setup argument structure for the new thread on its stack.
 	 * It's safe to access from the caller only until the thread
 	 * list is unlocked. */
-	stack -= (uintptr_t)stack % sizeof(uintptr_t);
-	stack -= sizeof(struct start_args);
-	struct start_args *args = (void *)stack;
-	args->start_func = entry;
-	args->start_arg = arg;
+	//stack -= (uintptr_t)stack % sizeof(uintptr_t);
+	//stack -= sizeof(struct start_args);
+	//struct start_args *args = (void *)stack;
+	//args->start_func = entry;
+	//args->start_arg = arg;
+
+  /* Setup argument and stack for new thread */
+  /* Align stack to start_args */
+  stack -= sizeof(struct start_args);
+  stack -= (uintptr_t)stack % __alignof(struct start_args);
+  struct start_args *args = (void*) stack;
+
+  /* Align stack to 16 and set stack size */
+  new->stack = (void*)((uintptr_t)stack & -16);
+  new->stack_size = stack - stack_limit;
+  /* asm trampoline */
+  args->stack = new->stack;
+  args->start_func = entry;
+  args->start_arg = arg;
+  args->tls_base = (void*)new_tls_base;
 	args->control = attr._a_sched ? 1 : 0;
 
 	/* Application signals (but not the synccall signal) must be
@@ -352,7 +396,12 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 
 	__tl_lock();
 	if (!libc.threads_minus_1++) libc.need_locks = 1;
-	ret = __clone((c11 ? start_c11 : start), stack, flags, args, &new->tid, TP_ADJ(new), &__thread_list_lock);
+	//ret = __clone((c11 ? start_c11 : start), stack, flags, args, &new->tid, TP_ADJ(new), &__thread_list_lock);
+  
+  /* Host call '__wasm_thread_spawn' creates host thread execution context
+  * and calls the first argument for language specific start-up
+  */
+  ret = __wasm_thread_spawn(__wasm_thread_start_libc, (void*) args);
 
 	/* All clone failures translate to EAGAIN. If explicit scheduling
 	 * was requested, attempt it before unlocking the thread list so
@@ -360,13 +409,16 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
 	 * clean up all transient resource usage before returning. */
 	if (ret < 0) {
 		ret = -EAGAIN;
-	} else if (attr._a_sched) {
-		ret = __syscall_SYS_sched_setscheduler(
-			new->tid, attr._a_policy, &attr._a_prio);
-		if (a_swap(&args->control, ret ? 3 : 0)==2)
-			__wake(&args->control, 1, 1);
-		if (ret)
-			__wait(&args->control, 0, 3, 0);
+	} else {
+    a_store(&(new->tid), ret);
+    if (attr._a_sched) {
+      ret = __syscall_SYS_sched_setscheduler(
+        new->tid, attr._a_policy, &attr._a_prio);
+      if (a_swap(&args->control, ret ? 3 : 0)==2)
+        __wake(&args->control, 1, 1);
+      if (ret)
+        __wait(&args->control, 0, 3, 0);
+    }
 	}
 
 	if (ret >= 0) {
