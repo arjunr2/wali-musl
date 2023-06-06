@@ -17,19 +17,23 @@ includedir = $(prefix)/include
 libdir = $(prefix)/lib
 syslibdir = /lib
 
-# For WALI, exclude these
+# For WALI, exclude these parts of libc source
 EXCLUDE_SRC_DIRS = ldso
 
 MALLOC_DIR = mallocng
 SRC_DIRS = $(addprefix $(srcdir)/, $(filter-out $(addprefix src/, $(EXCLUDE_SRC_DIRS)), $(wildcard src/*)) src/malloc/$(MALLOC_DIR) crt) #ldso $(COMPAT_SRC_DIRS))
 BASE_GLOBS = $(addsuffix /*.c,$(SRC_DIRS))
 ARCH_GLOBS = $(addsuffix /$(ARCH)/*.[csS],$(SRC_DIRS))
+WASM_GLOBS = $(addsuffix /wasm32/*.[csS],$(SRC_DIRS))
 BASE_SRCS = $(sort $(wildcard $(BASE_GLOBS)))
 ARCH_SRCS = $(sort $(wildcard $(ARCH_GLOBS)))
+WASM_SRCS = $(sort $(wildcard $(WASM_GLOBS)))
 BASE_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(BASE_SRCS)))
 ARCH_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(ARCH_SRCS)))
+WASM_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(WASM_SRCS)))
 REPLACED_OBJS = $(sort $(subst /$(ARCH)/,/,$(ARCH_OBJS)))
-ALL_OBJS = $(addprefix obj/, $(filter-out $(REPLACED_OBJS), $(sort $(BASE_OBJS) $(ARCH_OBJS))))
+REPLACED_WASM_OBJS = $(sort $(subst /wasm32/,/,$(WASM_OBJS)))
+ALL_OBJS = $(addprefix obj/, $(filter-out $(REPLACED_OBJS) $(REPLACED_WASM_OBJS), $(sort $(BASE_OBJS) $(ARCH_OBJS) $(WASM_OBJS))))
 
 LIBC_OBJS = $(filter obj/src/%,$(ALL_OBJS)) $(filter obj/compat/%,$(ALL_OBJS))
 LDSO_OBJS = $(filter obj/ldso/%,$(ALL_OBJS:%.o=%.lo))

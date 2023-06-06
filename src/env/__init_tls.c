@@ -36,39 +36,24 @@ static struct builtin_tls {
 
 static struct tls_module main_tls;
 
-void *__copy_tls(unsigned char *mem)
-{
-	pthread_t td;
-	struct tls_module *p;
-	size_t i;
-	uintptr_t *dtv;
+/* __wasm_init_tls is a LLVM compiler-builtin
+* Linked in with wasm32-wasi-threads */
+extern void __wasm_init_tls(void*);
 
-#ifdef TLS_ABOVE_TP
-	dtv = (uintptr_t*)(mem + libc.tls_size) - (libc.tls_cnt + 1);
-
-	mem += -((uintptr_t)mem + sizeof(struct pthread)) & (libc.tls_align-1);
-	td = (pthread_t)mem;
-	mem += sizeof(struct pthread);
-
-	for (i=1, p=libc.tls_head; p; i++, p=p->next) {
-		dtv[i] = (uintptr_t)(mem + p->offset) + DTP_OFFSET;
-		memcpy(mem + p->offset, p->image, p->len);
-	}
-#else
-	dtv = (uintptr_t *)mem;
-
-	mem += libc.tls_size - sizeof(struct pthread);
-	mem -= (uintptr_t)mem & (libc.tls_align-1);
-	td = (pthread_t)mem;
-
-	for (i=1, p=libc.tls_head; p; i++, p=p->next) {
-		dtv[i] = (uintptr_t)(mem - p->offset) + DTP_OFFSET;
-		memcpy(mem - p->offset, p->image, p->len);
-	}
-#endif
-	dtv[0] = libc.tls_cnt;
-	td->dtv = dtv;
-	return td;
+/* Set alignment and initialize the WASM TLS */
+void *__copy_tls(unsigned char *mem) {
+  size_t tls_align = __builtin_wasm_tls_align();
+  volatile void* tls_base = __builtin_wasm_tls_base();
+  mem += tls_align;
+  mem -= (uintptr_t)mem & (tls_align-1);
+  __wasm_init_tls(mem);
+  /* __wasm_init_tls modifies the tls_base global 
+  * in assumption that it is to be used for a new thread
+  * Reset tls_base back to our current thread tls_base */
+  __asm__("local.get %0\n"
+              "global.set __tls_base\n"
+              :: "r"(tls_base));
+  return mem;
 }
 
 #if ULONG_MAX == 0xffffffff

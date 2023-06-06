@@ -53,6 +53,8 @@ void __tl_sync(pthread_t td)
 
 _Noreturn void __pthread_exit(void *result)
 {
+  char k[100] = "==========PTHREAD EXIT\n";
+  write(1, k, strlen(k));
 	pthread_t self = __pthread_self();
 	sigset_t set;
 
@@ -61,6 +63,8 @@ _Noreturn void __pthread_exit(void *result)
 	self->result = result;
 
 	while (self->cancelbuf) {
+    char k[100] = "CANCELBUF==========\n";
+    write(1, k, strlen(k));
 		void (*f)(void *) = self->cancelbuf->__f;
 		void *x = self->cancelbuf->__x;
 		self->cancelbuf = self->cancelbuf->__next;
@@ -83,6 +87,7 @@ _Noreturn void __pthread_exit(void *result)
 		__vm_wait();
 	}
 
+
 	/* Access to target the exiting thread with syscalls that use
 	 * its kernel tid is controlled by killlock. For detached threads,
 	 * any use past this point would have undefined behavior, but for
@@ -98,6 +103,8 @@ _Noreturn void __pthread_exit(void *result)
 	 * termination of the thread, but restore the previous lock and
 	 * signal state to prepare for exit to call atexit handlers. */
 	if (self->next == self) {
+    char k[100] = "PTHREAD EXIT2==================\n";
+    write(1, k, strlen(k));
 		__tl_unlock();
 		UNLOCK(self->killlock);
 		self->detach_state = state;
@@ -227,8 +234,11 @@ struct start_args {
 //	return 0;
 //}
 
+void __wasm_thread_start_libc(int tid, void *p);
+hidden void *__dummy_reference = __wasm_thread_start_libc;
 
-hidden void __wasm_thread_start_libc(int tid, void *p) {
+/* Called by __wasm_thread_start_libc, written as an asm module */
+hidden void __wasm_thread_start_libc_C(int tid, void *p) {
   struct start_args *args = p;
   pthread_t self = __pthread_self();
   /* pthread_create parent also races to set TID,
@@ -401,6 +411,8 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
   /* Host call '__wasm_thread_spawn' creates host thread execution context
   * and calls the first argument for language specific start-up
   */
+
+  printf("TLS Base: %d | New TLS Base: %d\n", tls_base, new_tls_base);
   ret = __wasm_thread_spawn(__wasm_thread_start_libc, (void*) args);
 
 	/* All clone failures translate to EAGAIN. If explicit scheduling
