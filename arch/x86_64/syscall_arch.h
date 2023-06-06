@@ -310,7 +310,7 @@ WALI_SYSCALL_DEF (lremovexattr, );
 WALI_SYSCALL_DEF (fremovexattr, );
 WALI_SYSCALL_DEF (tkill, );
 WALI_SYSCALL_DEF (time, );
-WALI_SYSCALL_DEF (futex, );
+WALI_SYSCALL_DEF (futex, int*,int,int,void*,int*,int);
 WALI_SYSCALL_DEF (sched_setaffinity, );
 WALI_SYSCALL_DEF (sched_getaffinity, );
 WALI_SYSCALL_DEF (set_thread_area, );

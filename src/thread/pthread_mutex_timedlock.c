@@ -15,7 +15,7 @@ static int __futex4(volatile void *addr, int op, int val, const struct timespec 
 	if (SYS_futex == SYS_futex_time64 || r!=-ENOSYS) return r;
 	to = to ? (void *)(long[]){CLAMP(s), ns} : 0;
 #endif
-	return __syscall_SYS_futex(addr, op, val, to);
+	return __syscall_SYS_futex(addr, op, val, to, 0, 0);
 }
 
 static int pthread_mutex_timedlock_pi(pthread_mutex_t *restrict m, const struct timespec *restrict at)
@@ -36,7 +36,7 @@ static int pthread_mutex_timedlock_pi(pthread_mutex_t *restrict m, const struct 
 		/* Catch spurious success for non-robust mutexes. */
 		if (!(type&4) && ((m->_m_lock & 0x40000000) || m->_m_waiters)) {
 			a_store(&m->_m_waiters, -1);
-			__syscall_SYS_futex(&m->_m_lock, FUTEX_UNLOCK_PI|priv);
+			__syscall_SYS_futex(&m->_m_lock, FUTEX_UNLOCK_PI|priv, 0, 0, 0, 0);
 			self->robust_list.pending = 0;
 			break;
 		}

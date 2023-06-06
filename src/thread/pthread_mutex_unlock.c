@@ -33,7 +33,7 @@ int __pthread_mutex_unlock(pthread_mutex_t *m)
 	if (type&8) {
 		if (old<0 || a_cas(&m->_m_lock, old, new)!=old) {
 			if (new) a_store(&m->_m_waiters, -1);
-			__syscall_SYS_futex(&m->_m_lock, FUTEX_UNLOCK_PI|priv);
+			__syscall_SYS_futex(&m->_m_lock, FUTEX_UNLOCK_PI|priv, 0, 0, 0, 0);
 		}
 		cont = 0;
 		waiters = 0;

@@ -97,6 +97,8 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (statfs, statfs, (char*)a1,(void*)a2);
 		CASE_SYSCALL (fstatfs, fstatfs, (int)a1,(void*)a2);
 		CASE_SYSCALL (setrlimit, setrlimit, (int)a1,(void*)a2);
+		CASE_SYSCALL (gettid, gettid, );
+		CASE_SYSCALL (futex, futex, (int*)a1,(int)a2,(int)a3,(void*)a4,(int*)a5,(int)a6);
 		CASE_SYSCALL (getdents64, getdents64, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (fadvise, fadvise, (int)a1,(long long)a2,(long long)a3,(int)a4);
 		CASE_SYSCALL (clock_gettime, clock_gettime, (int)a1,(void*)a2);
