@@ -326,7 +326,7 @@ WALI_SYSCALL_DEF (epoll_ctl_old, );
 WALI_SYSCALL_DEF (epoll_wait_old, );
 WALI_SYSCALL_DEF (remap_file_pages, );
 WALI_SYSCALL_DEF (getdents64, int,void*,int);
-WALI_SYSCALL_DEF (set_tid_address, );
+WALI_SYSCALL_DEF (set_tid_address, int*);
 WALI_SYSCALL_DEF (restart_syscall, );
 WALI_SYSCALL_DEF (semtimedop, );
 WALI_SYSCALL_DEF (fadvise, int,long long,long long,int);

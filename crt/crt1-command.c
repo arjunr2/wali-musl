@@ -1,3 +1,6 @@
+#include "atomic.h"
+
+extern void __wasm_init_tp(void);
 
 void __wali_call_ctors(void) __attribute((
   __import_module__("wali"),
@@ -18,10 +21,11 @@ extern int __main_void(void);
 __attribute__((export_name("_start")))
 void _start(void) {
   static volatile int started = 0;
-  if (started != 0) {
+  if (a_cas(&started, 0, 1)) {
     __builtin_trap();
   }
-  started = 1;
+  
+  __wasm_init_tp();
 
   // The linker synthesizes this to call constructors.
   __wali_call_ctors();

@@ -11,13 +11,18 @@
 
 volatile int __thread_list_lock;
 
+void __wasm_init_tp() {
+  __init_tp((void*)__get_tp());
+}
+
 int __init_tp(void *p)
 {
 	pthread_t td = p;
 	td->self = td;
-	int r = __set_thread_area(TP_ADJ(p));
-	if (r < 0) return -1;
-	if (!r) libc.can_do_threads = 1;
+	//int r = __set_thread_area(TP_ADJ(p));
+	//if (r < 0) return -1;
+  //if (!r) libc.can_do_threads = 1;
+	libc.can_do_threads = 1;
 	td->detach_state = DT_JOINABLE;
 	td->tid = __syscall_SYS_set_tid_address(&__thread_list_lock);
 	td->locale = &libc.global_locale;
