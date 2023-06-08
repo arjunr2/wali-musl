@@ -378,7 +378,7 @@ WALI_SYSCALL_DEF (symlinkat, );
 WALI_SYSCALL_DEF (readlinkat, );
 WALI_SYSCALL_DEF (fchmodat, );
 WALI_SYSCALL_DEF (faccessat, int,char*,int,int);
-WALI_SYSCALL_DEF (pselect6, );
+WALI_SYSCALL_DEF (pselect6, int,void*,void*,void*,void*,void*);
 WALI_SYSCALL_DEF (ppoll, );
 WALI_SYSCALL_DEF (unshare, );
 WALI_SYSCALL_DEF (set_robust_list, );

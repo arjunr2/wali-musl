@@ -108,6 +108,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (openat, openat, (int)a1,(char*)a2,(int)a3,(int)a4);
 		CASE_SYSCALL (unlinkat, unlinkat, (int)a1,(char*)a2,(int)a3);
 		CASE_SYSCALL (faccessat, faccessat, (int)a1,(char*)a2,(int)a3,(int)a4);
+		CASE_SYSCALL (pselect6, pselect6, (int)a1,(void*)a2,(void*)a3,(void*)a4,(void*)a5,(void*)a6);
 		CASE_SYSCALL (utimensat, utimensat, (int)a1,(char*)a2,(void*)a3,(int)a4);
 		CASE_SYSCALL (eventfd, eventfd, (int)a1);
 		CASE_SYSCALL (eventfd2, eventfd2, (int)a1,(int)a2);
