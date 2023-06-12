@@ -26,3 +26,6 @@ The build/installation process mostly mirrors that of musl and is detailed in th
 NOTE: Currently, the build is tested with clang-13. Support for newer versions will be added. 
 
 
+# NOTE
+
+Avoid compiling with clang O0. There are bugs in code generation. Use O1 or above
