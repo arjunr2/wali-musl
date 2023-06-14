@@ -43,5 +43,7 @@ hidden char *__gettextdomain(void);
 
 #undef MB_CUR_MAX
 #define MB_CUR_MAX (CURRENT_UTF8 ? 4 : 1)
+/* For WALI w/o threads */
+//#define MB_CUR_MAX 4
 
 #endif
