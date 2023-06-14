@@ -81,6 +81,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (fchown, fchown, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (umask, umask, (int)a1);
 		CASE_SYSCALL (getrlimit, getrlimit, (int)a1,(void*)a2);
+		CASE_SYSCALL (getrusage, getrusage, (int)a1,(void*)a2);
 		CASE_SYSCALL (sysinfo, sysinfo, (void*)a1);
 		CASE_SYSCALL (getuid, getuid, );
 		CASE_SYSCALL (getgid, getgid, );

@@ -206,7 +206,7 @@ WALI_SYSCALL_DEF (lchown, );
 WALI_SYSCALL_DEF (umask, int);
 WALI_SYSCALL_DEF (gettimeofday, );
 WALI_SYSCALL_DEF (getrlimit, int,void*);
-WALI_SYSCALL_DEF (getrusage, );
+WALI_SYSCALL_DEF (getrusage, int,void*);
 WALI_SYSCALL_DEF (sysinfo, void*);
 WALI_SYSCALL_DEF (times, );
 WALI_SYSCALL_DEF (ptrace, );
