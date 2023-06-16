@@ -1,6 +1,16 @@
 /* Virtualize fcntl flags across architectures: mainly differs for aarch64
 * x86_64, aarch64, riscv64 
-* Runtime maps to true flags */
+* Runtime maps to true flags 
+* Used by syscalls:
+*   fcntl
+*   open
+*   openat
+*   pipe2
+* Not supported:
+*   dup3
+*   mq_open
+*   signalfd
+*   */
 
 /* These map commonly */
 #define O_CREAT        0100 // 6
@@ -21,6 +31,12 @@
 #define O_NDELAY O_NONBLOCK // 11
 
 /* These are arch-specific */
+/* Aarch64 swaps O_DIRECTORY <-> O_DIRECT 
+*           and  O_NOFOLLOW <-> O_LARGEFILE
+* O_TMPFILE only differs because O_DIRECTORY flags also set
+* If WALI handles this correctly, no changes need to be made to it
+* Check these in the WALI runtime implementation to adjust accordingly
+* */
 #define O_DIRECTORY 0200000
 #define O_NOFOLLOW  0400000
 
