@@ -133,7 +133,7 @@ WALI_SYSCALL_DEF (access, char*,int);
 WALI_SYSCALL_DEF (pipe, int*);
 WALI_SYSCALL_DEF (select, int,void*,void*,void*,void*);
 WALI_SYSCALL_DEF (sched_yield, );
-WALI_SYSCALL_DEF (mremap, void*,unsigned int,unsigned int,int,...);
+WALI_SYSCALL_DEF (mremap, void*,unsigned int,unsigned int,int,void*);
 WALI_SYSCALL_DEF (msync, void*,unsigned int,int);
 WALI_SYSCALL_DEF (mincore, );
 WALI_SYSCALL_DEF (madvise, void*,unsigned int,int);

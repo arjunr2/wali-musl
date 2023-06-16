@@ -32,7 +32,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (pipe, pipe, (int*)a1);
 		CASE_SYSCALL (select, select, (int)a1,(void*)a2,(void*)a3,(void*)a4,(void*)a5);
 		CASE_SYSCALL (sched_yield, sched_yield, );
-		CASE_SYSCALL (mremap, mremap, (void*)a1,(unsigned int)a2,(unsigned int)a3,(int)a4,a5);
+		CASE_SYSCALL (mremap, mremap, (void*)a1,(unsigned int)a2,(unsigned int)a3,(int)a4,(void*)a5);
 		CASE_SYSCALL (msync, msync, (void*)a1,(unsigned int)a2,(int)a3);
 		CASE_SYSCALL (madvise, madvise, (void*)a1,(unsigned int)a2,(int)a3);
 		CASE_SYSCALL (dup, dup, (int)a1);
