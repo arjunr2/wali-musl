@@ -180,7 +180,7 @@ WALI_SYSCALL_DEF (msgget, );
 WALI_SYSCALL_DEF (msgsnd, );
 WALI_SYSCALL_DEF (msgrcv, );
 WALI_SYSCALL_DEF (msgctl, );
-WALI_SYSCALL_DEF (fcntl, int,int,...);
+WALI_SYSCALL_DEF (fcntl, int,int,int);
 WALI_SYSCALL_DEF (flock, int,int);
 WALI_SYSCALL_DEF (fsync, int);
 WALI_SYSCALL_DEF (fdatasync, );

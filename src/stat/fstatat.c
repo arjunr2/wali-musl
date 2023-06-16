@@ -79,7 +79,7 @@ static int fstatat_kstat(int fd, const char *restrict path, struct stat *restric
 
 	if (flag==AT_EMPTY_PATH && fd>=0 && !*path) {
 		ret = __syscall_SYS_fstat(fd, &kst);
-		if (ret==-EBADF && __syscall_SYS_fcntl(fd, F_GETFD)>=0) {
+		if (ret==-EBADF && __syscall_SYS_fcntl(fd, F_GETFD, 0)>=0) {
 			ret = __syscall_SYS_fstatat(fd, path, &kst, flag);
 			if (ret==-EINVAL) {
 				char buf[15+3*sizeof(int)];

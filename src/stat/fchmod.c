@@ -6,7 +6,7 @@
 int fchmod(int fd, mode_t mode)
 {
 	int ret = __syscall_SYS_fchmod(fd, mode);
-	if (ret != -EBADF || __syscall_SYS_fcntl(fd, F_GETFD) < 0)
+	if (ret != -EBADF || __syscall_SYS_fcntl(fd, F_GETFD, 0) < 0)
 		return __syscall_ret(ret);
 
 	char buf[15+3*sizeof(int)];

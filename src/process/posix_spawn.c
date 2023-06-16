@@ -110,7 +110,7 @@ static int child(void *args_vp)
 					if ((ret=__sys_dup2(fd, op->fd))<0)
 						goto fail;
 				} else {
-					ret = __syscall_SYS_fcntl(fd, F_GETFD);
+					ret = __syscall_SYS_fcntl(fd, F_GETFD, 0);
 					ret = __syscall_SYS_fcntl(fd, F_SETFD,
 					                ret & ~FD_CLOEXEC);
 					if (ret<0)
