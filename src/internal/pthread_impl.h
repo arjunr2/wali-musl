@@ -74,7 +74,7 @@ enum {
 	DT_DETACHED,
 };
 
-#define __SU (sizeof(size_t)/sizeof(int))
+#define __SU 2 //(sizeof(size_t)/sizeof(int))
 
 #define _a_stacksize __u.__s[0]
 #define _a_guardsize __u.__s[1]

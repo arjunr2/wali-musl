@@ -172,9 +172,10 @@ _Noreturn void __pthread_exit(void *result)
 		if (self->robust_list.off)
 			__syscall_SYS_set_robust_list(0, 3*sizeof(long));
 
+    printf("Detached Thread End: unmapself TBD\n");
 		/* The following call unmaps the thread's stack mapping
 		 * and then exits without touching the stack. */
-		__unmapself(self->map_base, self->map_size);
+		//__unmapself(self->map_base, self->map_size);
 	}
 
 	/* Wake any joiner. */
@@ -412,7 +413,7 @@ int __pthread_create(pthread_t *restrict res, const pthread_attr_t *restrict att
   * and calls the first argument for language specific start-up
   */
 
-  printf("TLS Base: %d | New TLS Base: %d\n", tls_base, new_tls_base);
+  //printf("TLS Base: %d | New TLS Base: %d\n", tls_base, new_tls_base);
   ret = __wasm_thread_spawn(__wasm_thread_start_libc, (void*) args);
 
 	/* All clone failures translate to EAGAIN. If explicit scheduling
