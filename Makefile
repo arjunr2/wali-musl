@@ -24,16 +24,12 @@ MALLOC_DIR = mallocng
 SRC_DIRS = $(addprefix $(srcdir)/, $(filter-out $(addprefix src/, $(EXCLUDE_SRC_DIRS)), $(wildcard src/*)) src/malloc/$(MALLOC_DIR) crt) #ldso $(COMPAT_SRC_DIRS))
 BASE_GLOBS = $(addsuffix /*.c,$(SRC_DIRS))
 ARCH_GLOBS = $(addsuffix /$(ARCH)/*.[csS],$(SRC_DIRS))
-WASM_GLOBS = $(addsuffix /wasm32/*.[csS],$(SRC_DIRS))
 BASE_SRCS = $(sort $(wildcard $(BASE_GLOBS)))
 ARCH_SRCS = $(sort $(wildcard $(ARCH_GLOBS)))
-WASM_SRCS = $(sort $(wildcard $(WASM_GLOBS)))
 BASE_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(BASE_SRCS)))
 ARCH_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(ARCH_SRCS)))
-WASM_OBJS = $(patsubst $(srcdir)/%,%.o,$(basename $(WASM_SRCS)))
 REPLACED_OBJS = $(sort $(subst /$(ARCH)/,/,$(ARCH_OBJS)))
-REPLACED_WASM_OBJS = $(sort $(subst /wasm32/,/,$(WASM_OBJS)))
-ALL_OBJS = $(addprefix obj/, $(filter-out $(REPLACED_OBJS) $(REPLACED_WASM_OBJS), $(sort $(BASE_OBJS) $(ARCH_OBJS) $(WASM_OBJS))))
+ALL_OBJS = $(addprefix obj/, $(filter-out $(REPLACED_OBJS), $(sort $(BASE_OBJS) $(ARCH_OBJS))))
 
 LIBC_OBJS = $(filter obj/src/%,$(ALL_OBJS)) $(filter obj/compat/%,$(ALL_OBJS))
 LDSO_OBJS = $(filter obj/ldso/%,$(ALL_OBJS:%.o=%.lo))
@@ -54,7 +50,7 @@ CFLAGS_AUTO = -O0 -pipe
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc -Wno-implicit-function-declaration -Wno-int-conversion
 
 CFLAGS_ALL = $(CFLAGS_C99FSE)
-CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I$(srcdir)/arch/wasm32 -I$(srcdir)/arch/$(ARCH) -I$(srcdir)/arch/generic -Iobj/src/internal -I$(srcdir)/src/include -I$(srcdir)/src/internal -Iobj/include -I$(srcdir)/include
+CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I$(srcdir)/arch/$(ARCH) -I$(srcdir)/arch/generic -Iobj/src/internal -I$(srcdir)/src/include -I$(srcdir)/src/internal -Iobj/include -I$(srcdir)/include
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS_AUTO) $(CFLAGS)
 
 LDFLAGS_ALL = $(LDFLAGS_AUTO) $(LDFLAGS)
@@ -107,7 +103,7 @@ all: $(ALL_LIBS) $(ALL_TOOLS)
 
 	cp -r obj/include/bits $(SYSROOT_INC)/
 	cp -r $(srcdir)/arch/generic/bits/* $(SYSROOT_INC)/bits
-	cp -r $(srcdir)/arch/x86_64/bits/* $(SYSROOT_INC)/bits/
+	cp -r $(srcdir)/arch/$(ARCH)/bits/* $(SYSROOT_INC)/bits/
 
 
 OBJ_DIRS = $(sort $(patsubst %/,%,$(dir $(ALL_LIBS) $(ALL_TOOLS) $(ALL_OBJS) $(GENH) $(GENH_INT))) obj/include)

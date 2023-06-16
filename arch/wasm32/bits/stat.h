@@ -1,6 +1,6 @@
 /* copied from kstat definition, but replace with correctly-sized userspace types */
 
-struct __attribute__((packed)) stat {
+struct stat {
 	dev_t st_dev;
 	ino_t st_ino;
 	nlink_t st_nlink;

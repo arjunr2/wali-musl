@@ -4,5 +4,5 @@
 AR = $(CROSS_COMPILE)ar
 RANLIB = $(CROSS_COMPILE)ranlib
 CC = clang
-ARCH = x86_64
+ARCH = wasm32
 CROSS_COMPILE = llvm-

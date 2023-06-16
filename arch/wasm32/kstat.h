@@ -4,7 +4,7 @@
 *   blksize_t = long (x86-64), int (aarch64, riscv64) 
 *   nlink_t = long (x86-64), int (aarch64, riscv64) */
 
-struct __attribute__((packed)) kstat {
+struct kstat {
 	dev_t st_dev;
 	ino_t st_ino;
 	nlink_t st_nlink;
