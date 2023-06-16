@@ -1,0 +1,2 @@
+* Use generic sem.h since SYS_ipc and SYS_semctl isn't supported yet
+

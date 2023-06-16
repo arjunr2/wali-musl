@@ -10,7 +10,11 @@ struct __attribute__((packed)) k_sigaction {
 	unsigned mask[2];
 };
 
-hidden void __restore();
+hidden void __restore() __attribute((
+  __import_module__("wali"),
+  __import_name__("__restore")
+));
+
 hidden void __restore_rt() __attribute((
   __import_module__("wali"),
   __import_name__("__restore_rt")
