@@ -3,67 +3,7 @@
 
 #define __SYSCALL_LL_E(x) (x)
 #define __SYSCALL_LL_O(x) (x)
-/*
-static __inline long __syscall0(long n)
-{
-	unsigned long ret;
-	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n) : "rcx", "r11", "memory");
-	return ret;
-}
 
-static __inline long __syscall1(long n, long a1)
-{
-	unsigned long ret;
-	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n), "D"(a1) : "rcx", "r11", "memory");
-	return ret;
-}
-
-static __inline long __syscall2(long n, long a1, long a2)
-{
-	unsigned long ret;
-	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n), "D"(a1), "S"(a2)
-						  : "rcx", "r11", "memory");
-	return ret;
-}
-
-static __inline long __syscall3(long n, long a1, long a2, long a3)
-{
-	unsigned long ret;
-	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n), "D"(a1), "S"(a2),
-						  "d"(a3) : "rcx", "r11", "memory");
-	return ret;
-}
-
-static __inline long __syscall4(long n, long a1, long a2, long a3, long a4)
-{
-	unsigned long ret;
-	register long r10 __asm__("r10") = a4;
-	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n), "D"(a1), "S"(a2),
-						  "d"(a3), "r"(r10): "rcx", "r11", "memory");
-	return ret;
-}
-
-static __inline long __syscall5(long n, long a1, long a2, long a3, long a4, long a5)
-{
-	unsigned long ret;
-	register long r10 __asm__("r10") = a4;
-	register long r8 __asm__("r8") = a5;
-	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n), "D"(a1), "S"(a2),
-						  "d"(a3), "r"(r10), "r"(r8) : "rcx", "r11", "memory");
-	return ret;
-}
-
-static __inline long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)
-{
-	unsigned long ret;
-	register long r10 __asm__("r10") = a4;
-	register long r8 __asm__("r8") = a5;
-	register long r9 __asm__("r9") = a6;
-	__asm__ __volatile__ ("syscall" : "=a"(ret) : "a"(n), "D"(a1), "S"(a2),
-						  "d"(a3), "r"(r10), "r"(r8), "r"(r9) : "rcx", "r11", "memory");
-	return ret;
-}
-*/
 long __syscall0(long n) __attribute((
   __import_module__("undefined"),
   __import_name__("syscall0")
@@ -125,8 +65,8 @@ WALI_SYSCALL_DEF (rt_sigaction, int,void*,void*,unsigned int);
 WALI_SYSCALL_DEF (rt_sigprocmask, int,void*,void*,unsigned int);
 WALI_SYSCALL_DEF (rt_sigreturn, long);
 WALI_SYSCALL_DEF (ioctl, int,int,char*);
-WALI_SYSCALL_DEF (pread64, int,void*,unsigned int,long long);
-WALI_SYSCALL_DEF (pwrite64, int,void*,unsigned int,long long);
+WALI_SYSCALL_DEF (pread64, int,char*,unsigned int,long long);
+WALI_SYSCALL_DEF (pwrite64, int,char*,unsigned int,long long);
 WALI_SYSCALL_DEF (readv, int,void*,int);
 WALI_SYSCALL_DEF (writev, int,void*,int);
 WALI_SYSCALL_DEF (access, char*,int);
@@ -366,20 +306,20 @@ WALI_SYSCALL_DEF (inotify_add_watch, );
 WALI_SYSCALL_DEF (inotify_rm_watch, );
 WALI_SYSCALL_DEF (migrate_pages, );
 WALI_SYSCALL_DEF (openat, int,char*,int,int);
-WALI_SYSCALL_DEF (mkdirat, );
+WALI_SYSCALL_DEF (mkdirat, int,char*,int);
 WALI_SYSCALL_DEF (mknodat, );
-WALI_SYSCALL_DEF (fchownat, );
+WALI_SYSCALL_DEF (fchownat, int,char*,int,int,int);
 WALI_SYSCALL_DEF (futimesat, );
 WALI_SYSCALL_DEF (fstatat, );
 WALI_SYSCALL_DEF (unlinkat, int,char*,int);
 WALI_SYSCALL_DEF (renameat, );
-WALI_SYSCALL_DEF (linkat, );
-WALI_SYSCALL_DEF (symlinkat, );
-WALI_SYSCALL_DEF (readlinkat, );
-WALI_SYSCALL_DEF (fchmodat, );
+WALI_SYSCALL_DEF (linkat, int,char*,int,char*,int);
+WALI_SYSCALL_DEF (symlinkat, char*,int,char*);
+WALI_SYSCALL_DEF (readlinkat, int,char*,char*,unsigned int);
+WALI_SYSCALL_DEF (fchmodat, int,char*,int,int);
 WALI_SYSCALL_DEF (faccessat, int,char*,int,int);
 WALI_SYSCALL_DEF (pselect6, int,void*,void*,void*,void*,void*);
-WALI_SYSCALL_DEF (ppoll, );
+WALI_SYSCALL_DEF (ppoll, void*,int,void*,void*,unsigned int);
 WALI_SYSCALL_DEF (unshare, );
 WALI_SYSCALL_DEF (set_robust_list, );
 WALI_SYSCALL_DEF (get_robust_list, );
@@ -400,7 +340,7 @@ WALI_SYSCALL_DEF (accept4, );
 WALI_SYSCALL_DEF (signalfd4, );
 WALI_SYSCALL_DEF (eventfd2, int,int);
 WALI_SYSCALL_DEF (epoll_create1, );
-WALI_SYSCALL_DEF (dup3, );
+WALI_SYSCALL_DEF (dup3, int,int,int);
 WALI_SYSCALL_DEF (pipe2, int*,int);
 WALI_SYSCALL_DEF (inotify_init1, );
 WALI_SYSCALL_DEF (preadv, );
@@ -424,7 +364,7 @@ WALI_SYSCALL_DEF (kcmp, );
 WALI_SYSCALL_DEF (finit_module, );
 WALI_SYSCALL_DEF (sched_setattr, );
 WALI_SYSCALL_DEF (sched_getattr, );
-WALI_SYSCALL_DEF (renameat2, );
+WALI_SYSCALL_DEF (renameat2, int,char*,int,char*,int);
 WALI_SYSCALL_DEF (seccomp, );
 WALI_SYSCALL_DEF (getrandom, void*,unsigned int,int);
 WALI_SYSCALL_DEF (memfd_create, );
@@ -462,13 +402,6 @@ WALI_SYSCALL_DEF (faccessat2, int,char*,int,int);
 #define __SYSCALL_ARCH_CONCAT_X(a,b) a##b
 #define __SYSCALL_ARCH_CONCAT(a,b) __SYSCALL_ARCH_CONCAT_X(a,b)
 
-
-
-//#define VDSO_USEFUL
-//#define VDSO_CGT_SYM "__vdso_clock_gettime"
-//#define VDSO_CGT_VER "LINUX_2.6"
-//#define VDSO_GETCPU_SYM "__vdso_getcpu"
-//#define VDSO_GETCPU_VER "LINUX_2.6"
 
 #define IPC_64 0
 
