@@ -109,6 +109,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (openat, openat, (int)a1,(char*)a2,(int)a3,(int)a4);
 		CASE_SYSCALL (mkdirat, mkdirat, (int)a1,(char*)a2,(int)a3);
 		CASE_SYSCALL (fchownat, fchownat, (int)a1,(char*)a2,(int)a3,(int)a4,(int)a5);
+		CASE_SYSCALL (newfstatat, fstatat, (int)a1,(char*)a2,(void*)a3,(int)a4);
 		CASE_SYSCALL (unlinkat, unlinkat, (int)a1,(char*)a2,(int)a3);
 		CASE_SYSCALL (linkat, linkat, (int)a1,(char*)a2,(int)a3,(char*)a4,(int)a5);
 		CASE_SYSCALL (symlinkat, symlinkat, (char*)a1,(int)a2,(char*)a3);

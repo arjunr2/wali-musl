@@ -310,7 +310,7 @@ WALI_SYSCALL_DEF (mkdirat, int,char*,int);
 WALI_SYSCALL_DEF (mknodat, );
 WALI_SYSCALL_DEF (fchownat, int,char*,int,int,int);
 WALI_SYSCALL_DEF (futimesat, );
-WALI_SYSCALL_DEF (fstatat, );
+WALI_SYSCALL_DEF (fstatat, int,char*,void*,int);
 WALI_SYSCALL_DEF (unlinkat, int,char*,int);
 WALI_SYSCALL_DEF (renameat, );
 WALI_SYSCALL_DEF (linkat, int,char*,int,char*,int);
