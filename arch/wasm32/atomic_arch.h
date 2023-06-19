@@ -90,18 +90,3 @@ __attribute((
 //  return t;
 //}
 
-
-//#define a_barrier a_barrier
-//void a_barrier()
-//__attribute((
-//  __import_module__("wali"),
-//  __import_name__("a_barrier")
-//));
-
-//#define a_spin a_spin
-//void a_spin()
-//__attribute((
-//  __import_module__("wali"),
-//  __import_name__("a_spin")
-//));
-
