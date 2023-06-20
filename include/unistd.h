@@ -35,6 +35,7 @@ extern "C" {
 #define __NEED_useconds_t
 
 #include <bits/alltypes.h>
+#include "syscall_defs.h"
 
 int pipe(int [2]);
 int pipe2(int [2], int);
@@ -180,7 +181,13 @@ void setusershell(void);
 void endusershell(void);
 char *getusershell(void);
 int acct(const char *);
-long syscall(long, ...);
+
+long syscall_vararg_wrapper(long n,...);
+/* Variable length syscall for user programs */
+#ifndef syscall
+#define syscall(...)  __SYSCALL_DISP(syscall_vararg,__VA_ARGS__)
+#endif
+
 int execvpe(const char *, char *const [], char *const []);
 int issetugid(void);
 int getentropy(void *, size_t);

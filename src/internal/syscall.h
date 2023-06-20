@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <sys/syscall.h>
 #include "syscall_arch.h"
+#include "syscall_defs.h"
 
 #ifndef SYSCALL_RLIM_INFINITY
 #define SYSCALL_RLIM_INFINITY (~0ULL)
@@ -18,36 +19,16 @@
 #define __SYSCALL_LL_PRW(x) __SYSCALL_LL_O(x)
 #endif
 
-#ifndef __scc
-#define __scc(X) ((long) (X))
-typedef long syscall_arg_t;
-#endif
 
 hidden long __syscall_ret(unsigned long),
 	__syscall_cp(syscall_arg_t, syscall_arg_t, syscall_arg_t, syscall_arg_t,
 	             syscall_arg_t, syscall_arg_t, syscall_arg_t);
 
-#define __syscall1(n,a) __syscall1(n,__scc(a))
-#define __syscall2(n,a,b) __syscall2(n,__scc(a),__scc(b))
-#define __syscall3(n,a,b,c) __syscall3(n,__scc(a),__scc(b),__scc(c))
-#define __syscall4(n,a,b,c,d) __syscall4(n,__scc(a),__scc(b),__scc(c),__scc(d))
-#define __syscall5(n,a,b,c,d,e) __syscall5(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e))
-#define __syscall6(n,a,b,c,d,e,f) __syscall6(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f))
-#define __syscall7(n,a,b,c,d,e,f,g) __syscall7(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f),__scc(g))
-
-#define __SYSCALL_NARGS_X(a,b,c,d,e,f,g,h,n,...) n
-#define __SYSCALL_NARGS(...) __SYSCALL_NARGS_X(__VA_ARGS__,7,6,5,4,3,2,1,0,)
-#define __SYSCALL_CONCAT_X(a,b) a##b
-#define __SYSCALL_CONCAT(a,b) __SYSCALL_CONCAT_X(a,b)
-#define __SYSCALL_DISP(b,...) __SYSCALL_CONCAT(b,__SYSCALL_NARGS(__VA_ARGS__))(__VA_ARGS__)
-
 /* Standin replacement to make sure this is unused in the future */
-#define SYS_NULL 0
 long __syscall(long n, ...) __attribute__((
   __import_module__("undefined"),
   __import_name__("undef_syscall")
 ));
-//#define __syscall(...) __SYSCALL_DISP(__syscall,__VA_ARGS__)
 #define syscall(b,...) __syscall_ret(__syscall_##b(__VA_ARGS__))
 
 #define socketcall(nm,a,b,c,d,e,f) __syscall_ret(__socketcall(nm,a,b,c,d,e,f))
