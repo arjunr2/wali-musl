@@ -40,11 +40,11 @@ static void __attribute__((noinline)) a_and(volatile int *p, int v) {
 #define a_or a_or
 /* WAMR has a bug with O0 when using __atomic_or_fetch */
 static void __attribute__((noinline)) a_or(volatile int *p, int v) {
-  __asm__ __volatile__ ("local.get %0\n"
-          "local.get %1\n"
-          "i32.atomic.rmw.or 0\n"
-          :: "r"(p), "r"(v));
-  //__atomic_or_fetch(p, v, __ATOMIC_SEQ_CST);
+  //__asm__ __volatile__ ("local.get %0\n"
+  //        "local.get %1\n"
+  //        "i32.atomic.rmw.or 0\n"
+  //        :: "r"(p), "r"(v));
+  __atomic_or_fetch(p, v, __ATOMIC_SEQ_CST);
 }
 
 #define a_and_64 a_and_64
