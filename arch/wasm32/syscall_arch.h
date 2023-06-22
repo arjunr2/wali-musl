@@ -92,7 +92,7 @@ WALI_SYSCALL_DEF (sendfile, );
 WALI_SYSCALL_DEF (socket, int,int,int);
 WALI_SYSCALL_DEF (connect, int,void*,unsigned int);
 WALI_SYSCALL_DEF (accept, int,void*,void*);
-WALI_SYSCALL_DEF (sendto, int,void*,unsigned int,int);
+WALI_SYSCALL_DEF (sendto, int,void*,unsigned int,int,void*,unsigned int);
 WALI_SYSCALL_DEF (recvfrom, int,void*,unsigned int,int,void*,void*);
 WALI_SYSCALL_DEF (sendmsg, int,void*,int);
 WALI_SYSCALL_DEF (recvmsg, int,void*,int);
