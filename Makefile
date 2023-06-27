@@ -46,7 +46,7 @@ LDFLAGS_AUTO =
 LIBCC = -lgcc
 CPPFLAGS =
 CFLAGS = --target=wasm32 -mbulk-memory -matomics
-CFLAGS_AUTO = -O0 -pipe
+CFLAGS_AUTO = -O3 -pipe
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc -Wno-implicit-function-declaration -Wno-int-conversion
 
 CFLAGS_ALL = $(CFLAGS_C99FSE)
