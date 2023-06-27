@@ -53,8 +53,6 @@ void __tl_sync(pthread_t td)
 
 _Noreturn void __pthread_exit(void *result)
 {
-  char k[100] = "==========PTHREAD EXIT\n";
-  write(1, k, strlen(k));
 	pthread_t self = __pthread_self();
 	sigset_t set;
 
@@ -63,7 +61,7 @@ _Noreturn void __pthread_exit(void *result)
 	self->result = result;
 
 	while (self->cancelbuf) {
-    char k[100] = "CANCELBUF==========\n";
+    char k[100] = "== CANCELBUF\n";
     write(1, k, strlen(k));
 		void (*f)(void *) = self->cancelbuf->__f;
 		void *x = self->cancelbuf->__x;
@@ -103,8 +101,6 @@ _Noreturn void __pthread_exit(void *result)
 	 * termination of the thread, but restore the previous lock and
 	 * signal state to prepare for exit to call atexit handlers. */
 	if (self->next == self) {
-    char k[100] = "PTHREAD EXIT2==================\n";
-    write(1, k, strlen(k));
 		__tl_unlock();
 		UNLOCK(self->killlock);
 		self->detach_state = state;
@@ -172,7 +168,7 @@ _Noreturn void __pthread_exit(void *result)
 		if (self->robust_list.off)
 			__syscall_SYS_set_robust_list(0, 3*sizeof(long));
 
-    printf("Detached Thread End: unmapself TBD\n");
+    printf("== Detached Thread End: unmapself TBD\n");
 		/* The following call unmaps the thread's stack mapping
 		 * and then exits without touching the stack. */
 		//__unmapself(self->map_base, self->map_size);
