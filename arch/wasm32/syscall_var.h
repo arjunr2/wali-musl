@@ -68,6 +68,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		//CASE_SYSCALL (getdents, getdents, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (getcwd, getcwd, (char*)a1,(unsigned int)a2);
 		CASE_SYSCALL (chdir, chdir, (char*)a1);
+		CASE_SYSCALL (fchdir, fchdir, (int)a1);
 		CASE_SYSCALL (rename, rename, (char*)a1,(char*)a2);
 		CASE_SYSCALL (mkdir, mkdir, (char*)a1,(int)a2);
 		CASE_SYSCALL (rmdir, rmdir, (char*)a1);
@@ -92,6 +93,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (setsid, setsid, );
 		CASE_SYSCALL (getpgid, getpgid, (int)a1);
 		CASE_SYSCALL (getsid, getsid, (int)a1);
+		CASE_SYSCALL (rt_sigpending, rt_sigpending, (void*)a1,(unsigned int)a2);
 		CASE_SYSCALL (rt_sigsuspend, rt_sigsuspend, (void*)a1,(unsigned int)a2);
 		CASE_SYSCALL (sigaltstack, sigaltstack, (void*)a1,(void*)a2);
 		CASE_SYSCALL (utime, utime, (char*)a1,(void*)a2);
