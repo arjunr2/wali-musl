@@ -1,5 +1,6 @@
 #ifndef _SYSCALL_VAR_H
 #define _SYSCALL_VAR_H
+#include <stdio.h>
 
 #define CASE_SYSCALL(name, fn_name, ...) \
   case SYS_##name: return __syscall_SYS_##fn_name(__VA_ARGS__); break; 
@@ -108,6 +109,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (clock_gettime, clock_gettime, (int)a1,(void*)a2);
 		CASE_SYSCALL (clock_nanosleep, clock_nanosleep, (int)a1,(int)a2,(void*)a3,(void*)a4);
 		CASE_SYSCALL (exit_group, exit_group, (int)a1);
+		CASE_SYSCALL (epoll_ctl, epoll_ctl, (int)a1,(int)a2,(int)a3,(void*)a4);
 		CASE_SYSCALL (openat, openat, (int)a1,(char*)a2,(int)a3,(int)a4);
 		CASE_SYSCALL (mkdirat, mkdirat, (int)a1,(char*)a2,(int)a3);
 		CASE_SYSCALL (fchownat, fchownat, (int)a1,(char*)a2,(int)a3,(int)a4,(int)a5);
@@ -121,8 +123,10 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (pselect6, pselect6, (int)a1,(void*)a2,(void*)a3,(void*)a4,(void*)a5,(void*)a6);
 		CASE_SYSCALL (ppoll, ppoll, (void*)a1,(int)a2,(void*)a3,(void*)a4,(unsigned int)a5);
 		CASE_SYSCALL (utimensat, utimensat, (int)a1,(char*)a2,(void*)a3,(int)a4);
+		CASE_SYSCALL (epoll_pwait, epoll_pwait, (int)a1,(void*)a2,(int)a3,(int)a4,(void*)a5,(unsigned int)a6);
 		CASE_SYSCALL (eventfd, eventfd, (int)a1);
 		CASE_SYSCALL (eventfd2, eventfd2, (int)a1,(int)a2);
+		CASE_SYSCALL (epoll_create1, epoll_create1, (int)a1);
 		CASE_SYSCALL (dup3, dup3, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (pipe2, pipe2, (int*)a1,(int)a2);
 		CASE_SYSCALL (prlimit64, prlimit64, (int)a1,(int)a2,(void*)a3,(void*)a4);
@@ -130,7 +134,10 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (getrandom, getrandom, (void*)a1,(unsigned int)a2,(int)a3);
 		CASE_SYSCALL (statx, statx, (int)a1,(char*)a2,(int)a3,(int)a4,(void*)a5);
 		CASE_SYSCALL (faccessat2, faccessat2, (int)a1,(char*)a2,(int)a3,(int)a4);
-    default: return -1;
+    default: {
+      printf("Invalid syscall var call -- NR %d\n",  n);
+      return -1;
+    }
   }
 }
 
