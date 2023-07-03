@@ -248,7 +248,7 @@ WALI_SYSCALL_DEF (flistxattr, );
 WALI_SYSCALL_DEF (removexattr, );
 WALI_SYSCALL_DEF (lremovexattr, );
 WALI_SYSCALL_DEF (fremovexattr, );
-WALI_SYSCALL_DEF (tkill, );
+WALI_SYSCALL_DEF (tkill, int,int);
 WALI_SYSCALL_DEF (time, );
 WALI_SYSCALL_DEF (futex, int*,int,int,void*,int*,int);
 WALI_SYSCALL_DEF (sched_setaffinity, );

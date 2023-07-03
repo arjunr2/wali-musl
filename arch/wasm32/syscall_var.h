@@ -102,6 +102,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (fstatfs, fstatfs, (int)a1,(void*)a2);
 		CASE_SYSCALL (setrlimit, setrlimit, (int)a1,(void*)a2);
 		CASE_SYSCALL (gettid, gettid, );
+		CASE_SYSCALL (tkill, tkill, (int)a1, (int)a2);
 		CASE_SYSCALL (futex, futex, (int*)a1,(int)a2,(int)a3,(void*)a4,(int*)a5,(int)a6);
 		CASE_SYSCALL (getdents64, getdents64, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (set_tid_address, set_tid_address, (int*)a1);
@@ -136,7 +137,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (faccessat2, faccessat2, (int)a1,(char*)a2,(int)a3,(int)a4);
     default: {
       printf("Invalid syscall var call -- NR %d\n",  n);
-      return -1;
+      return -ENOSYS;
     }
   }
 }

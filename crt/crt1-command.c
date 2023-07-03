@@ -1,4 +1,5 @@
 #include "atomic.h"
+#include "init_env.h"
 
 extern void __wasm_init_tp(void);
 
@@ -29,6 +30,9 @@ void _start(void) {
 
   // The linker synthesizes this to call constructors.
   __wali_call_ctors();
+
+  // Initialize environment variables from WALI
+  init_env();
 
   // Call `__main_void` which will either be the application's zero-argument
   // `__main_void` function or a libc routine which obtains the command-line
