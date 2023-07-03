@@ -16,10 +16,10 @@ void init_env() {
   struct stat st;
 
   /* Identify env var file */
-  get_init_envfile(filename, FSIZE);
+  int found = get_init_envfile(filename, FSIZE);
 
   /* Check if env file exists */
-  if (!access(filename, R_OK)) {
+  if (found && !access(filename, R_OK)) {
     int fd = open(filename, O_RDONLY);
     int status = fstat(fd, &st);
     int size = st.st_size;
@@ -48,8 +48,6 @@ void init_env() {
       printf("Failed to malloc for env\n");
     }
   } 
-  else {
-    printf("Could not find env file: \'%s\'\n", filename);
-  }
+
   free(filename);
 }
