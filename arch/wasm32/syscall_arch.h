@@ -101,7 +101,7 @@ WALI_SYSCALL_DEF (bind, int,void*,unsigned int);
 WALI_SYSCALL_DEF (listen, int,int);
 WALI_SYSCALL_DEF (getsockname, int,void*,void*);
 WALI_SYSCALL_DEF (getpeername, int,void*,void*);
-WALI_SYSCALL_DEF (socketpair, );
+WALI_SYSCALL_DEF (socketpair, int,int,int,int*);
 WALI_SYSCALL_DEF (setsockopt, int,int,int,void*,unsigned int);
 WALI_SYSCALL_DEF (getsockopt, int,int,int,void*,void*);
 WALI_SYSCALL_DEF (clone, );

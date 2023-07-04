@@ -54,6 +54,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (listen, listen, (int)a1,(int)a2);
 		CASE_SYSCALL (getsockname, getsockname, (int)a1,(void*)a2,(void*)a3);
 		CASE_SYSCALL (getpeername, getpeername, (int)a1,(void*)a2,(void*)a3);
+		CASE_SYSCALL (socketpair, socketpair, (int)a1,(int)a2,(int)a3,(int*)a4);
 		CASE_SYSCALL (setsockopt, setsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(unsigned int)a5);
 		CASE_SYSCALL (getsockopt, getsockopt, (int)a1,(int)a2,(int)a3,(void*)a4,(void*)a5);
 		CASE_SYSCALL (fork, fork, );
