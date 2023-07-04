@@ -8,18 +8,10 @@
 
 #define FSIZE 1000
 
-void init_env() {
-  char *filename = (char*) malloc(FSIZE);
-  if (!filename) {
-    printf("Failed to malloc for envfile\n");
-  }
+static void read_envfile(char *filename) {
   struct stat st;
-
-  /* Identify env var file */
-  int found = get_init_envfile(filename, FSIZE);
-
   /* Check if env file exists */
-  if (found && !access(filename, R_OK)) {
+  if (!access(filename, R_OK)) {
     int fd = open(filename, O_RDONLY);
     int status = fstat(fd, &st);
     int size = st.st_size;
@@ -36,7 +28,7 @@ void init_env() {
       /* Parse token by token */
       token = strtok(env_tok, s);
       while (token != NULL) {
-        if (putenv(token)) {
+        if (putenv(strdup(token))) {
           printf("Error in reading environ file \'%s\'\n", filename);
           break;
         }
@@ -48,6 +40,18 @@ void init_env() {
       printf("Failed to malloc for env\n");
     }
   } 
-
-  free(filename);
 }
+
+void init_env() {
+  char filename[FSIZE];
+  if (!filename) {
+    printf("Failed to malloc for envfile\n");
+  }
+
+  /* Populate env if file exists */
+  int found = get_init_envfile(filename, FSIZE);
+  if (found) {
+    read_envfile(filename);
+  }
+}
+
