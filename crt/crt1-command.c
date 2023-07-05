@@ -42,7 +42,6 @@ void _start(void) {
   // Call atexit functions, destructors, stdio cleanup, etc.
   __wali_call_dtors();
 
-  if (r != 0) {
-      __wali_proc_exit(r);
-  }
+  __wali_proc_exit(r);
+
 }
