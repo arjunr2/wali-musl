@@ -88,11 +88,17 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (sysinfo, sysinfo, (void*)a1);
 		CASE_SYSCALL (getuid, getuid, );
 		CASE_SYSCALL (getgid, getgid, );
+		CASE_SYSCALL (setuid, setuid, (int)a1);
+		CASE_SYSCALL (setgid, setgid, (int)a1);
 		CASE_SYSCALL (geteuid, geteuid, );
 		CASE_SYSCALL (getegid, getegid, );
 		CASE_SYSCALL (setpgid, setpgid, (int)a1,(int)a2);
 		CASE_SYSCALL (getppid, getppid, );
 		CASE_SYSCALL (setsid, setsid, );
+		CASE_SYSCALL (getgroups, getgroups, (unsigned int)a1,(void*)a2);
+		CASE_SYSCALL (setgroups, setgroups, (unsigned int)a1,(void*)a2);
+		CASE_SYSCALL (setresuid, setresuid, (int)a1,(int)a2,(int)a3);
+		CASE_SYSCALL (setresgid, setresgid, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (getpgid, getpgid, (int)a1);
 		CASE_SYSCALL (getsid, getsid, (int)a1);
 		CASE_SYSCALL (rt_sigpending, rt_sigpending, (void*)a1,(unsigned int)a2);
@@ -102,8 +108,9 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (statfs, statfs, (char*)a1,(void*)a2);
 		CASE_SYSCALL (fstatfs, fstatfs, (int)a1,(void*)a2);
 		CASE_SYSCALL (setrlimit, setrlimit, (int)a1,(void*)a2);
+		CASE_SYSCALL (chroot, chroot, (char*)a1);
 		CASE_SYSCALL (gettid, gettid, );
-		CASE_SYSCALL (tkill, tkill, (int)a1, (int)a2);
+		CASE_SYSCALL (tkill, tkill, (int)a1,(int)a2);
 		CASE_SYSCALL (futex, futex, (int*)a1,(int)a2,(int)a3,(void*)a4,(int*)a5,(int)a6);
 		CASE_SYSCALL (getdents64, getdents64, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (set_tid_address, set_tid_address, (int*)a1);
