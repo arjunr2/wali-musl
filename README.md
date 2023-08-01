@@ -29,8 +29,8 @@ Create a file named `config.mak` with paths to the llvm-project compiled for WAL
 ARCH = wasm32
 AR = $(CROSS_COMPILE)ar
 RANLIB = $(CROSS_COMPILE)ranlib
-CC = clang
-CROSS_COMPILE = llvm-
+CC = <path-to-llvm-bin>/clang
+CROSS_COMPILE = <path-to-llvm-bin>/llvm-
 ```
 
 
