@@ -79,12 +79,12 @@ static int __attribute__((noinline)) a_fetch_add(volatile int *p, int v) {
 }
 
 
-#define a_cas_p a_cas_p
-void *a_cas_p(volatile void *p, void *t, void *s)
-__attribute((
-  __import_module__("wali"),
-  __import_name__("a_cas_p")
-));
+//#define a_cas_p a_cas_p
+//void *a_cas_p(volatile void *p, void *t, void *s)
+//__attribute((
+//  __import_module__("wali"),
+//  __import_name__("a_cas_p")
+//));
 //static void* __attribute__((noinline)) a_cas_p(volatile void *p, void *t, void *s) {
 //  __atomic_compare_exchange(p, t, s, 0, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
 //  return t;
