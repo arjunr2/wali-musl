@@ -5,8 +5,7 @@ Webassembly. We build off of the base code of [musl libc](https://github.com/bmi
 
 Refer to the parent [WALI](https://github.com/arjunr2/WALI) repository on a complete overview of using and testing WALI
 
-NOTE: We currently support only x86-64 and future work will include 
-support for other architectures.
+NOTE: We currently support x86-64, aarch64, and riscv64 architectures. Future work will expand support
 
 ## Prerequisites
 
