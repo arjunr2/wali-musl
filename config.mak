@@ -3,6 +3,6 @@
 # Any changes made here will be lost if configure is re-run
 AR = $(CROSS_COMPILE)ar
 RANLIB = $(CROSS_COMPILE)ranlib
-CC = clang
+CC = ../llvm-project/build/bin/clang
 ARCH = wasm32
 CROSS_COMPILE = llvm-
