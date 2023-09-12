@@ -26,10 +26,10 @@ void _start(void) {
     __builtin_trap();
   }
   
-  __wasm_init_tp();
-
   // The linker synthesizes this to call constructors.
   __wali_call_ctors();
+
+  __wasm_init_tp();
 
   // Initialize environment variables from WALI
   init_env();
