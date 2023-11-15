@@ -44,7 +44,7 @@ long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)  _
 #define WALI_SYSCALL_DEF(type, ...) \
   long __syscall_SYS_##type(__VA_ARGS__) __attribute ((\
     __import_module__("wali"),\
-    __import_name__("__syscall_SYS_" #type)\
+    __import_name__("SYS_" #type)\
   ));
 
 /* WALI Syscall Imports */

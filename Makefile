@@ -18,7 +18,7 @@ libdir = $(prefix)/lib
 syslibdir = /lib
 
 # For WALI, exclude these parts of libc source
-EXCLUDE_SRC_DIRS = ldso
+#EXCLUDE_SRC_DIRS =
 
 MALLOC_DIR = mallocng
 SRC_DIRS = $(addprefix $(srcdir)/, $(filter-out $(addprefix src/, $(EXCLUDE_SRC_DIRS)), $(wildcard src/*)) src/malloc/$(MALLOC_DIR) crt) #ldso $(COMPAT_SRC_DIRS))
@@ -64,7 +64,7 @@ GENERIC_INCLUDES = $(wildcard $(srcdir)/arch/generic/bits/*.h)
 INCLUDES = $(wildcard $(srcdir)/include/*.h $(srcdir)/include/*/*.h)
 ALL_INCLUDES = $(sort $(INCLUDES:$(srcdir)/%=%) $(GENH:obj/%=%) $(ARCH_INCLUDES:$(srcdir)/arch/$(ARCH)/%=include/%) $(GENERIC_INCLUDES:$(srcdir)/arch/generic/%=include/%))
 
-EMPTY_LIB_NAMES = m pthread rt #rt pthread crypt util xnet resolv dl
+EMPTY_LIB_NAMES = m pthread rt dl #rt pthread crypt util xnet resolv dl
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 CRT_LIBS = $(addprefix lib/,$(notdir $(CRT_OBJS)))
 STATIC_LIBS = lib/libc.a
