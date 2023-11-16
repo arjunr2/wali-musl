@@ -66,6 +66,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (fcntl, fcntl, (int)a1,(int)a2,(int)a3);
 		CASE_SYSCALL (flock, flock, (int)a1,(int)a2);
 		CASE_SYSCALL (fsync, fsync, (int)a1);
+		CASE_SYSCALL (fdatasync, fdatasync, (int)a1);
 		CASE_SYSCALL (ftruncate, ftruncate, (int)a1,(long long)a2);
 		//CASE_SYSCALL (getdents, getdents, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (getcwd, getcwd, (char*)a1,(unsigned int)a2);
@@ -116,6 +117,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (set_tid_address, set_tid_address, (int*)a1);
 		CASE_SYSCALL (fadvise, fadvise, (int)a1,(long long)a2,(long long)a3,(int)a4);
 		CASE_SYSCALL (clock_gettime, clock_gettime, (int)a1,(void*)a2);
+		CASE_SYSCALL (clock_getres, clock_getres, (int)a1,(void*)a2);
 		CASE_SYSCALL (clock_nanosleep, clock_nanosleep, (int)a1,(int)a2,(void*)a3,(void*)a4);
 		CASE_SYSCALL (exit_group, exit_group, (int)a1);
 		CASE_SYSCALL (epoll_ctl, epoll_ctl, (int)a1,(int)a2,(int)a3,(void*)a4);
@@ -134,6 +136,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (utimensat, utimensat, (int)a1,(char*)a2,(void*)a3,(int)a4);
 		CASE_SYSCALL (epoll_pwait, epoll_pwait, (int)a1,(void*)a2,(int)a3,(int)a4,(void*)a5,(unsigned int)a6);
 		CASE_SYSCALL (eventfd, eventfd, (int)a1);
+		CASE_SYSCALL (accept4, accept4, (int)a1,(void*)a2,(void*)a3,(int)a4);
 		CASE_SYSCALL (eventfd2, eventfd2, (int)a1,(int)a2);
 		CASE_SYSCALL (epoll_create1, epoll_create1, (int)a1);
 		CASE_SYSCALL (dup3, dup3, (int)a1,(int)a2,(int)a3);
