@@ -7,7 +7,7 @@
 int accept4(int fd, struct sockaddr *restrict addr, socklen_t *restrict len, int flg)
 {
 	if (!flg) return accept(fd, addr, len);
-	int ret = socketcall_cp(accept4, fd, addr, len, flg, 0, 0);
+	int ret = socketcall_cp(accept4, fd, addr, len, flg);
 	if (ret>=0 || (errno != ENOSYS && errno != EINVAL)) return ret;
 	ret = accept(fd, addr, len);
 	if (ret<0) return ret;

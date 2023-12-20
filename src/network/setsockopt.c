@@ -12,7 +12,7 @@ int setsockopt(int fd, int level, int optname, const void *optval, socklen_t opt
 	time_t s;
 	suseconds_t us;
 
-	int r = __socketcall(setsockopt, fd, level, optname, optval, optlen, 0);
+	int r = __socketcall(setsockopt, fd, level, optname, optval, optlen);
 
 	if (r==-ENOPROTOOPT) switch (level) {
 	case SOL_SOCKET:
@@ -30,7 +30,7 @@ int setsockopt(int fd, int level, int optname, const void *optval, socklen_t opt
 			if (optname==SO_SNDTIMEO) optname=SO_SNDTIMEO_OLD;
 
 			r = __socketcall(setsockopt, fd, level, optname,
-				((long[]){s, CLAMP(us)}), 2*sizeof(long), 0);
+				((long[]){s, CLAMP(us)}), 2*sizeof(long));
 			break;
 		case SO_TIMESTAMP:
 		case SO_TIMESTAMPNS:
@@ -38,7 +38,7 @@ int setsockopt(int fd, int level, int optname, const void *optval, socklen_t opt
 			if (optname==SO_TIMESTAMP) optname=SO_TIMESTAMP_OLD;
 			if (optname==SO_TIMESTAMPNS) optname=SO_TIMESTAMPNS_OLD;
 			r = __socketcall(setsockopt, fd, level,
-				optname, optval, optlen, 0);
+				optname, optval, optlen);
 			break;
 		}
 	}

@@ -29,20 +29,19 @@ long __syscall(long n, ...) __attribute__((
   __import_module__("undefined"),
   __import_name__("undef_syscall")
 ));
+
 #define syscall(b,...) __syscall_ret(__syscall_##b(__VA_ARGS__))
 
-#define socketcall(nm,a,b,c,d,e,f) __syscall_ret(__socketcall(nm,a,b,c,d,e,f))
-#define socketcall_cp(nm,a,b,c,d,e,f) __syscall_ret(__socketcall_cp(nm,a,b,c,d,e,f))
-
-#define __syscall_cp0(n) (__syscall_cp)(n,0,0,0,0,0,0)
-#define __syscall_cp1(n,a) (__syscall_cp)(n,__scc(a),0,0,0,0,0)
-#define __syscall_cp2(n,a,b) (__syscall_cp)(n,__scc(a),__scc(b),0,0,0,0)
-#define __syscall_cp3(n,a,b,c) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),0,0,0)
-#define __syscall_cp4(n,a,b,c,d) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),__scc(d),0,0)
-#define __syscall_cp5(n,a,b,c,d,e) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),0)
-#define __syscall_cp6(n,a,b,c,d,e,f) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f))
-
-#define __syscall_cp(...) __SYSCALL_DISP(__syscall_cp,__VA_ARGS__)
+//#define __syscall_cp0(n) (__syscall_cp)(n,0,0,0,0,0,0)
+//#define __syscall_cp1(n,a) (__syscall_cp)(n,__scc(a),0,0,0,0,0)
+//#define __syscall_cp2(n,a,b) (__syscall_cp)(n,__scc(a),__scc(b),0,0,0,0)
+//#define __syscall_cp3(n,a,b,c) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),0,0,0)
+//#define __syscall_cp4(n,a,b,c,d) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),__scc(d),0,0)
+//#define __syscall_cp5(n,a,b,c,d,e) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),0)
+//#define __syscall_cp6(n,a,b,c,d,e,f) (__syscall_cp)(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f))
+//
+//#define __syscall_cp(b,...) __SYSCALL_DISP(__syscall_cp,__VA_ARGS__)
+#define __syscall_cp(b,...) __syscall_##b(__VA_ARGS__)
 #define syscall_cp(b,...) __syscall_ret(__syscall_##b(__VA_ARGS__))
 
 
@@ -370,21 +369,37 @@ hidden void __procfdname(char __buf[static 15+3*sizeof(int)], unsigned);
 
 hidden void *__vdsosym(const char *, const char *);
 
-static inline long __alt_socketcall(int sys, int sock, int cp, syscall_arg_t a, syscall_arg_t b, syscall_arg_t c, syscall_arg_t d, syscall_arg_t e, syscall_arg_t f)
-{
-	long r;
-	if (cp) r = __syscall_cp(sys, a, b, c, d, e, f);
-	else r = __syscall_var(sys, a, b, c, d, e, f);
-	if (r != -ENOSYS) return r;
-#ifdef SYS_socketcall
-	if (cp) r = __syscall_cp(SYS_socketcall, sock, ((long[6]){a, b, c, d, e, f}));
-	else r = __syscall_SYS_socketcall(sock, ((long[6]){a, b, c, d, e, f}));
-#endif
-	return r;
-}
-#define __socketcall(nm, a, b, c, d, e, f) __alt_socketcall(SYS_##nm, __SC_##nm, 0, \
-	__scc(a), __scc(b), __scc(c), __scc(d), __scc(e), __scc(f))
-#define __socketcall_cp(nm, a, b, c, d, e, f) __alt_socketcall(SYS_##nm, __SC_##nm, 1, \
-	__scc(a), __scc(b), __scc(c), __scc(d), __scc(e), __scc(f))
+
+#define socketcall(nm,...) __syscall_ret(__socketcall(nm,__VA_ARGS__))
+#define socketcall_cp(nm,...) __syscall_ret(__socketcall_cp(nm,__VA_ARGS__))
+
+#define __socketcall(nm,...) __alt_socketcall(nm, 0, __VA_ARGS__)
+#define __socketcall_cp(nm,...) __alt_socketcall(nm, 1, __VA_ARGS__)
+
+/* Socketcall translation should be performed with WALI engine implementation */
+#define __alt_socketcall(nm, cp, ...) ({  \
+  long r; \
+	if (cp) r = __syscall_cp(SYS_##nm, __VA_ARGS__);  \
+	else r = __syscall_SYS_##nm(__VA_ARGS__);  \
+  r;  \
+})
+
+//static inline long __alt_socketcall(int sys, int sock, int cp, syscall_arg_t a, syscall_arg_t b, syscall_arg_t c, syscall_arg_t d, syscall_arg_t e, syscall_arg_t f)
+//{
+//	long r;
+//	if (cp) r = __syscall_cp(sys, a, b, c, d, e, f);
+//	else r = __syscall_var(sys, a, b, c, d, e, f);
+//	if (r != -ENOSYS) return r;
+//#ifdef SYS_socketcall
+//	if (cp) r = __syscall_cp(SYS_socketcall, sock, ((long[6]){a, b, c, d, e, f}));
+//	else r = __syscall_SYS_socketcall(sock, ((long[6]){a, b, c, d, e, f}));
+//#endif
+//	return r;
+//}
+//#define __socketcall(nm, a, b, c, d, e, f) __alt_socketcall(SYS_##nm, __SC_##nm, 0, \
+//	__scc(a), __scc(b), __scc(c), __scc(d), __scc(e), __scc(f))
+//#define __socketcall_cp(nm, a, b, c, d, e, f) __alt_socketcall(SYS_##nm, __SC_##nm, 1, \
+//	__scc(a), __scc(b), __scc(c), __scc(d), __scc(e), __scc(f))
+
 
 #endif

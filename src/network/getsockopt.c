@@ -8,7 +8,7 @@ int getsockopt(int fd, int level, int optname, void *restrict optval, socklen_t 
 	long tv32[2];
 	struct timeval *tv;
 
-	int r = __socketcall(getsockopt, fd, level, optname, optval, optlen, 0);
+	int r = __socketcall(getsockopt, fd, level, optname, optval, optlen);
 
 	if (r==-ENOPROTOOPT) switch (level) {
 	case SOL_SOCKET:
@@ -20,7 +20,7 @@ int getsockopt(int fd, int level, int optname, void *restrict optval, socklen_t 
 			if (optname==SO_RCVTIMEO) optname=SO_RCVTIMEO_OLD;
 			if (optname==SO_SNDTIMEO) optname=SO_SNDTIMEO_OLD;
 			r = __socketcall(getsockopt, fd, level, optname,
-				tv32, (socklen_t[]){sizeof tv32}, 0);
+				tv32, (socklen_t[]){sizeof tv32});
 			if (r<0) break;
 			tv = optval;
 			tv->tv_sec = tv32[0];
@@ -33,7 +33,7 @@ int getsockopt(int fd, int level, int optname, void *restrict optval, socklen_t 
 			if (optname==SO_TIMESTAMP) optname=SO_TIMESTAMP_OLD;
 			if (optname==SO_TIMESTAMPNS) optname=SO_TIMESTAMPNS_OLD;
 			r = __socketcall(getsockopt, fd, level,
-				optname, optval, optlen, 0);
+				optname, optval, optlen);
 			break;
 		}
 	}

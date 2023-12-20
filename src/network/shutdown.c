@@ -3,5 +3,5 @@
 
 int shutdown(int fd, int how)
 {
-	return socketcall(shutdown, fd, how, 0, 0, 0, 0);
+	return socketcall(shutdown, fd, how);
 }

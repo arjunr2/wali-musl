@@ -21,9 +21,9 @@ static int __futex4_cp(volatile void *addr, int op, int val, const struct timesp
 	if (SYS_futex == SYS_futex_time64 || r!=-ENOSYS) return r;
 	to = to ? (void *)(long[]){CLAMP(s), ns} : 0;
 #endif
-	r = __syscall_cp(SYS_futex, addr, op, val, to);
+	r = __syscall_cp(SYS_futex, addr, op, val, to, 0, 0);
 	if (r != -ENOSYS) return r;
-	return __syscall_cp(SYS_futex, addr, op & ~FUTEX_PRIVATE, val, to);
+	return __syscall_cp(SYS_futex, addr, op & ~FUTEX_PRIVATE, val, to, 0, 0);
 }
 
 static volatile int dummy = 0;
