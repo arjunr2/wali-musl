@@ -96,6 +96,8 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (setpgid, setpgid, (int)a1,(int)a2);
 		CASE_SYSCALL (getppid, getppid, );
 		CASE_SYSCALL (setsid, setsid, );
+		CASE_SYSCALL (setreuid, setreuid, (int)a1,(int)a2);
+		CASE_SYSCALL (setregid, setregid, (int)a1,(int)a2);
 		CASE_SYSCALL (getgroups, getgroups, (unsigned int)a1,(void*)a2);
 		CASE_SYSCALL (setgroups, setgroups, (unsigned int)a1,(void*)a2);
 		CASE_SYSCALL (setresuid, setresuid, (int)a1,(int)a2,(int)a3);
