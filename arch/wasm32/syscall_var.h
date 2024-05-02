@@ -115,6 +115,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (gettid, gettid, );
 		CASE_SYSCALL (tkill, tkill, (int)a1,(int)a2);
 		CASE_SYSCALL (futex, futex, (int*)a1,(int)a2,(int)a3,(void*)a4,(int*)a5,(int)a6);
+		CASE_SYSCALL (sched_getaffinity, sched_getaffinity, (int)a1,(unsigned int)a2,(void*)a3);
 		CASE_SYSCALL (getdents64, getdents64, (int)a1,(void*)a2,(int)a3);
 		CASE_SYSCALL (set_tid_address, set_tid_address, (int*)a1);
 		CASE_SYSCALL (fadvise, fadvise, (int)a1,(long long)a2,(long long)a3,(int)a4);

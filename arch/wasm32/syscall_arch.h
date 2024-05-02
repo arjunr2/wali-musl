@@ -252,7 +252,7 @@ WALI_SYSCALL_DEF (tkill, int,int);
 WALI_SYSCALL_DEF (time, );
 WALI_SYSCALL_DEF (futex, int*,int,int,void*,int*,int);
 WALI_SYSCALL_DEF (sched_setaffinity, );
-WALI_SYSCALL_DEF (sched_getaffinity, );
+WALI_SYSCALL_DEF (sched_getaffinity, int,unsigned int,void*);
 WALI_SYSCALL_DEF (set_thread_area, );
 WALI_SYSCALL_DEF (io_setup, );
 WALI_SYSCALL_DEF (io_destroy, );
