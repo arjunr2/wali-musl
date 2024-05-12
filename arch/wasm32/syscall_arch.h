@@ -205,7 +205,7 @@ WALI_SYSCALL_DEF (vhangup, );
 WALI_SYSCALL_DEF (modify_ldt, );
 WALI_SYSCALL_DEF (pivot_root, );
 WALI_SYSCALL_DEF (_sysctl, );
-WALI_SYSCALL_DEF (prctl, );
+WALI_SYSCALL_DEF (prctl, int,unsigned long,unsigned long,unsigned long,unsigned long);
 WALI_SYSCALL_DEF (arch_prctl, );
 WALI_SYSCALL_DEF (adjtimex, );
 WALI_SYSCALL_DEF (setrlimit, int,void*);

@@ -110,6 +110,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (utime, utime, (char*)a1,(void*)a2);
 		CASE_SYSCALL (statfs, statfs, (char*)a1,(void*)a2);
 		CASE_SYSCALL (fstatfs, fstatfs, (int)a1,(void*)a2);
+		CASE_SYSCALL (prctl, prctl, (int)a1,(unsigned long)a2,(unsigned long)a3,(unsigned long)a4,(unsigned long)a5);
 		CASE_SYSCALL (setrlimit, setrlimit, (int)a1,(void*)a2);
 		CASE_SYSCALL (chroot, chroot, (char*)a1);
 		CASE_SYSCALL (gettid, gettid, );
