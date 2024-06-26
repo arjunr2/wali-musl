@@ -25,3 +25,5 @@ Default values are made to be compatible with setup guide in parent [WALI](https
 If the WALI compiler is installed independently, substitute `COMPILER_BIN = <path-to-llvm-bin-directory>`
 
 
+## Unsupported libc features
+- timer\_create; must figure out SIGEV\_SIGNAL notification
