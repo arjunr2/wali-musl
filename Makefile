@@ -99,7 +99,11 @@ all: $(ALL_LIBS) $(ALL_TOOLS)
 	cp -r include	$(SYSROOT_DIR)/
 
 	mkdir -p $(SYSROOT_LIB)/wasm32-wasi-threads
-	cp -r $(SYSROOT_LIB)/crt1-command.o $(SYSROOT_LIB)/wasm32-wasi-threads/
+	cp $(SYSROOT_LIB)/crt1-command.o $(SYSROOT_LIB)/wasm32-wasi-threads/
+	cp $(SYSROOT_LIB)/crt1.o $(SYSROOT_LIB)/wasm32-wasi-threads/
+	cp $(SYSROOT_LIB)/crtn.o $(SYSROOT_LIB)/wasm32-wasi-threads/
+	cp $(SYSROOT_LIB)/rcrt1.o $(SYSROOT_LIB)/wasm32-wasi-threads/
+	cp $(SYSROOT_LIB)/Scrt1.o $(SYSROOT_LIB)/wasm32-wasi-threads/
 
 	cp -r obj/include/bits $(SYSROOT_INC)/
 	cp -r $(srcdir)/arch/generic/bits/* $(SYSROOT_INC)/bits
