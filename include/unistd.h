@@ -182,10 +182,10 @@ void endusershell(void);
 char *getusershell(void);
 int acct(const char *);
 
-long syscall_vararg_wrapper(long n,...);
-/* Variable length syscall for user programs */
+long syscall(long, ...);
+/* Variadic syscall typecasting support */
 #ifndef syscall
-#define syscall(...)  __SYSCALL_DISP(syscall_vararg,__VA_ARGS__)
+#define syscall(...)  __SYSCALL_DISP(syscall,__VA_ARGS__)
 #endif
 
 int execvpe(const char *, char *const [], char *const []);

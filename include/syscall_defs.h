@@ -14,13 +14,12 @@ typedef long syscall_arg_t;
 #define __SYSCALL_CONCAT(a,b) __SYSCALL_CONCAT_X(a,b)
 #define __SYSCALL_DISP(b,...) __SYSCALL_CONCAT(b,__SYSCALL_NARGS(__VA_ARGS__))(__VA_ARGS__)
 
-#define syscall_vararg0(n) syscall_vararg_wrapper(n)
-#define syscall_vararg1(n,a) syscall_vararg_wrapper(n,__scc(a))
-#define syscall_vararg2(n,a,b) syscall_vararg_wrapper(n,__scc(a),__scc(b))
-#define syscall_vararg3(n,a,b,c) syscall_vararg_wrapper(n,__scc(a),__scc(b),__scc(c))
-#define syscall_vararg4(n,a,b,c,d) syscall_vararg_wrapper(n,__scc(a),__scc(b),__scc(c),__scc(d))
-#define syscall_vararg5(n,a,b,c,d,e) syscall_vararg_wrapper(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e))
-#define syscall_vararg6(n,a,b,c,d,e,f) syscall_vararg_wrapper(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f))
-
+#define syscall0(n) syscall(n)
+#define syscall1(n,a) syscall(n,__scc(a))
+#define syscall2(n,a,b) syscall(n,__scc(a),__scc(b))
+#define syscall3(n,a,b,c) syscall(n,__scc(a),__scc(b),__scc(c))
+#define syscall4(n,a,b,c,d) syscall(n,__scc(a),__scc(b),__scc(c),__scc(d))
+#define syscall5(n,a,b,c,d,e) syscall(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e))
+#define syscall6(n,a,b,c,d,e,f) syscall(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f))
 
 #endif
