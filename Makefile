@@ -45,7 +45,7 @@ LDFLAGS =
 LDFLAGS_AUTO =
 LIBCC = -lgcc
 CPPFLAGS =
-CFLAGS = --target=wasm32 -mbulk-memory -matomics
+CFLAGS = --target=wasm32-wali-linux-musl -mbulk-memory -matomics
 CFLAGS_AUTO = -O3 -pipe
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc -Wno-implicit-function-declaration -Wno-int-conversion
 
@@ -89,26 +89,7 @@ all:
 
 else
 
-SYSROOT_DIR=sysroot
-SYSROOT_INC=$(SYSROOT_DIR)/include
-SYSROOT_LIB=$(SYSROOT_DIR)/lib
-
 all: $(ALL_LIBS) $(ALL_TOOLS)
-	mkdir -p $(SYSROOT_DIR)
-	cp -r lib	$(SYSROOT_DIR)/
-	cp -r include	$(SYSROOT_DIR)/
-
-	mkdir -p $(SYSROOT_LIB)/wasm32-wasi-threads
-	cp $(SYSROOT_LIB)/crt1-command.o $(SYSROOT_LIB)/wasm32-wasi-threads/
-	cp $(SYSROOT_LIB)/crt1.o $(SYSROOT_LIB)/wasm32-wasi-threads/
-	cp $(SYSROOT_LIB)/crtn.o $(SYSROOT_LIB)/wasm32-wasi-threads/
-	cp $(SYSROOT_LIB)/rcrt1.o $(SYSROOT_LIB)/wasm32-wasi-threads/
-	cp $(SYSROOT_LIB)/Scrt1.o $(SYSROOT_LIB)/wasm32-wasi-threads/
-
-	cp -r obj/include/bits $(SYSROOT_INC)/
-	cp -r $(srcdir)/arch/generic/bits/* $(SYSROOT_INC)/bits
-	cp -r $(srcdir)/arch/$(ARCH)/bits/* $(SYSROOT_INC)/bits/
-
 
 OBJ_DIRS = $(sort $(patsubst %/,%,$(dir $(ALL_LIBS) $(ALL_TOOLS) $(ALL_OBJS) $(GENH) $(GENH_INT))) obj/include)
 
@@ -251,7 +232,7 @@ musl-%.tar.gz: .git
 endif
 
 clean:
-	rm -rf obj lib sysroot
+	rm -rf obj lib
 
 distclean: clean
 	rm -f config.mak

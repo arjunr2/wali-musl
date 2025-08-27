@@ -8,4 +8,4 @@ lib/musl-gcc.specs
 *.wasm
 *.wat
 *.ll
-sysroot/
+config.mak

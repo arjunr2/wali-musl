@@ -17,13 +17,9 @@ Build llvm as shown in parent WALI directory, and add the `bin` directory to you
 
 ## Building wali libc
 
-The build/installation process mostly mirrors that of musl and is detailed in the 
-[INSTALL](https://github.com/arjunr2/wali-musl/blob/master/INSTALL) file.
-
-The `config.mak` file performs environment configuration for the build.
-Default values are made to be compatible with setup guide in parent [WALI](https://github.com/arjunr2/WALI) repo.
-If the WALI compiler is installed independently, substitute `COMPILER_BIN = <path-to-llvm-bin-directory>`
-
+The Makefile in parent [WALI](https://github.com/arjunr2/WALI) allows building this with a simple `make libc` command.
+Under the hood, this makefile generates the appropriate `config.mak` and build flags
+If the WALI compiler is installed independently, substitute appropriate variables into `config.mak` for your use-case
 
 ## Unsupported libc features
 - timer\_create; must figure out SIGEV\_SIGNAL notification
