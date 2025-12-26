@@ -3,57 +3,36 @@
 #include "init_env.h"
 #include "atomic.h"
 
-/* Command Line Argument handling for WALI */
-int __cl_get_argc(void) __attribute ((
-  __import_module__("wali"),
-  __import_name__("__cl_get_argc")
-));
-
-int __cl_get_argv_len(int) __attribute ((
-  __import_module__("wali"),
-  __import_name__("__cl_get_argv_len")
-));
-
-int __cl_copy_argv(char*, int) __attribute ((
-  __import_module__("wali"),
-  __import_name__("__cl_copy_argv")
-));
-
-// Engine-internal initialization
-void __wali_init(void) __attribute((
-  __import_module__("wali"),
-  __import_name__("__init")
-));
-// Engine-internal deinitialization
-void __wali_deinit(void) __attribute((
-  __import_module__("wali"),
-  __import_name__("__deinit")
-));
-
 extern void __wasm_init_tp(void);
 
-/* Export startup methods */
 // __wali_init must be run before any main or other exported functions
 //
-// This is called by default in `crt`, but is exported for users to 
+// This is called by default in `crt`, but can be exported for users to 
 // explicitly call if using -nostartfiles
-void __wali_startup(void) {
+int __wali_startup(void) {
   static volatile int started = 0;
   if (a_cas(&started, 0, 1)) {
     __builtin_trap();
   }
-  __wali_init();
+  int r = __wali_init();
+  if (r) {
+    return r;
+  }
   __wasm_init_tp();
   // Initialize WALI environment variables
-  init_env();
+  r = init_env();
+  if (r) {
+    return r;
+  }
+  return 0;
 }
 
 // __wali_cleanup must be run before exiting to cleanup any dangling state
 //
-// This is called by default in `crt`, but is exported for users to 
+// This is called by default in `crt`, but can be exported for users to
 // explicitly call if using -nostartfiles
-void __wali_cleanup(void) {
-  __wali_deinit();
+int __wali_cleanup(void) {
+  return __wali_deinit();
 }
 
 
