@@ -41,10 +41,10 @@ long __syscall6(long n, long a1, long a2, long a3, long a4, long a5, long a6)  _
 
 
 
-#define WALI_SYSCALL_DEF(type, ...) \
-  long __syscall_SYS_##type(__VA_ARGS__) __attribute ((\
+#define WALI_SYSCALL_DEF(name, ...) \
+  long __syscall_SYS_##name(__VA_ARGS__) __attribute ((\
     __import_module__("wali"),\
-    __import_name__("SYS_" #type)\
+    __import_name__("SYS_" #name)\
   ));
 
 /* WALI Syscall Imports */
@@ -55,7 +55,7 @@ WALI_SYSCALL_DEF (close, int);
 WALI_SYSCALL_DEF (stat, char*,void*);
 WALI_SYSCALL_DEF (fstat, int,void*);
 WALI_SYSCALL_DEF (lstat, char*,void*);
-WALI_SYSCALL_DEF (poll, void*,int,int);
+WALI_SYSCALL_DEF (poll, void*,unsigned int,int);
 WALI_SYSCALL_DEF (lseek, int,long long,int);
 WALI_SYSCALL_DEF (mmap, void*,unsigned int,int,int,int,long long);
 WALI_SYSCALL_DEF (mprotect, void*,unsigned int,int);
@@ -107,7 +107,7 @@ WALI_SYSCALL_DEF (getsockopt, int,int,int,void*,void*);
 WALI_SYSCALL_DEF (clone, );
 WALI_SYSCALL_DEF (fork, );
 WALI_SYSCALL_DEF (vfork, );
-WALI_SYSCALL_DEF (execve, char*,char*,char*);
+WALI_SYSCALL_DEF (execve, char*,void*,void*);
 WALI_SYSCALL_DEF (exit, int);
 WALI_SYSCALL_DEF (wait4, int,int*,int,void*);
 WALI_SYSCALL_DEF (kill, int,int);
@@ -126,7 +126,7 @@ WALI_SYSCALL_DEF (fsync, int);
 WALI_SYSCALL_DEF (fdatasync, int);
 WALI_SYSCALL_DEF (truncate, );
 WALI_SYSCALL_DEF (ftruncate, int,long long);
-WALI_SYSCALL_DEF (getdents, int,void*,int);
+WALI_SYSCALL_DEF (getdents, );
 WALI_SYSCALL_DEF (getcwd, char*,unsigned int);
 WALI_SYSCALL_DEF (chdir, char*);
 WALI_SYSCALL_DEF (fchdir, int);
@@ -144,7 +144,7 @@ WALI_SYSCALL_DEF (chown, char*,int,int);
 WALI_SYSCALL_DEF (fchown, int,int,int);
 WALI_SYSCALL_DEF (lchown, );
 WALI_SYSCALL_DEF (umask, int);
-WALI_SYSCALL_DEF (gettimeofday, );
+WALI_SYSCALL_DEF (gettimeofday, void*,void*);
 WALI_SYSCALL_DEF (getrlimit, int,void*);
 WALI_SYSCALL_DEF (getrusage, int,void*);
 WALI_SYSCALL_DEF (sysinfo, void*);
@@ -266,6 +266,7 @@ WALI_SYSCALL_DEF (epoll_ctl_old, );
 WALI_SYSCALL_DEF (epoll_wait_old, );
 WALI_SYSCALL_DEF (remap_file_pages, );
 WALI_SYSCALL_DEF (getdents64, int,void*,int);
+#define __syscall_SYS_getdents __syscall_SYS_getdents64
 WALI_SYSCALL_DEF (set_tid_address, int*);
 WALI_SYSCALL_DEF (restart_syscall, );
 WALI_SYSCALL_DEF (semtimedop, );
@@ -310,7 +311,8 @@ WALI_SYSCALL_DEF (mkdirat, int,char*,int);
 WALI_SYSCALL_DEF (mknodat, );
 WALI_SYSCALL_DEF (fchownat, int,char*,int,int,int);
 WALI_SYSCALL_DEF (futimesat, );
-WALI_SYSCALL_DEF (fstatat, int,char*,void*,int);
+WALI_SYSCALL_DEF (newfstatat, int,char*,void*,int);
+#define __syscall_SYS_fstatat __syscall_SYS_newfstatat
 WALI_SYSCALL_DEF (unlinkat, int,char*,int);
 WALI_SYSCALL_DEF (renameat, );
 WALI_SYSCALL_DEF (linkat, int,char*,int,char*,int);
@@ -319,7 +321,7 @@ WALI_SYSCALL_DEF (readlinkat, int,char*,char*,unsigned int);
 WALI_SYSCALL_DEF (fchmodat, int,char*,int,int);
 WALI_SYSCALL_DEF (faccessat, int,char*,int,int);
 WALI_SYSCALL_DEF (pselect6, int,void*,void*,void*,void*,void*);
-WALI_SYSCALL_DEF (ppoll, void*,int,void*,void*,unsigned int);
+WALI_SYSCALL_DEF (ppoll, void*,unsigned int,void*,void*,unsigned int);
 WALI_SYSCALL_DEF (unshare, );
 WALI_SYSCALL_DEF (set_robust_list, );
 WALI_SYSCALL_DEF (get_robust_list, );
@@ -380,10 +382,36 @@ WALI_SYSCALL_DEF (pwritev2, );
 WALI_SYSCALL_DEF (pkey_mprotect, );
 WALI_SYSCALL_DEF (pkey_alloc, );
 WALI_SYSCALL_DEF (pkey_free, );
-WALI_SYSCALL_DEF (statx, int,char*,int,int,void*);
+WALI_SYSCALL_DEF (statx, int,char*,int,unsigned int,void*);
 WALI_SYSCALL_DEF (io_pgetevents, );
 WALI_SYSCALL_DEF (rseq, );
+WALI_SYSCALL_DEF (pidfd_send_signal, );
+WALI_SYSCALL_DEF (io_uring_setup, );
+WALI_SYSCALL_DEF (io_uring_enter, );
+WALI_SYSCALL_DEF (io_uring_register, );
+WALI_SYSCALL_DEF (open_tree, );
+WALI_SYSCALL_DEF (move_mount, );
+WALI_SYSCALL_DEF (fsopen, );
+WALI_SYSCALL_DEF (fsconfig, );
+WALI_SYSCALL_DEF (fsmount, );
+WALI_SYSCALL_DEF (fspick, );
+WALI_SYSCALL_DEF (pidfd_open, );
+WALI_SYSCALL_DEF (clone3, );
+WALI_SYSCALL_DEF (close_range, );
+WALI_SYSCALL_DEF (openat2, );
+WALI_SYSCALL_DEF (pidfd_getfd, );
 WALI_SYSCALL_DEF (faccessat2, int,char*,int,int);
+WALI_SYSCALL_DEF (process_madvise, );
+WALI_SYSCALL_DEF (epoll_pwait2, );
+WALI_SYSCALL_DEF (mount_setattr, );
+WALI_SYSCALL_DEF (quotactl_fd, );
+WALI_SYSCALL_DEF (landlock_create_ruleset, );
+WALI_SYSCALL_DEF (landlock_add_rule, );
+WALI_SYSCALL_DEF (landlock_restrict_self, );
+WALI_SYSCALL_DEF (memfd_secret, );
+WALI_SYSCALL_DEF (process_mrelease, );
+WALI_SYSCALL_DEF (futex_waitv, );
+WALI_SYSCALL_DEF (set_mempolicy_home_node, );
 
 
 #define __scca(X) ((long) (X))
