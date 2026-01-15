@@ -15,7 +15,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (stat, (char*)a1,(void*)a2);
 		CASE_SYSCALL (fstat, (int)a1,(void*)a2);
 		CASE_SYSCALL (lstat, (char*)a1,(void*)a2);
-		CASE_SYSCALL (poll, (void*)a1,(unsigned int)a2,(int)a3);
+		CASE_SYSCALL (poll, (void*)a1,(unsigned long long)a2,(int)a3);
 		CASE_SYSCALL (lseek, (int)a1,(long long)a2,(int)a3);
 		CASE_SYSCALL (mmap, (void*)a1,(unsigned int)a2,(int)a3,(int)a4,(int)a5,(long long)a6);
 		CASE_SYSCALL (mprotect, (void*)a1,(unsigned int)a2,(int)a3);
@@ -63,7 +63,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (wait4, (int)a1,(int*)a2,(int)a3,(void*)a4);
 		CASE_SYSCALL (kill, (int)a1,(int)a2);
 		CASE_SYSCALL (uname, (void*)a1);
-		CASE_SYSCALL (fcntl, (int)a1,(int)a2,(int)a3);
+		CASE_SYSCALL (fcntl, (int)a1,(int)a2,(unsigned long)a3);
 		CASE_SYSCALL (flock, (int)a1,(int)a2);
 		CASE_SYSCALL (fsync, (int)a1);
 		CASE_SYSCALL (fdatasync, (int)a1);
@@ -107,7 +107,6 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (rt_sigpending, (void*)a1,(unsigned int)a2);
 		CASE_SYSCALL (rt_sigsuspend, (void*)a1,(unsigned int)a2);
 		CASE_SYSCALL (sigaltstack, (void*)a1,(void*)a2);
-		CASE_SYSCALL (utime, (char*)a1,(void*)a2);
 		CASE_SYSCALL (statfs, (char*)a1,(void*)a2);
 		CASE_SYSCALL (fstatfs, (int)a1,(void*)a2);
 		CASE_SYSCALL (prctl, (int)a1,(unsigned long)a2,(unsigned long)a3,(unsigned long)a4,(unsigned long)a5);
@@ -136,7 +135,7 @@ static long __syscall_var(long n, long a1, long a2, long a3, long a4, long a5, l
 		CASE_SYSCALL (fchmodat, (int)a1,(char*)a2,(int)a3,(int)a4);
 		CASE_SYSCALL (faccessat, (int)a1,(char*)a2,(int)a3,(int)a4);
 		CASE_SYSCALL (pselect6, (int)a1,(void*)a2,(void*)a3,(void*)a4,(void*)a5,(void*)a6);
-		CASE_SYSCALL (ppoll, (void*)a1,(unsigned int)a2,(void*)a3,(void*)a4,(unsigned int)a5);
+		CASE_SYSCALL (ppoll, (void*)a1,(unsigned long long)a2,(void*)a3,(void*)a4,(unsigned int)a5);
 		CASE_SYSCALL (utimensat, (int)a1,(char*)a2,(void*)a3,(int)a4);
 		CASE_SYSCALL (epoll_pwait, (int)a1,(void*)a2,(int)a3,(int)a4,(void*)a5,(unsigned int)a6);
 		CASE_SYSCALL (eventfd, (int)a1);
